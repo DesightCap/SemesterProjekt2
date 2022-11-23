@@ -1,0 +1,1 @@
+Placer kode til temperatur sensor Arduinoen her

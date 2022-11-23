@@ -1,0 +1,1 @@
+Placer kode til klimaregulerings Arduinoen her
