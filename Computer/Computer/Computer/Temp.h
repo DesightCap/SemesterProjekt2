@@ -1,4 +1,10 @@
 #pragma once
+
+#include <iostream>
+#include "UART.h"
+
+using namespace std;
+
 class Temp
 {
 public:

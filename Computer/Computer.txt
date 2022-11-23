@@ -1,1 +1,6 @@
 Kode til kontrol computeren
+
+Kilder: 
+https://stackoverflow.com/questions/43493794/how-to-get-local-time-c
+https://www.w3schools.com/cpp/cpp_files.asp
+https://stackoverflow.com/questions/2393345/how-to-append-text-to-a-text-file-in-c

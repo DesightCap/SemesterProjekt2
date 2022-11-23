@@ -1,9 +1,48 @@
 #include "Log.h"
 
-void Log::print()
+#pragma warning(disable: 4996 )
+
+Log::Log(string filename)
 {
+	filename_ = filename;
 }
 
-void Log::addToLog(int temp)
+void Log::print() // Idskriver hele log
 {
+	string myReading;
+	ifstream MyFile;
+	MyFile.open(filename_);
+	while (getline(MyFile, myReading))
+	{
+		cout << "Log indslag: " << myReading << endl;
+	}
+	
+	MyFile.close();
+	
+}
+
+void Log::addToLog(int temp) // Tilføjer læsning til log
+{
+
+	time_t currentTime = time(NULL);
+	struct tm* localTime;
+
+	time(&currentTime);
+	localTime = localtime(&currentTime);
+	//localTime = localtime_s(currentTime, );
+
+	//cout << localTime->tm_mon; // Test time functions by printing to terminal
+
+	ofstream MyFile;
+	MyFile.open(filename_, ios_base::app);
+	MyFile 
+		<< "Temperatur: " << temp
+		<< " Tidspunkt: " 
+		<< setfill('0') << setw(2) << localTime->tm_hour << ':'	// Skriver time som to tal til fil
+		<< setfill('0') << setw(2) << localTime->tm_min << ':'	// Skriver minut som to tal til fil
+		<< setfill('0') << setw(2) << localTime->tm_sec 		// Skriver time som to tal til fil
+		<< " Dato: "
+		<< localTime->tm_mday << "/" << localTime->tm_mon+1 << "/" << localTime->tm_year+1900
+		<< endl;
+	MyFile.close();
 }

@@ -1,13 +1,2 @@
-﻿  Computer.cpp
-  Log.cpp
-C:\Users\hresk\OneDrive\Dokumenter\GitHub\SemesterProjekt2\Computer\Computer\Computer\Log.h(8,9): error C3646: 'filename_': unknown override specifier
-C:\Users\hresk\OneDrive\Dokumenter\GitHub\SemesterProjekt2\Computer\Computer\Computer\Log.h(8,18): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-  Temp.cpp
-  UART.cpp
-C:\Users\hresk\OneDrive\Dokumenter\GitHub\SemesterProjekt2\Computer\Computer\Computer\UART.h(9,12): error C2061: syntax error: identifier 'string'
-C:\Users\hresk\OneDrive\Dokumenter\GitHub\SemesterProjekt2\Computer\Computer\Computer\UART.cpp(21,23): error C2761: 'void UART::send(void)': redeclaration of member is not allowed
-C:\Users\hresk\OneDrive\Dokumenter\GitHub\SemesterProjekt2\Computer\Computer\Computer\UART.cpp(21,17): error C2065: 'string': undeclared identifier
-C:\Users\hresk\OneDrive\Dokumenter\GitHub\SemesterProjekt2\Computer\Computer\Computer\UART.cpp(22,1): error C2143: syntax error: missing ';' before '{'
-C:\Users\hresk\OneDrive\Dokumenter\GitHub\SemesterProjekt2\Computer\Computer\Computer\UART.cpp(22,1): error C2447: '{': missing function header (old-style formal list?)
-  UI.cpp
-  Generating Code...
+﻿  ComputerMain.cpp
+  Computer.vcxproj -> C:\Users\hresk\OneDrive\Dokumenter\GitHub\SemesterProjekt2\Computer\Computer\x64\Debug\Computer.exe

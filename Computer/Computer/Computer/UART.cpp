@@ -1,4 +1,7 @@
+#include <iostream>
 #include "UART.h"
+
+using namespace std;
 
 int UART::getTemp()
 {

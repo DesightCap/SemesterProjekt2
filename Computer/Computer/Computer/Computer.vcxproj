@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Computer.cpp" />
+    <ClCompile Include="ComputerMain.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="Temp.cpp" />
     <ClCompile Include="UART.cpp" />
