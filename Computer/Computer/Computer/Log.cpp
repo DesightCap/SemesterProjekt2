@@ -36,13 +36,13 @@ void Log::addToLog(int temp) // Tilføjer læsning til log
 	ofstream MyFile;
 	MyFile.open(filename_, ios_base::app);
 	MyFile 
-		<< "Temperatur: " << temp
-		<< " Tidspunkt: " 
+		<< "Tidspunkt: " 
 		<< setfill('0') << setw(2) << localTime->tm_hour << ':'	// Skriver time som to tal til fil
 		<< setfill('0') << setw(2) << localTime->tm_min << ':'	// Skriver minut som to tal til fil
 		<< setfill('0') << setw(2) << localTime->tm_sec 		// Skriver time som to tal til fil
 		<< " Dato: "
 		<< localTime->tm_mday << "/" << localTime->tm_mon+1 << "/" << localTime->tm_year+1900
+		<< " Temperatur: " << temp
 		<< endl;
 	MyFile.close();
 }

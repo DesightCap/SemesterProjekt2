@@ -8,7 +8,7 @@ using namespace std;
 class Temp
 {
 public:
-	bool setTempInt(int min, int max);
+	bool setTempInt(int min, int max); // 
 	int checkTemp(int temp); 
 private:
 	int TempMin_;

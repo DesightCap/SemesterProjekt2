@@ -5,12 +5,21 @@
 #include "UART.h"
 #include "UI.h"
 
+#include <time.h>
+
 using namespace std;
 
 int main()
 {
 	Log testObj;
-	//testObj.addToLog(80085);
-	testObj.print();
+
+
+	// addToLog metode test
+	srand(time(0)); testObj.addToLog(rand() % 20);
+	
+
+
+	// Udskriv log test
+	//testObj.print();
 }
 
