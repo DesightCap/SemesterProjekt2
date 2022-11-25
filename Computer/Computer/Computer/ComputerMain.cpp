@@ -18,8 +18,5 @@ int main()
 	srand(time(0)); testObj.addToLog(rand() % 20);
 	
 
-
-	// Udskriv log test
-	//testObj.print();
 }
 
