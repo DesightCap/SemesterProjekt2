@@ -2203,3 +2203,4 @@ Tidspunkt: 10:36:31 Dato: 25/11/2022 Temperatur: 12
 Tidspunkt: 10:37:46 Dato: 25/11/2022 Temperatur: 17
 Tidspunkt: 10:38:01 Dato: 25/11/2022 Temperatur: 6
 Tidspunkt: 10:38:03 Dato: 25/11/2022 Temperatur: 12
+Tidspunkt: 12:29:56 Dato: 25/11/2022 Temperatur: 14

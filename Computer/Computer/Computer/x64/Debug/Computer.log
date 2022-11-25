@@ -1,2 +1,5 @@
-﻿  Log.cpp
+﻿  ComputerMain.cpp
+C:\Users\hresk\OneDrive\Dokumenter\GitHub\SemesterProjekt2\Computer\Computer\Computer\ComputerMain.cpp(19,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  Log.cpp
+  Generating Code...
   Computer.vcxproj -> C:\Users\hresk\OneDrive\Dokumenter\GitHub\SemesterProjekt2\Computer\Computer\x64\Debug\Computer.exe

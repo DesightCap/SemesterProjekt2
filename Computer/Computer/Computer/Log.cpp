@@ -1,10 +1,8 @@
 #include "Log.h"
 
-//#pragma warning(disable: 4996 )
-
 Log::Log(string filename)
 {
-	filename_ = filename;
+	filename_ = filename; // Husk .txt for tekstfil 
 }
 
 void Log::print() // Idskriver hele log
