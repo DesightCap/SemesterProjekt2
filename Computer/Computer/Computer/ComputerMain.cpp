@@ -15,7 +15,7 @@ int main()
 
 
 	// addToLog metode test
-	srand(time(0)); testObj.addToLog(rand() % 20);
+	//srand(time(0)); testObj.addToLog(rand() % 20);
 	
 
 
