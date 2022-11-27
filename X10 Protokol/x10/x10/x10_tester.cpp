@@ -8,7 +8,7 @@ using namespace std;
 #include "x10.h"
 
 //counter for hvert ZC interrupt
-volatile int counter = 1;
+volatile int counter = 100;
 volatile int* counterPtr = &counter;
 
 //Stoerrelse på datapakke i bits. Skal initialiseres alt efter stoerrelsen på vores data, skal lige have tjekket.
