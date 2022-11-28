@@ -144,14 +144,12 @@
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="Temp.cpp" />
     <ClCompile Include="UART.cpp" />
-    <ClCompile Include="UI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Computer.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="Temp.h" />
     <ClInclude Include="UART.h" />
-    <ClInclude Include="UI.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -13,7 +13,7 @@ using namespace std;
 int main()
 {
 	Log testLog;
-	UI testUI;
+//	UI testUI;
 	UART testUART;
 	Temp testTemp(5,10);
 	
@@ -26,8 +26,8 @@ int main()
 	//testObj.print();
 
 //	Computer testCmp(UI testUI, UART testUART, Log &testLog, Temp &testTemp());
-	Computer testComputer(&testUI,&testUART,&testLog, &testTemp);
-	
+	Computer testComputer(&testUART,&testLog, &testTemp);
+	testComputer.TempReg();
 	
 }
 

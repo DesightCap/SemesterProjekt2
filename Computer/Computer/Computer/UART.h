@@ -8,7 +8,7 @@ using namespace std;
 class UART
 {
 public:
-	int getTemp();
+	int getTemp(); // Modtage temperatur
 	void sendOp();
 	void sendNed();
 	int initUART();
