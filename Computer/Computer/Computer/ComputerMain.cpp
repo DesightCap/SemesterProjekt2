@@ -1,24 +1,33 @@
 #include <iostream>
 #include "Computer.h"
+/*
 #include "Log.h"
 #include "Temp.h"
 #include "UART.h"
 #include "UI.h"
-
+*/
 #include <time.h>
 
 using namespace std;
 
 int main()
 {
-	Log testObj;
+	Log testLog;
+	UI testUI;
+	UART testUART;
+	Temp testTemp(5,10);
 	
 	// Test
 
 	// addToLog metode test
-	srand(time(0)); testObj.addToLog(rand() % 20);
+	//srand(time(0)); testObj.addToLog(rand() % 20);
 	
 	// Udskriv log test
-	testObj.print();
+	//testObj.print();
+
+//	Computer testCmp(UI testUI, UART testUART, Log &testLog, Temp &testTemp());
+	Computer testComputer(&testUI,&testUART,&testLog, &testTemp);
+	
+	
 }
 

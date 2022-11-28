@@ -11,7 +11,9 @@ using namespace std;
 class Computer
 {
 public:
-	Computer(UI, UART, Log*, Temp*);
+	//Computer(testUI, testUART, &testLog, &testTemp)
+	Computer(UI* testUI, UART* testUART, Log* testLog, Temp* testTemp);
+
 	void TempReg();
 private:
 	int temp_;

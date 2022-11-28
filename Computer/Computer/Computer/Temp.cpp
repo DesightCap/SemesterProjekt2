@@ -1,5 +1,11 @@
 #include "Temp.h"
 
+Temp::Temp(int min, int max)
+{
+	TempMin_ = min;
+	TempMax_ = max;
+}
+
 bool Temp::setTempInt(int min, int max)
 {
 	// Undersøg hvad vi skal validere vedr. temperatur interval
@@ -14,7 +20,9 @@ bool Temp::setTempInt(int min, int max)
 		return false;
 }
 
+/*
 int Temp::checkTemp(int temp)
 {
 	return 0;
 }
+*/
