@@ -5,6 +5,9 @@ UI::UI()
 
 }
 */
+UI::UI()
+{
+}
 int UI::tempInitiate()
 {
     return 0;

@@ -9,13 +9,15 @@ using namespace std;
 class UI
 {
 public:
-	//UI();
+	UI();
 	int tempInitiate();
 	void tempStop();
 	bool recieveTempInterval();
 	void printLog();
 	void openMenu();
-	
-	friend class Computer;
+
+private:
+	int xd_;
+
 };
 

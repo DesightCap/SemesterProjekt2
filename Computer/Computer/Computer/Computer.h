@@ -6,15 +6,23 @@
 #include "Temp.h"
 #include "UI.h"
 
+
 using namespace std;
 
-class Computer
+class Computer : Log, Temp, UART, UI
 {
 public:
 	//Computer(testUI, testUART, &testLog, &testTemp)
-	Computer(UI* testUI, UART* testUART, Log* testLog, Temp* testTemp);
+	Computer();
 
 	void TempReg();
+	void consol();
+	void LogPrint() {
+		print();
+	}
+
+
+
 private:
 	int temp_;
 };

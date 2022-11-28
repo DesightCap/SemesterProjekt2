@@ -8,6 +8,7 @@ using namespace std;
 class UART
 {
 public:
+	
 	int getTemp();
 	void sendOp();
 	void sendNed();

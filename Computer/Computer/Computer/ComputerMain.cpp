@@ -15,7 +15,7 @@ int main()
 	Log testLog;
 	UI testUI;
 	UART testUART;
-	Temp testTemp(5,10);
+	Temp testTemp(6,29);
 	
 	// Test
 
@@ -26,8 +26,7 @@ int main()
 	//testObj.print();
 
 //	Computer testCmp(UI testUI, UART testUART, Log &testLog, Temp &testTemp());
-	Computer testComputer(&testUI,&testUART,&testLog, &testTemp);
-	
-	
+	Computer testComputer;
+	testComputer.LogPrint();
 }
 
