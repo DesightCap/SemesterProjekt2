@@ -15,10 +15,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="x10_tester.cpp">
+    <ClCompile Include="x10_sender_tester.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="x10.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="x10_sender_modtager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,26 +1,28 @@
 #include "x10.h"
 using namespace std;
+#include <stdio.h>
+#include <stdlib.h>
 
 x10::x10()
 {
 }
 
-void x10::sendx10(string command, uint32_t* datapakkePtr, volatile int* counterPtr) const
+void x10::sendx10(char command, uint8_t* datapakkePtr, volatile int* counterPtr) const
 {
 
 	//simplificeret forslag med on/off. Kunne være switch-case med heatOn, heatOff, blowOn, blowOff, tempSomething osv.
-	if (command == "on")
-		*datapakkePtr = 0b00000000000011110000111100001111;
+	if (command == y)
+		*datapakkePtr = 0b11111111;
 
-	else if (command == "off")
-		*datapakkePtr = 0b00000000000011110000111100000000;
+	else if (command == z)
+		*datapakkePtr = 0b00000000;
 
 	*counterPtr = 1;
 }
 
-std::string x10::recievex10() const
+char x10::recievex10() const
 {
-	return std::string();
+	return char();
 }
 
 void x10::initISR() const

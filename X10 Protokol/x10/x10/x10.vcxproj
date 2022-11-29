@@ -128,7 +128,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="x10.cpp" />
-    <ClCompile Include="x10_tester.cpp" />
+    <ClCompile Include="x10_sender_modtager.cpp" />
+    <ClCompile Include="x10_sender_tester.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="x10.h" />
