@@ -1,2 +1,5 @@
-﻿  UI.cpp
+﻿  Computer.cpp
+  ComputerMain.cpp
+  UART.cpp
+  Generating Code...
   Computer.vcxproj -> C:\Users\hresk\OneDrive\Dokumenter\GitHub\SemesterProjekt2\Computer\Computer\x64\Debug\Computer.exe

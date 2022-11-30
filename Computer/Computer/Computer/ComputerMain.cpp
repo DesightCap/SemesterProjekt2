@@ -20,14 +20,15 @@ int main()
 	// Test
 
 	// addToLog metode test
-	//srand(time(0)); testObj.addToLog(rand() % 20);
+	//srand(time(0)); testLog.addToLog(rand() % 20);
 	
 	// Udskriv log test
 	//testObj.print();
-
+	
 //	Computer testCmp(UI testUI, UART testUART, Log &testLog, Temp &testTemp());
+	
 	Computer testComputer(&testUART,&testLog, &testTemp);
-	testComputer.TempReg();
+	testComputer.openMenu();
 	
 }
 
