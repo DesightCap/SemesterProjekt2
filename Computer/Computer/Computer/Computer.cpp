@@ -96,6 +96,7 @@ void Computer::openMenu()
 
 		}
 		Sleep(65);
+		
 		{
 			int tempValidate = testTemp_->checkTemp(temp_);
 			if (tempValidate < 0)

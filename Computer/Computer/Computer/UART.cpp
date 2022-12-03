@@ -115,11 +115,14 @@ int UART::getTemp(char* buffer, unsigned int buf_size)
 
 void UART::sendOp()
 {
-
+	char up = 'u';
+	send(&up, 1);
 }
 
 void UART::sendNed()
 {
+	char down = 'd';
+	send(&down, 1);
 }
 
 
@@ -129,7 +132,7 @@ bool UART::send(char* buffer, unsigned int buf_size)
 	unsigned int toWrite = OUTPUT_DATA_BYTES;
 
 	bool Status = WriteFile(handleToCOM, buffer, toWrite, &bytesWritten, NULL);
-	
+	Sleep(ARDUINO_WAIT_TIME/2);
 	
 
 	return Status;

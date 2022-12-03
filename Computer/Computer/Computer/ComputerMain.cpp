@@ -60,21 +60,49 @@ int main()
 		Sleep(60);
 	}
 	//*/
-	
+
 	//*
 
 
-	//cout << "Arduino forbundet: " << boolalpha << testUART.isConnected() << endl << "Forbundet til port " << port;
+	cout << "Arduino forbundet: " << boolalpha << testUART.isConnected() << endl << "Forbundet til port " << port << endl;
 	while (testUART.isConnected())
 	{
 		char toSend;
+		cout << "Data to send: ";
 		cin >> toSend;
-		testUART.send(&toSend, 1);
-		cout << testComputer.dataHandler() << endl;
+		testUART.send(&toSend, 2);
+		
+		if (toSend == '8')
+		{
+			testUART.send(&toSend, 1);
+			string stringRecieved = testComputer.dataHandler();
+
+			try
+			{
+				cout << "Data recieved: " << stoi(stringRecieved) << endl;
+
+			}
+			catch (invalid_argument const& error)
+			{
+				cout << "String til Int daarligt argument: " << error.what() << endl;
+			}
+			catch (out_of_range const& error)
+			{
+				cout << "String til Int uden for range: " << error.what() << endl;
+			}
+		}
+		else
+		{
+			cout << "Data recieved: " << testComputer.dataHandler() << endl;
+		}
 	}
+
+
 	/*
 	while (testUART.isConnected())
 	{
+
+		Sleep(ARDUINO_WAIT_TIME); //Alternativ sleep
 		if (testUART.isConnected())
 		{
 			for (int i = 0; i < INPUT_DATA_BYTES; i++)
@@ -87,11 +115,12 @@ int main()
 		//inputValue = stod(inputValStr); // String til double
 
 		//cout << fixed << setprecision << inputValue << '\r';
+		cout << "Data recieved: " << inputData << endl << endl;
 
-		cout << endl << "Data: " << inputData;
+
 
 		//this_thread::sleep_for(chrono::microseconds(500)); // Sov baseret på hvor ofte arduino sender data
-		Sleep(ARDUINO_WAIT_TIME); //Alternativ sleep
+
 	}
 	//*/
 
