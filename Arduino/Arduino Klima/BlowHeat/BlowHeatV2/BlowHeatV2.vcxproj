@@ -130,10 +130,12 @@
     <ClCompile Include="Blow.cpp" />
     <ClCompile Include="BlowHeatV2.cpp" />
     <ClCompile Include="Heat.cpp" />
+    <ClCompile Include="TempReg.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Blow.h" />
     <ClInclude Include="Heat.h" />
+    <ClInclude Include="TempReg.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

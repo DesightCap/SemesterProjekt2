@@ -24,12 +24,18 @@
     <ClCompile Include="Blow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TempReg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Heat.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Blow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TempReg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

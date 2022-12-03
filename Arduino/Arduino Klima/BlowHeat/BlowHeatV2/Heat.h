@@ -6,9 +6,9 @@
 class HeatControl{
 private:
 		double TempMin_;
-		void SetMinTemp(double tempMin);
 public:
-		HeatControl(double SetTempMin);
+		void SetMinTemp(double tempMin);
+		HeatControl(double SetTempMin = 5);
 		~HeatControl();
 		double getTempMin();
 		void TempOp(double currentTemp);

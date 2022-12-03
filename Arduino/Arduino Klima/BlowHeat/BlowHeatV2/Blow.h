@@ -7,9 +7,9 @@
 class BlowControl {
 private:
 	double TempMax_;
-	void SetMinTemp(double tempMax);
 public:
-	BlowControl(double SetTempMax);
+	void SetMaxTemp(double tempMax);
+	BlowControl(double SetTempMax = 40);
 	~BlowControl();
 	double getTempMax();
 	void TempNed(double currentTemp);

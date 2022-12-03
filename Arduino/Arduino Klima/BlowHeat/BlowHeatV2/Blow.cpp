@@ -4,14 +4,14 @@
 
 BlowControl::BlowControl(double SetTempMax)
 {
-	SetMinTemp(SetTempMax);
+	SetMaxTemp(SetTempMax);
 }
 
 BlowControl::~BlowControl()
 {
 }
 
-void BlowControl::SetMinTemp(double tempMax)
+void BlowControl::SetMaxTemp(double tempMax)
 {
 	TempMax_ = tempMax;
 }
