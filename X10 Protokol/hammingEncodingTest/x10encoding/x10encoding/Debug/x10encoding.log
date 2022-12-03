@@ -1,0 +1,27 @@
+﻿  main.c
+C:\Users\Johan\Desktop\x10encoding\x10encoding\main.c(38,32): warning C4047: 'function': 'int *' differs in levels of indirection from 'int (*)[50]'
+C:\Users\Johan\Desktop\x10encoding\x10encoding\main.c(38,13): warning C4024: 'randomBits': different types for formal and actual parameter 1
+C:\Users\Johan\Desktop\x10encoding\x10encoding\main.c(41,27): warning C4047: 'function': 'int *' differs in levels of indirection from 'int (*)[50]'
+C:\Users\Johan\Desktop\x10encoding\x10encoding\main.c(41,8): warning C4024: 'print': different types for formal and actual parameter 1
+C:\Users\Johan\Desktop\x10encoding\x10encoding\main.c(56,32): warning C4047: 'function': 'int *' differs in levels of indirection from 'int (*)[50]'
+C:\Users\Johan\Desktop\x10encoding\x10encoding\main.c(56,13): warning C4024: 'randomBits': different types for formal and actual parameter 1
+C:\Users\Johan\Desktop\x10encoding\x10encoding\main.c(59,27): warning C4047: 'function': 'int *' differs in levels of indirection from 'int (*)[50]'
+C:\Users\Johan\Desktop\x10encoding\x10encoding\main.c(59,8): warning C4024: 'print': different types for formal and actual parameter 1
+C:\Users\Johan\Desktop\x10encoding\x10encoding\main.c(61,63): warning C4047: 'function': 'int *' differs in levels of indirection from 'int (*)[50]'
+C:\Users\Johan\Desktop\x10encoding\x10encoding\main.c(61,44): warning C4024: 'combineBitArrays': different types for formal and actual parameter 1
+C:\Users\Johan\Desktop\x10encoding\x10encoding\main.c(61,102): warning C4047: 'function': 'int *' differs in levels of indirection from 'int (*)[50]'
+C:\Users\Johan\Desktop\x10encoding\x10encoding\main.c(61,83): warning C4024: 'combineBitArrays': different types for formal and actual parameter 3
+C:\Users\Johan\Desktop\x10encoding\x10encoding\main.c(63,28): warning C4047: 'function': 'int *' differs in levels of indirection from 'int (*)[50]'
+C:\Users\Johan\Desktop\x10encoding\x10encoding\main.c(63,8): warning C4024: 'print': different types for formal and actual parameter 1
+C:\Users\Johan\Desktop\x10encoding\x10encoding\main.c(68,27): warning C4047: 'function': 'int *' differs in levels of indirection from 'int (*)[50]'
+C:\Users\Johan\Desktop\x10encoding\x10encoding\main.c(68,8): warning C4024: 'print': different types for formal and actual parameter 1
+C:\Users\Johan\Desktop\x10encoding\x10encoding\main.c(82,25): warning C4047: 'function': 'int *' differs in levels of indirection from 'int (*)[50]'
+C:\Users\Johan\Desktop\x10encoding\x10encoding\main.c(82,8): warning C4024: 'print': different types for formal and actual parameter 1
+C:\Users\Johan\Desktop\x10encoding\x10encoding\main.c(92,27): warning C4047: 'function': 'int *' differs in levels of indirection from 'int (*)[50]'
+C:\Users\Johan\Desktop\x10encoding\x10encoding\main.c(92,8): warning C4024: 'print': different types for formal and actual parameter 1
+C:\Users\Johan\Desktop\x10encoding\x10encoding\main.c(96,27): warning C4047: 'function': 'int *' differs in levels of indirection from 'int (*)[50]'
+C:\Users\Johan\Desktop\x10encoding\x10encoding\main.c(96,8): warning C4024: 'print': different types for formal and actual parameter 1
+C:\Users\Johan\Desktop\x10encoding\x10encoding\main.c(104,18): warning C4244: 'function': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\Johan\Desktop\x10encoding\x10encoding\main.c(208): warning C4715: 'hammingEncoding': not all control paths return a value
+C:\Users\Johan\Desktop\x10encoding\x10encoding\main.c(333): warning C4715: 'hammingDecoding': not all control paths return a value
+  x10encoding.vcxproj -> C:\Users\Johan\Desktop\x10encoding\Debug\x10encoding.exe
