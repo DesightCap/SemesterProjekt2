@@ -1,6 +1,7 @@
 #include "TempReg.h"
 #include <stdlib.h>
 #include <iostream>
+#include <exception>
 
 
 TempReg::TempReg(double minimumTemp, double MaxemumTemp)
@@ -10,9 +11,9 @@ TempReg::TempReg(double minimumTemp, double MaxemumTemp)
 	{
 	setTempInterval(minimumTemp, MaxemumTemp);
 	}
-	catch (const char* msg)
+	catch (std::invalid_argument const& ex)
 	{
-		std::cerr << msg << std::endl;
+		std::cout << ex.what() << std::endl;
 	}
 
 }
