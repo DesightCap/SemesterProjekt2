@@ -2,7 +2,10 @@
   "ExpandedNodes": [
     "",
     "\\Arduino",
-    "\\Arduino\\Arduino Klima"
+    "\\Arduino\\Arduino Temp",
+    "\\Arduino\\Arduino Temp\\I2c_v2",
+    "\\Arduino\\Arduino Temp\\I2c_v2\\I2c_v2"
   ],
+  "SelectedNode": "\\Arduino\\Arduino Temp\\I2c_v2\\I2c_v2.sln",
   "PreviewInSolutionExplorer": false
 }
