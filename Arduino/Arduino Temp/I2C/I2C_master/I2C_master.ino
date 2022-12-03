@@ -22,5 +22,5 @@ void loop()
 {
     Serial.print(Temperature.getTemp());
     Serial.println(" oC");
-    delay(2000);
+    delay(1000);
 }
