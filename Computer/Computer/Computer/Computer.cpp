@@ -68,11 +68,11 @@ void Computer::openMenu()
 			// Jeg tror her at vi skal refere til en seperat funktion
 			// På den funktion bliver vi evt. nødt til at sætte multithreading op
 			cout << " Skriv min temp: ";
-			int tempIntMin = UIinput();
-			Sleep(1000);
+			int tempIntMin;
+			cin >> tempIntMin;
 			cout << endl << "Skriv max temp: ";
-			Sleep(1000);
-			int tempIntMax = UIinput();
+			int tempIntMax;
+			cin >> tempIntMax;
 			testTemp_->setTempInt(tempIntMin, tempIntMax);
 		}
 		break;
@@ -82,14 +82,20 @@ void Computer::openMenu()
 			break;
 		case 4:
 		case 5:
-			Sleep(65);
+			//
 			cout << "invalid input ";
 			break;
 		default:
 
-			testUART_->getTemp();
+			// Skal variabler oprettes med standard værdi? 
+			char* buffer = 0;
+			unsigned int buf_size = 100;
+
+			//testUART_->getTemp(buffer, buf_size);
+			
 
 		}
+		Sleep(65);
 		{
 			int tempValidate = testTemp_->checkTemp(temp_);
 			if (tempValidate < 0)
@@ -121,4 +127,20 @@ int Computer::UIinput()
 	}
 	return 0;
 	// Overvej at implementere sleep i UIinput(), i stedet for hvor den bliver brugt
+}
+
+string Computer::dataHandler()
+{
+		Sleep(ARDUINO_WAIT_TIME);
+		if (testUART_->isConnected())
+		{
+			for (int i = 0; i < INPUT_DATA_BYTES; i++)
+			{
+				inputData_[i] = 0;
+			}
+			testUART_->getTemp(inputData_, INPUT_DATA_BYTES);
+		}
+		
+	string inputValStr(inputData_);
+	return inputValStr;
 }

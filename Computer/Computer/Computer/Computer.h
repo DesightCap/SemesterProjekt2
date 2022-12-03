@@ -22,10 +22,16 @@ public:
 	void printLog();
 	void openMenu();
 	int UIinput();
+	string dataHandler();
 private:
 	UART* testUART_;
 	Log* testLog_;
 	Temp* testTemp_;
 	int temp_;
+
+	//char comport_[] = "COM5"; // Alternativ: char comport[] = "\\\\.\\COM5";
+	//char* port_ = comport;
+	char inputData_[INPUT_DATA_BYTES];
+
 };
 

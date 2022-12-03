@@ -1,6 +1,10 @@
 Kode til kontrol computeren
 
 Kilder: 
+// LOG
 https://stackoverflow.com/questions/43493794/how-to-get-local-time-c
 https://www.w3schools.com/cpp/cpp_files.asp
 https://stackoverflow.com/questions/2393345/how-to-append-text-to-a-text-file-in-c
+// UART
+https://www.youtube.com/watch?v=bLz33O6-i5Q
+https://www.xanthium.in/Serial-Port-Programming-using-Win32-API
