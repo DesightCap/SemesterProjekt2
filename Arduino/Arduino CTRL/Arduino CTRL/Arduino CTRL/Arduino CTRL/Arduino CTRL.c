@@ -17,9 +17,6 @@ void tempChange(char);
 
 int main()
 {
-	//char tegn;
-	//char TestStreng[8] = "2.55 \n\r";
-
 	// Initialize LED port
 	initLEDport();
 	// Initialize UART: Baud = 9600, 8 data bits, No Parity
@@ -30,34 +27,41 @@ int main()
 	turnOnLED(2);
 	turnOffLED(3);
 	turnOnLED(4);
-	srand(time(NULL));
+	
 	while (1)
 	{
-		char recieved = ReadChar();
 		//_delay_ms(2000);
 		
-		if (recieved == 'u' || recieved == 'U')
+		if ( switchStatus() != 0 )
 		{
-			tempChange('u');
+			if(switchOn(7))
+			{
+				toSend = "63";
+				toggleLED(7);
+				SendString(toSend);
+				_delay_ms(2000);
+			}
+			else if(switchOn(0))
+			{
+				toSend = "20";
+				toggleLED(0);
+				SendString(toSend);
+				_delay_ms(2000);
+			}
 		}
-		else if (recieved == 'd'||recieved == 'D')
+		else
 		{
-			tempChange('d');
+			char recieved = ReadChar();
+			if (recieved == 'u' || recieved == 'U')
+			{
+				tempChange('u');
+			}
+			else if (recieved == 'd'||recieved == 'D')
+			{
+				tempChange('d');
+			}	
 		}
-		if(switchOn(7))
-		{
-			toSend = "63";
-			toggleLED(7);
-			SendString(toSend);
-			_delay_ms(2000);
-		}
-		else if(switchOn(0))
-		{
-			toSend = "20";
-			toggleLED(0);
-			SendString(toSend);
-			_delay_ms(2000);
-		}
+		
 		recieved = '0';
 	}
 	/*

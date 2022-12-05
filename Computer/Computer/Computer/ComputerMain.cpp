@@ -14,8 +14,8 @@
 
 using namespace std;
 
-char inputData[INPUT_DATA_BYTES]; // INPUT_DATA_BYTES er defineret i UART.h
-double inputValue = 0.0;
+//char inputData[INPUT_DATA_BYTES]; // INPUT_DATA_BYTES er defineret i UART.h
+//double inputValue = 0.0;
 
 // Vi antager at Ardrino tilsluttes port mellem COM1 og COM9, da vi ellers skal formatere porten som \\\\.\\COM3 som Win32 vil have den // Kan evt. udvides efterfølgende
 char comport[] = "COM5";
@@ -67,11 +67,11 @@ int main()
 	cout << "Arduino forbundet: " << boolalpha << testUART.isConnected() << endl << "Forbundet til port " << port << endl;
 	while (testUART.isConnected())
 	{
-		string buffer{'0','0','\0'};
+		//string buffer{'0','0','\0'};
 		char recieve[] = "00";
 
 		char toSend;
-		int input =	testComputer.UIinput();
+		int input = testComputer.UIinput();
 		if (input == 1)
 		{
 			testUART.sendNed();
@@ -84,11 +84,26 @@ int main()
 		{
 
 			//testUART.getTemp((char*)&buffer, sizeof(buffer) / sizeof(buffer[0]));
-			testUART.getTemp(recieve, 3);
-			if (recieve != "00")
-				cout << recieve << endl;
-			
+			//testUART.getTemp(recieve, 3);
+			testUART.getTemp(recieve, sizeof(recieve) / sizeof(recieve[0]));
 
+			if (recieve[0] != '0' || recieve[1] != '0' || recieve[2] != '\0')
+			{
+				cout << recieve << endl;
+			}
+			else if (recieve[0] == '0' && recieve[1] == '0' && recieve[2] == '\0')
+			{
+				Sleep(50);
+				testUART.getTemp(recieve, sizeof(recieve) / sizeof(recieve[0]));
+				if (recieve[0] != '0' || recieve[1] != '0' || recieve[2] != '\0')
+				{
+					cout << recieve << endl;
+				}
+			}
+			else
+			{
+				cout << "Ingen input." << endl;
+			}
 		}
 		Sleep(ARDUINO_WAIT_TIME);
 	}

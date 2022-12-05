@@ -1,8 +1,8 @@
 #pragma once
 
 #define ARDUINO_WAIT_TIME 2000
-#define INPUT_DATA_BYTES 8 // Antallet af bytes vi modtager i string. (Husk \r\n hver tæller for en)
-#define OUTPUT_DATA_BYTES 8
+#define INPUT_DATA_BYTES 1 // Antallet af bytes vi modtager i string. (Husk \r\n hver tæller for en)
+#define OUTPUT_DATA_BYTES 1
 
 #include <iostream>
 #include "UART.h"
