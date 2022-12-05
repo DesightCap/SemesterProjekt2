@@ -9,7 +9,7 @@ class Temp
 {
 public:
 	Temp(int min = 5, int max = 30);
-	bool setTempInt(int min, int max); // 
+	bool setTempInt(); // 
 	int checkTemp(int temp); // 0 == indenfor; + == over; - == under
 private:
 	int TempMin_;

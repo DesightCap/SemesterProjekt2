@@ -21,8 +21,10 @@ public:
 	bool recieveTempInterval();
 	void printLog();
 	void openMenu();
+	void menuPrint();
 	int UIinput();
 	string dataHandler();
+	int tempCharArrayToInt(char recieved[]);
 private:
 	UART* testUART_;
 	Log* testLog_;

@@ -25,11 +25,12 @@ char* port = comport;
 
 int main()
 {
-
+	
 	Log testLog;
 	//	UI testUI;
 	UART testUART(port); // Med UART der opretter forbindelse i constructoren, kunne Complex(d).print(); som vist i OOP være en ide til at hente data ud?
-	Temp testTemp(5, 10);
+	Temp testTemp(10, 50);
+	cout << "Arduino forbundet: " << boolalpha << testUART.isConnected() << endl << "Forbundet til port " << port << endl;
 
 	// Test
 
@@ -42,7 +43,7 @@ int main()
 //	Computer testCmp(UI testUI, UART testUART, Log &testLog, Temp &testTemp());
 
 	Computer testComputer(&testUART, &testLog, &testTemp);
-	//testComputer.openMenu();
+	testComputer.openMenu();
 	/*
 	// Test skrivning til Arduino
 	char testOutput = 1;
@@ -64,14 +65,13 @@ int main()
 	//*
 
 
-	cout << "Arduino forbundet: " << boolalpha << testUART.isConnected() << endl << "Forbundet til port " << port << endl;
+	//cout << "Arduino forbundet: " << boolalpha << testUART.isConnected() << endl << "Forbundet til port " << port << endl;
 	while (testUART.isConnected())
 	{
 		//string buffer{'0','0','\0'};
 		char recieve[] = "00";
-
 		char toSend;
-		int input = testComputer.UIinput();
+		/*int input = testComputer.UIinput();
 		if (input == 1)
 		{
 			testUART.sendNed();
@@ -80,7 +80,11 @@ int main()
 		{
 			testUART.sendOp();
 		}
-		else
+		else if (input == 3)
+		{
+			testLog.print();
+		}
+		else*/
 		{
 
 			//testUART.getTemp((char*)&buffer, sizeof(buffer) / sizeof(buffer[0]));
@@ -89,7 +93,27 @@ int main()
 
 			if (recieve[0] != '0' || recieve[1] != '0' || recieve[2] != '\0')
 			{
-				cout << recieve << endl;
+
+				int recievedInt = testComputer.tempCharArrayToInt(recieve);
+
+				testLog.addToLog(recievedInt);
+				cout << "Skrevet til log" << endl;
+				switch (testTemp.checkTemp(recievedInt))
+				{
+				case -1:
+					testUART.sendNed();
+					cout << "Saenk temperatur" << endl;
+					break;
+				case 0:
+					cout << "Temp indenfor interval" << endl;
+					break;
+				case 1:
+					testUART.sendOp();
+					cout << "Haev temp" << endl;
+					break;
+				default:
+					break;
+				}
 			}
 			else if (recieve[0] == '0' && recieve[1] == '0' && recieve[2] == '\0')
 			{

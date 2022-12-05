@@ -1,6 +1,3 @@
 ﻿  Computer.cpp
-  ComputerMain.cpp
-C:\Users\hresk\OneDrive\Dokumenter\GitHub\SemesterProjekt2\Computer\Computer\Computer\ComputerMain.cpp(73,8): warning C4101: 'toSend': unreferenced local variable
-  UART.cpp
-  Generating Code...
+C:\Users\hresk\OneDrive\Dokumenter\GitHub\SemesterProjekt2\Computer\Computer\Computer\Computer.cpp(105,9): warning C4101: 'toSend': unreferenced local variable
   Computer.vcxproj -> C:\Users\hresk\OneDrive\Dokumenter\GitHub\SemesterProjekt2\Computer\Computer\x64\Debug\Computer.exe
