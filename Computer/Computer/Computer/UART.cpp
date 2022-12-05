@@ -22,7 +22,7 @@ UART::UART(char* portName)
 
 	// Fejlhåndtering // DWORD bruger WIN32 API funktioner til at få den sidste fejl i en interger værdi.
 	DWORD errMsg = GetLastError();
-
+	
 	// Fejlkode 2 i DWORD er ERROR_FILE_NOT_FOUND. 
 	// Fejlkode 5 i DWORD er ERROR_ACCESS_DENIED.
 	// Det er de eneste vi er interesseret i. 
@@ -50,8 +50,6 @@ UART::UART(char* portName)
 			dcbSerialParameters.StopBits = ONESTOPBIT;
 			dcbSerialParameters.Parity = NOPARITY;
 			dcbSerialParameters.fDtrControl = DTR_CONTROL_ENABLE;
-
-
 
 			if (!SetCommState(handleToCOM, &dcbSerialParameters))
 			{
@@ -97,7 +95,7 @@ int UART::getTemp(char* buffer, unsigned int buf_size)
 	// Forbered til at læse alle tilgængelige bytes, uden af overskride det forspurgte antal bytes. 
 	if (status.cbInQue > 0)
 	{
-		if (status.cbInQue > buf_size)
+		if (status.cbInQue >= buf_size)
 		{
 			toRead = buf_size;
 		}
@@ -107,6 +105,7 @@ int UART::getTemp(char* buffer, unsigned int buf_size)
 	// Indlæs antal ("toRead") bytes ind i "buffer" og retuner antallet af bytes der er blevet læst
 	if (ReadFile(handleToCOM, buffer, toRead, &bytesRead, NULL))
 	{
+		CancelIo(handleToCOM);
 		return bytesRead;
 	}
 	
@@ -131,11 +130,13 @@ bool UART::send(char* buffer, unsigned int buf_size)
 	DWORD bytesWritten  = 0;
 	unsigned int toWrite = OUTPUT_DATA_BYTES;
 
-	bool Status = WriteFile(handleToCOM, buffer, toWrite, &bytesWritten, NULL);
-	Sleep(ARDUINO_WAIT_TIME/2);
-	
+	if (!WriteFile(handleToCOM, buffer, toWrite, &bytesWritten, NULL))
+	{
+		ClearCommError(handleToCOM, &errors, &status);
+		return false;
+	}
 
-	return Status;
+	return true;
 }
 
 char UART::getChar()

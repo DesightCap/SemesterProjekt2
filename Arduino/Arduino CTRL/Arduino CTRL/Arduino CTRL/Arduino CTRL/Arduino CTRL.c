@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include "uart1.h"
 #include "led.h"
+#include "switch.h"
 #include <util/delay.h>
 
 char recieved = '0';
@@ -23,18 +24,17 @@ int main()
 	initLEDport();
 	// Initialize UART: Baud = 9600, 8 data bits, No Parity
 	InitUART(9600,8);
-	//int i = 0;
+	initSwitchPort();
 	
 	turnOffLED(1);
 	turnOnLED(2);
 	turnOffLED(3);
 	turnOnLED(4);
-	
+	srand(time(NULL));
 	while (1)
 	{
 		char recieved = ReadChar();
-		
-		_delay_ms(2000);
+		//_delay_ms(2000);
 		
 		if (recieved == 'u' || recieved == 'U')
 		{
@@ -44,15 +44,21 @@ int main()
 		{
 			tempChange('d');
 		}
-		if (recieved == '8')
+		if(switchOn(7))
 		{
-			toSend = "83";
-			
+			toSend = "63";
+			toggleLED(7);
 			SendString(toSend);
+			_delay_ms(2000);
+		}
+		else if(switchOn(0))
+		{
+			toSend = "20";
+			toggleLED(0);
+			SendString(toSend);
+			_delay_ms(2000);
 		}
 		recieved = '0';
-		toSend = "00";
-
 	}
 	/*
 	while (i != 10)

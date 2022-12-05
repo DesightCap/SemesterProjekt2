@@ -119,6 +119,12 @@
     <Compile Include="led1.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="switch.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="switch.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="uart1.c">
       <SubType>compile</SubType>
     </Compile>

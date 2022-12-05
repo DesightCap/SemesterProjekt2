@@ -67,35 +67,64 @@ int main()
 	cout << "Arduino forbundet: " << boolalpha << testUART.isConnected() << endl << "Forbundet til port " << port << endl;
 	while (testUART.isConnected())
 	{
+		string buffer{'0','0','\0'};
+		char recieve[] = "00";
+
 		char toSend;
-		cout << "Data to send: ";
-		cin >> toSend;
-		testUART.send(&toSend, 2);
-		
-		if (toSend == '8')
+		int input =	testComputer.UIinput();
+		if (input == 1)
 		{
-			testUART.send(&toSend, 1);
-			string stringRecieved = testComputer.dataHandler();
-
-			try
-			{
-				cout << "Data recieved: " << stoi(stringRecieved) << endl;
-
-			}
-			catch (invalid_argument const& error)
-			{
-				cout << "String til Int daarligt argument: " << error.what() << endl;
-			}
-			catch (out_of_range const& error)
-			{
-				cout << "String til Int uden for range: " << error.what() << endl;
-			}
+			testUART.sendNed();
+		}
+		else if (input == 2)
+		{
+			testUART.sendOp();
 		}
 		else
 		{
-			cout << "Data recieved: " << testComputer.dataHandler() << endl;
+
+			//testUART.getTemp((char*)&buffer, sizeof(buffer) / sizeof(buffer[0]));
+			testUART.getTemp(recieve, 3);
+			if (recieve != "00")
+				cout << recieve << endl;
+			
+
 		}
+		Sleep(ARDUINO_WAIT_TIME);
 	}
+
+
+	//while (testUART.isConnected())
+	//{
+	//	char toSend;
+	//	cout << "Data to send: ";
+	//	cin >> toSend;
+	//	testUART.send(&toSend, 2);
+	//	
+	//	if (toSend == '8')
+	//	{
+	//		testUART.send(&toSend, 1);
+	//		string stringRecieved = testComputer.dataHandler();
+
+	//		try
+	//		{
+	//			cout << "Data recieved: " << stoi(stringRecieved) << endl;
+
+	//		}
+	//		catch (invalid_argument const& error)
+	//		{
+	//			cout << "String til Int daarligt argument: " << error.what() << endl;
+	//		}
+	//		catch (out_of_range const& error)
+	//		{
+	//			cout << "String til Int uden for range: " << error.what() << endl;
+	//		}
+	//	}
+	//	else
+	//	{
+	//		cout << "Data recieved: " << testComputer.dataHandler() << endl;
+	//	}
+	//}
 
 
 	/*
