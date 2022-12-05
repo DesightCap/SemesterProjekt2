@@ -11,10 +11,10 @@ void x10::sendx10(char command, uint8_t* datapakkePtr, volatile int* counterPtr)
 {
 
 	//simplificeret forslag med on/off. Kunne være switch-case med heatOn, heatOff, blowOn, blowOff, tempSomething osv.
-	if (command == y)
+	if (command == 'y')
 		*datapakkePtr = 0b11111111;
 
-	else if (command == z)
+	else if (command == 'z')
 		*datapakkePtr = 0b00000000;
 
 	*counterPtr = 1;

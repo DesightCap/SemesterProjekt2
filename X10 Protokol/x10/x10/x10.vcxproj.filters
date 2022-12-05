@@ -21,7 +21,7 @@
     <ClCompile Include="x10.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="x10_sender_modtager.cpp">
+    <ClCompile Include="x10_modtager_tester.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
