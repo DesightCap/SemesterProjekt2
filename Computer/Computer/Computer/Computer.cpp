@@ -2,9 +2,10 @@
 #include <iostream>
 #include <string>
 #include <sstream>
-#include <stdlib.h>
+//#include <stdlib.h>
 
 #include "Computer.h"
+
 
 Computer::Computer(UART* testUART, Log* testLog, Temp* testTemp)
 {
@@ -46,47 +47,47 @@ void Computer::openMenu()
 {
 	// Jeg har været nødt til at sætte en sleep ind ved UIinput kald, det ødelægger lidt ideen med at omgå at blokere for kørslen.
 	// Vi er evt. nødt til at mixe med multithreading? 
+	// Problem burde være løst - prøv at fjerne diverse Sleep() funktioner og se om UI stadig virker
 
 	bool runningTempReg = true;
 	
-	cout
-		<< "1: Udskriv log" << endl
-		<< "2: Saet temperatur interval" << endl
-		<< "3: Stop korsel af loop" << endl << endl;
+	//cout
+	//	<< "1: Udskriv log" << endl
+	//	<< "2: Saet temperatur interval" << endl
+	//	<< "3: Stop korsel af loop" << endl << endl;
+
+	this->menuPrint();
 
 	while (runningTempReg)
 	{
 		// uskrift med menuPrint()
-		for (int j = 48; j < 54; j++)
+		/*for (int j = 48; j < 54; j++)
 		{
 			GetAsyncKeyState(j);
-		}
+		}*/
 
-		//this->menuPrint();
+		
+		
 		int userSelect = 0;
 		switch (UIinput())
 		{
 		case 1:
 			// Hvordan håndtere vi her? 
+			system("CLS");
 			testLog_->print();
-			Sleep(100);
+			this->menuPrint(false); // udskriver menu uden rydning af consol
 			break;
 		case 2:
-			Sleep(100);
 			{
-				// Jeg tror her at vi skal refere til en seperat funktion
-				// På den funktion bliver vi evt. nødt til at sætte multithreading op
-				cout << " Skriv min temp: ";
-				int tempIntMin;
-				cin >> tempIntMin;
-				cout << endl << "Skriv max temp: ";
-				int tempIntMax;
-				cin >> tempIntMax;
+				
 				testTemp_->setTempInt();
+
+				this->menuPrint();
+				cout << "Temperatur interval indstillet." << endl;
 			}
 			break;
 		case 3:
-			cout << "Koersels loop afsluttes. ";
+			cout << endl << endl << "Koersels loop afsluttes. ";
 			runningTempReg = false;
 			break;
 		case 4:
@@ -96,11 +97,6 @@ void Computer::openMenu()
 			break;
 		default:
 
-			// Skal variabler oprettes med standard værdi? 
-			//char* buffer = 0;
-			//unsigned int buf_size = 100;
-
-			////testUART_->getTemp(buffer, buf_size);
 			char recieve[] = "00";
 			char toSend;
 			testUART_->getTemp(recieve, sizeof(recieve) / sizeof(recieve[0]));
@@ -110,7 +106,7 @@ void Computer::openMenu()
 				int recievedInt = this->tempCharArrayToInt(recieve);
 
 				testLog_->addToLog(recievedInt);
-				cout << "Skrevet til log" << endl;
+				//cout << "Skrevet til log" << endl; // test udskriv for skrivning til log
 				switch (this->testTemp_->checkTemp(recievedInt))
 				{
 				case -1:
@@ -127,6 +123,7 @@ void Computer::openMenu()
 				default:
 					break;
 				}
+				
 			}
 			else if (recieve[0] == '0' && recieve[1] == '0' && recieve[2] == '\0')
 			{
@@ -137,12 +134,9 @@ void Computer::openMenu()
 					cout << recieve << endl;
 				}
 			}
-			else
-			{
-				cout << "Ingen input." << endl;
-			}
+			
 			Sleep(ARDUINO_WAIT_TIME);
-
+			break;
 		}
 		/*
 		Sleep(65);
@@ -161,9 +155,10 @@ void Computer::openMenu()
 	}
 }
 
-void Computer::menuPrint()
+void Computer::menuPrint(bool clear)
 {
-	system("CLR");
+	if (clear)
+		system("CLS");
 	for (int j = 48; j < 54; j++)
 	{
 		GetAsyncKeyState(j);

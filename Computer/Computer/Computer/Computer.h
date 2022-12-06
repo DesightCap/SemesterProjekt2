@@ -21,7 +21,7 @@ public:
 	bool recieveTempInterval();
 	void printLog();
 	void openMenu();
-	void menuPrint();
+	void menuPrint(bool clear = true);
 	int UIinput();
 	string dataHandler();
 	int tempCharArrayToInt(char recieved[]);

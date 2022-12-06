@@ -1,11 +1,5 @@
 #include <iostream>
 #include "Computer.h"
-/*
-#include "Log.h"
-#include "Temp.h"
-#include "UART.h"
-#include "UI.h"
-*/
 #include <time.h>
 #include <iomanip> // til at sætte præcion 
 #include <thread>
@@ -21,7 +15,6 @@ using namespace std;
 char comport[] = "COM5";
 //char comport[] = "\\\\.\\COM5";
 char* port = comport;
-
 
 int main()
 {
@@ -193,4 +186,3 @@ int main()
 	//*/
 
 }
-
