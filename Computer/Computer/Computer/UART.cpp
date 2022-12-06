@@ -141,6 +141,8 @@ bool UART::send(char* buffer, unsigned int buf_size)
 
 char UART::getChar()
 {
+
+	// Nødvendig?
 	return 0;
 }
 

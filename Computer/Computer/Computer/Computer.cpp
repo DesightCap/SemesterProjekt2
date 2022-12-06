@@ -17,6 +17,7 @@ Computer::Computer(UART* testUART, Log* testLog, Temp* testTemp)
 
 void Computer::TempReg()
 {
+	// Diskuter
 
 
 }
@@ -26,22 +27,21 @@ void Computer::TempReg()
 
 int Computer::tempInitiate()
 {
+	// Diskuter
 	return 0;
 }
 
 void Computer::tempStop()
 {
+	// Diskuter
 }
 
 bool Computer::recieveTempInterval()
 {
-
+	// Mangler
 	return false;
 }
 
-void Computer::printLog()
-{
-}
 
 void Computer::openMenu()
 {
@@ -50,24 +50,11 @@ void Computer::openMenu()
 	// Problem burde være løst - prøv at fjerne diverse Sleep() funktioner og se om UI stadig virker
 
 	bool runningTempReg = true;
-	
-	//cout
-	//	<< "1: Udskriv log" << endl
-	//	<< "2: Saet temperatur interval" << endl
-	//	<< "3: Stop korsel af loop" << endl << endl;
 
 	this->menuPrint();
 
 	while (runningTempReg)
-	{
-		// uskrift med menuPrint()
-		/*for (int j = 48; j < 54; j++)
-		{
-			GetAsyncKeyState(j);
-		}*/
-
-		
-		
+	{		
 		int userSelect = 0;
 		switch (UIinput())
 		{
@@ -79,9 +66,7 @@ void Computer::openMenu()
 			break;
 		case 2:
 			{
-				
 				testTemp_->setTempInt();
-
 				this->menuPrint();
 				cout << "Temperatur interval indstillet." << endl;
 			}

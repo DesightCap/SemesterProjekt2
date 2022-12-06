@@ -22,7 +22,7 @@ int main()
 	Log testLog;
 	//	UI testUI;
 	UART testUART(port); // Med UART der opretter forbindelse i constructoren, kunne Complex(d).print(); som vist i OOP være en ide til at hente data ud?
-	Temp testTemp(10, 50);
+	Temp testTemp;
 	cout << "Arduino forbundet: " << boolalpha << testUART.isConnected() << endl << "Forbundet til port " << port << endl;
 
 	// Test
@@ -32,7 +32,7 @@ int main()
 
 	// Udskriv log test
 	//testObj.print();
-
+	
 //	Computer testCmp(UI testUI, UART testUART, Log &testLog, Temp &testTemp());
 
 	Computer testComputer(&testUART, &testLog, &testTemp);

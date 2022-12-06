@@ -8,3 +8,5 @@ https://stackoverflow.com/questions/2393345/how-to-append-text-to-a-text-file-in
 // UART
 https://www.youtube.com/watch?v=bLz33O6-i5Q
 https://www.xanthium.in/Serial-Port-Programming-using-Win32-API
+// Computer
+https://stackoverflow.com/questions/20222277/delete-key-press-historygetkeystate-c
