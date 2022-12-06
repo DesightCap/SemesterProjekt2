@@ -1,28 +1,28 @@
-/*
- * x10.h
- *
- * Created: 29-11-2022 08:25:16
- *  Author: sebastian
- */
 
 
 #ifndef X10_H_
 #define X10_H_
 
 #pragma once
-#include <iostream>
+#include <avr/io.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <avr/interrupt.h>
+#define F_CPU 16000000
 
 
-class x10
-{
-public:
-	x10();
-	void sendx10(char, uint8_t* datapakkePtr, volatile int* counterPtr) const;
-	char recievex10() const;
-	void initISR() const;
-};
+void sendx10(uint16_t* adr, uint16_t* com, uint16_t* combined, uint16_t* encoded, uint32_t* datapakke, volatile int* counterPtr);
+//uint8_t recievex10();
+void initISR();
+void initPort();
+
+void combineBitArrays(uint16_t* adr, uint16_t* com, uint16_t* combined);
+int correctModulo(int, int);
+void hammingEncoding(uint16_t* str, uint16_t* encoded);
+void doubleEncoded(uint16_t* encoded, uint32_t* datapakke);
+void recievex10(volatile int* count);
+
+
 
 
 
