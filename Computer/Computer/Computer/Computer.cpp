@@ -31,10 +31,17 @@ int Computer::tempInitiate()
 	return 0;
 }
 
-void Computer::tempStop()
+void Computer::readEnable()
 {
-	// Diskuter
+
+	startStop_ = true;
 }
+
+void Computer::readToggle()
+{
+	startStop_ = !startStop_;
+}
+
 
 bool Computer::recieveTempInterval()
 {
@@ -52,9 +59,9 @@ void Computer::openMenu()
 	bool runningTempReg = true;
 
 	this->menuPrint();
-
+	readEnable();
 	while (runningTempReg)
-	{		
+	{
 		int userSelect = 0;
 		switch (UIinput())
 		{
@@ -65,65 +72,81 @@ void Computer::openMenu()
 			this->menuPrint(false); // udskriver menu uden rydning af consol
 			break;
 		case 2:
-			{
-				testTemp_->setTempInt();
-				this->menuPrint();
-				cout << "Temperatur interval indstillet." << endl;
-			}
-			break;
+		{
+			testTemp_->setTempInt();
+			this->menuPrint();
+			cout << "Temperatur interval indstillet." << endl;
+		}
+		break;
 		case 3:
 			cout << endl << endl << "Koersels loop afsluttes. ";
 			runningTempReg = false;
 			break;
 		case 4:
+			readToggle();
+			if (!startStop_)
+			{
+				cout << "stopper temperatur regulering" << endl;
+			}
+			else if (startStop_)
+			{
+				cout << " starter temperatur regulering" << endl;
+			}
+
 		case 5:
 			//
 			cout << "invalid input ";
 			break;
 		default:
 
-			char recieve[] = "00,0";
+			char recieve[] = "00.0";
 			char toSend;
-			//testUART_->getTemp(recieve, 4);
-			testUART_->getTemp(recieve, (sizeof(recieve) / sizeof(recieve[0]))-1);
+			if (startStop_ == true)
+				testUART_->getTemp(recieve, (sizeof(recieve) / sizeof(recieve[0])) - 1);
 			if (recieve[0] != '0' || recieve[1] != '0' || recieve[2] != '\0')
 			{
 
 				double recievedInt = this->tempCharArrayToDouble(recieve);
 
 				testLog_->addToLog(recievedInt);
-				cout << "Skrevet til log" 
-					<< " - Double: " << recievedInt 
-					<< " Char: " << recieve[0] << recieve[1] << recieve[2] << recieve[3] 
+				cout << "Skrevet til log"
+					<< " - Double: " << recievedInt
+					<< " Char: " << recieve[0] << recieve[1] << recieve[2] << recieve[3]
 					<< endl; // test udskriv for skrivning til log
 				switch (this->testTemp_->checkTemp(recievedInt))
 				{
 				case -1:
-					testUART_->sendNed();
+					if (startStop_ == true)
+						testUART_->sendNed();
 					cout << "Saenk temperatur" << endl;
 					break;
 				case 0:
-					cout << "Temp indenfor interval" << endl;
+					if (startStop_ == true)
+						cout << "Temp indenfor interval" << endl;
 					break;
 				case 1:
-					testUART_->sendOp();
+					if (startStop_ == true)
+						testUART_->sendOp();
 					cout << "Haev temp" << endl;
 					break;
 				default:
 					break;
 				}
-				
+
 			}
 			else if (recieve[0] == '0' && recieve[1] == '0' && recieve[2] == '\0')
 			{
 				Sleep(50);
-				testUART_->getTemp(recieve, sizeof(recieve) / sizeof(recieve[0]));
+				if (startStop_)
+				{
+					testUART_->getTemp(recieve, sizeof(recieve) / sizeof(recieve[0]));
+				}
 				if (recieve[0] != '0' || recieve[1] != '0' || recieve[2] != '\0')
 				{
 					cout << recieve << endl;
 				}
 			}
-			
+
 			Sleep(ARDUINO_WAIT_TIME);
 			break;
 		}
@@ -155,7 +178,8 @@ void Computer::menuPrint(bool clear)
 	cout
 		<< "1: Udskriv log" << endl
 		<< "2: Saet temperatur interval" << endl
-		<< "3: Stop korsel af loop" << endl << endl;
+		<< "3: Stop korsel af loop" << endl
+		<< "4: start/stop temperatur maaling" << endl << endl;
 
 }
 

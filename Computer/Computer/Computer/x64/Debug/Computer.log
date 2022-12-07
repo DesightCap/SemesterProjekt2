@@ -1,8 +1,4 @@
 ﻿  Computer.cpp
-C:\Users\hresk\OneDrive\Dokumenter\GitHub\SemesterProjekt2\Computer\Computer\Computer\Computer.cpp(99,40): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\hresk\OneDrive\Dokumenter\GitHub\SemesterProjekt2\Computer\Computer\Computer\Computer.cpp(86,9): warning C4101: 'toSend': unreferenced local variable
-  ComputerMain.cpp
-C:\Users\hresk\OneDrive\Dokumenter\GitHub\SemesterProjekt2\Computer\Computer\Computer\ComputerMain.cpp(95,21): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-C:\Users\hresk\OneDrive\Dokumenter\GitHub\SemesterProjekt2\Computer\Computer\Computer\ComputerMain.cpp(71,8): warning C4101: 'toSend': unreferenced local variable
-  Generating Code...
-  Computer.vcxproj -> C:\Users\hresk\OneDrive\Dokumenter\GitHub\SemesterProjekt2\Computer\Computer\x64\Debug\Computer.exe
+C:\Users\Anders\Documents\GitHub\SemesterProjekt2\Computer\Computer\Computer\Computer.cpp(116,40): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\Anders\Documents\GitHub\SemesterProjekt2\Computer\Computer\Computer\Computer.cpp(103,9): warning C4101: 'toSend': unreferenced local variable
+  Computer.vcxproj -> C:\Users\Anders\Documents\GitHub\SemesterProjekt2\Computer\Computer\x64\Debug\Computer.exe
