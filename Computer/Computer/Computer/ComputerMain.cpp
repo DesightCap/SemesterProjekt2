@@ -8,6 +8,10 @@
 //[HKEY_LOCAL_MACHINE\HARDWARE\]
 //Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Ports
 
+void testFunktionSkrivTilLog();
+void testFunktionSkrivTilArduino(UART);
+void testFunktionArdionoConnected(UART);
+
 
 using namespace std;
 
@@ -21,26 +25,30 @@ char* port = comport;
 
 int main()
 {
-	
+
 	Log testLog;
-	//	UI testUI;
 	UART testUART(port); // Med UART der opretter forbindelse i constructoren, kunne Complex(d).print(); som vist i OOP være en ide til at hente data ud?
 	Temp testTemp;
-	cout << "Arduino forbundet: " << boolalpha << testUART.isConnected() << endl << "Forbundet til port " << port << endl;
-
-	// Test
-
-	// addToLog metode test
-	//srand(time(0)); testLog.addToLog(rand() % 20);
-
-	// Udskriv log test
-	//testObj.print();
-	
-//	Computer testCmp(UI testUI, UART testUART, Log &testLog, Temp &testTemp());
 
 	Computer testComputer(&testUART, &testLog, &testTemp);
 	testComputer.openMenu();
-	/*
+}
+
+void testFunktionSkrivTilLog(Log testLog)
+{
+	// addToLog metode test
+	srand(time(0)); testLog.addToLog(rand() % 20);
+}
+
+void testFunktionArdionoConnected(UART testUART)
+{
+	cout << "Arduino forbundet: " << boolalpha << testUART.isConnected() << endl;
+	if (testUART.isConnected())
+		cout << endl << "Forbundet til port " << port << endl;
+}
+
+void testFunktionSkrivTilArduino(UART testUART)
+{
 	// Test skrivning til Arduino
 	char testOutput = 1;
 	while (true)
@@ -56,138 +64,5 @@ int main()
 		}
 		Sleep(60);
 	}
-	//*/
-
-	//*
-
-
-	//   *********************** RYD OP! *********************a
-
-	//cout << "Arduino forbundet: " << boolalpha << testUART.isConnected() << endl << "Forbundet til port " << port << endl;
-	while (testUART.isConnected())
-	{
-		//string buffer{'0','0','\0'};
-		char recieve[] = "00";
-		char toSend;
-		/*int input = testComputer.UIinput();
-		if (input == 1)
-		{
-			testUART.sendNed();
-		}
-		else if (input == 2)
-		{
-			testUART.sendOp();
-		}
-		else if (input == 3)
-		{
-			testLog.print();
-		}
-		else*/
-		{
-
-			//testUART.getTemp((char*)&buffer, sizeof(buffer) / sizeof(buffer[0]));
-			//testUART.getTemp(recieve, 3);
-			testUART.getTemp(recieve, sizeof(recieve) / sizeof(recieve[0]));
-
-			if (recieve[0] != '0' || recieve[1] != '0' || recieve[2] != '\0')
-			{
-
-				int recievedInt = testComputer.tempCharArrayToDouble(recieve);
-
-				//testLog.addToLog(recievedInt);
-				cout << "Skrevet til log" << endl;
-				switch (testTemp.checkTemp(recievedInt))
-				{
-				case -1:
-					testUART.sendNed();
-					cout << "bit 0" << recieve[0] << " efter konvertering " << recievedInt << "X Saenk temperatur" << endl; // Test cout - Fjern inden final
-					break;
-				case 0:
-					cout << "Temp indenfor interval" << endl; // Test cout - Fjern inden final
-					break;
-				case 1:
-					testUART.sendOp();
-					cout << "Haev temp" << endl; // Test cout - Fjern inden final
-					break;
-				default:
-					break;
-				}
-			}
-			else if (recieve[0] == '0' && recieve[1] == '0' && recieve[2] == '\0')
-			{
-				Sleep(50);
-				testUART.getTemp(recieve, sizeof(recieve) / sizeof(recieve[0]));
-				if (recieve[0] != '0' || recieve[1] != '0' || recieve[2] != '\0')
-				{
-					cout << recieve << endl;
-				}
-			}
-			else
-			{
-				cout << "Ingen input." << endl;
-			}
-		}
-		Sleep(ARDUINO_WAIT_TIME);
-	}
-
-
-	//while (testUART.isConnected())
-	//{
-	//	char toSend;
-	//	cout << "Data to send: ";
-	//	cin >> toSend;
-	//	testUART.send(&toSend, 2);
-	//	
-	//	if (toSend == '8')
-	//	{
-	//		testUART.send(&toSend, 1);
-	//		string stringRecieved = testComputer.dataHandler();
-
-	//		try
-	//		{
-	//			cout << "Data recieved: " << stoi(stringRecieved) << endl;
-
-	//		}
-	//		catch (invalid_argument const& error)
-	//		{
-	//			cout << "String til Int daarligt argument: " << error.what() << endl;
-	//		}
-	//		catch (out_of_range const& error)
-	//		{
-	//			cout << "String til Int uden for range: " << error.what() << endl;
-	//		}
-	//	}
-	//	else
-	//	{
-	//		cout << "Data recieved: " << testComputer.dataHandler() << endl;
-	//	}
-	//}
-
-
-	/*
-	while (testUART.isConnected())
-	{
-
-		Sleep(ARDUINO_WAIT_TIME); //Alternativ sleep
-		if (testUART.isConnected())
-		{
-			for (int i = 0; i < INPUT_DATA_BYTES; i++)
-			{
-				inputData[i] = 0;
-			}
-			testUART.getTemp(inputData, INPUT_DATA_BYTES);
-		}
-		string inputValStr(inputData); // Kan man evt bare caste til string i stedet for at oprette en ny string?
-		//inputValue = stod(inputValStr); // String til double
-
-		//cout << fixed << setprecision << inputValue << '\r';
-		cout << "Data recieved: " << inputData << endl << endl;
-
-
-
-		//this_thread::sleep_for(chrono::microseconds(500)); // Sov baseret på hvor ofte arduino sender data
-
-	}
-	//*/
 
 }

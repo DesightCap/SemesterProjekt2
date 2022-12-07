@@ -31,7 +31,7 @@ private:
 	Log* testLog_;
 	Temp* testTemp_;
 	int temp_;
-	bool startStop_ = true;
+	bool startStop_;
 	//char comport_[] = "COM5"; // Alternativ: char comport[] = "\\\\.\\COM5";
 	//char* port_ = comport;
 	char inputData_[INPUT_DATA_BYTES];

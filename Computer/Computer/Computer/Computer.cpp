@@ -58,7 +58,7 @@ void Computer::openMenu()
 
 	bool runningTempReg = true;
 
-	this->menuPrint();
+	this->menuPrint(false);
 	readEnable();
 	while (runningTempReg)
 	{
@@ -74,7 +74,7 @@ void Computer::openMenu()
 		case 2:
 		{
 			testTemp_->setTempInt();
-			this->menuPrint();
+			this->menuPrint(false);
 			cout << "Temperatur interval indstillet." << endl;
 		}
 		break;
@@ -90,9 +90,9 @@ void Computer::openMenu()
 			}
 			else if (startStop_)
 			{
-				cout << " starter temperatur regulering" << endl;
+				cout << "starter temperatur regulering" << endl;
 			}
-
+			break;
 		case 5:
 			//
 			cout << "invalid input ";
@@ -101,55 +101,57 @@ void Computer::openMenu()
 
 			char recieve[] = "00.0";
 			char toSend;
-			if (startStop_ == true)
+			while (startStop_ == true)
+			{
 				testUART_->getTemp(recieve, (sizeof(recieve) / sizeof(recieve[0])) - 1);
-			if (recieve[0] != '0' || recieve[1] != '0' || recieve[2] != '\0')
-			{
-
-				double recievedInt = this->tempCharArrayToDouble(recieve);
-
-				testLog_->addToLog(recievedInt);
-				cout << "Skrevet til log"
-					<< " - Double: " << recievedInt
-					<< " Char: " << recieve[0] << recieve[1] << recieve[2] << recieve[3]
-					<< endl; // test udskriv for skrivning til log
-				switch (this->testTemp_->checkTemp(recievedInt))
-				{
-				case -1:
-					if (startStop_ == true)
-						testUART_->sendNed();
-					cout << "Saenk temperatur" << endl;
-					break;
-				case 0:
-					if (startStop_ == true)
-						cout << "Temp indenfor interval" << endl;
-					break;
-				case 1:
-					if (startStop_ == true)
-						testUART_->sendOp();
-					cout << "Haev temp" << endl;
-					break;
-				default:
-					break;
-				}
-
-			}
-			else if (recieve[0] == '0' && recieve[1] == '0' && recieve[2] == '\0')
-			{
-				Sleep(50);
-				if (startStop_)
-				{
-					testUART_->getTemp(recieve, sizeof(recieve) / sizeof(recieve[0]));
-				}
 				if (recieve[0] != '0' || recieve[1] != '0' || recieve[2] != '\0')
 				{
-					cout << recieve << endl;
+
+					double recievedDouble = this->tempCharArrayToDouble(recieve);
+
+					testLog_->addToLog(recievedDouble);
+					cout << "Skrevet til log"
+						<< " - Double: " << recievedDouble
+						<< " Char: " << recieve[0] << recieve[1] << recieve[2] << recieve[3]
+						<< endl; // test udskriv for skrivning til log
+					switch (this->testTemp_->checkTemp(recievedDouble))
+					{
+					case -1:
+						if (startStop_ == true)
+							testUART_->sendNed();
+						cout << "Saenk temperatur" << endl;
+						break;
+					case 0:
+						if (startStop_ == true)
+							cout << "Temp indenfor interval" << endl;
+						break;
+					case 1:
+						if (startStop_ == true)
+							testUART_->sendOp();
+						cout << "Haev temp" << endl;
+						break;
+					default:
+						break;
+					}
+
 				}
+				else if (recieve[0] == '0' && recieve[1] == '0' && recieve[2] == '\0')
+				{
+					Sleep(50);
+					if (startStop_)
+					{
+						testUART_->getTemp(recieve, sizeof(recieve) / sizeof(recieve[0]));
+					}
+					if (recieve[0] != '0' || recieve[1] != '0' || recieve[2] != '\0')
+					{
+						cout << recieve << endl;
+					}
+				}
+				break;
 			}
 
-			Sleep(ARDUINO_WAIT_TIME);
-			break;
 		}
+			Sleep(ARDUINO_WAIT_TIME);
 		/*
 		Sleep(65);
 
