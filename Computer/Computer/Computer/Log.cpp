@@ -19,7 +19,7 @@ void Log::print() // Idskriver hele log
 
 }
 
-void Log::addToLog(int temp) // Tilføjer læsning til log
+void Log::addToLog(double temp) // Tilføjer læsning til log
 {
 
 	time_t currentTime = time(NULL);

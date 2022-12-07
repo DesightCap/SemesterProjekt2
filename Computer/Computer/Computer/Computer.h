@@ -24,7 +24,7 @@ public:
 	void menuPrint(bool clear = true);
 	int UIinput();
 	string dataHandler();
-	int tempCharArrayToInt(char recieved[]);
+	double tempCharArrayToDouble(char recieved[]);
 private:
 	UART* testUART_;
 	Log* testLog_;

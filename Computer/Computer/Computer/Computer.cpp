@@ -82,16 +82,20 @@ void Computer::openMenu()
 			break;
 		default:
 
-			char recieve[] = "00";
+			char recieve[] = "00,0";
 			char toSend;
-			testUART_->getTemp(recieve, sizeof(recieve) / sizeof(recieve[0]));
+			//testUART_->getTemp(recieve, 4);
+			testUART_->getTemp(recieve, (sizeof(recieve) / sizeof(recieve[0]))-1);
 			if (recieve[0] != '0' || recieve[1] != '0' || recieve[2] != '\0')
 			{
 
-				int recievedInt = this->tempCharArrayToInt(recieve);
+				double recievedInt = this->tempCharArrayToDouble(recieve);
 
 				testLog_->addToLog(recievedInt);
-				//cout << "Skrevet til log" << endl; // test udskriv for skrivning til log
+				cout << "Skrevet til log" 
+					<< " - Double: " << recievedInt 
+					<< " Char: " << recieve[0] << recieve[1] << recieve[2] << recieve[3] 
+					<< endl; // test udskriv for skrivning til log
 				switch (this->testTemp_->checkTemp(recievedInt))
 				{
 				case -1:
@@ -190,10 +194,15 @@ string Computer::dataHandler()
 	return inputValStr;
 }
 
-int Computer::tempCharArrayToInt(char recieved[])
+double Computer::tempCharArrayToDouble(char recieved[])
 {
-	int intRecieve;
-	stringstream str(recieved);
-	str >> intRecieve;
-	return intRecieve;
+	//double intRecieve;
+	double doubleRecieve;
+	//stringstream str(recieved);
+	stringstream s2d;
+	s2d << recieved;
+	s2d >> doubleRecieve;
+
+	//str >> intRecieve;
+	return doubleRecieve;
 }

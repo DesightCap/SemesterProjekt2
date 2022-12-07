@@ -23,10 +23,25 @@ int main()
 	InitUART(9600,8);
 	initSwitchPort();
 	
-	turnOffLED(1);
-	turnOnLED(2);
-	turnOffLED(3);
-	turnOnLED(4);
+	turnOffLED(2);
+	turnOnLED(3);
+	turnOffLED(4);
+	turnOnLED(5);
+	
+	while (1)
+	{
+		_delay_ms(2000);
+		SendString("21.5");
+		
+		//SendChar('1');
+		//SendChar('2');
+		//SendChar('.');
+		//SendChar('5');
+		//SendChar('\0');
+		
+		
+	}
+	
 	
 	while (1)
 	{

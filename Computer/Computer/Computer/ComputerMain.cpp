@@ -2,8 +2,11 @@
 #include "Computer.h"
 #include <time.h>
 #include <iomanip> // til at sætte præcion 
-#include <thread>
+//#include <thread>
 #include <string> // string til double via stod()
+
+//[HKEY_LOCAL_MACHINE\HARDWARE\]
+//Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Ports
 
 
 using namespace std;
@@ -58,6 +61,8 @@ int main()
 	//*
 
 
+	//   *********************** RYD OP! *********************a
+
 	//cout << "Arduino forbundet: " << boolalpha << testUART.isConnected() << endl << "Forbundet til port " << port << endl;
 	while (testUART.isConnected())
 	{
@@ -87,22 +92,22 @@ int main()
 			if (recieve[0] != '0' || recieve[1] != '0' || recieve[2] != '\0')
 			{
 
-				int recievedInt = testComputer.tempCharArrayToInt(recieve);
+				int recievedInt = testComputer.tempCharArrayToDouble(recieve);
 
-				testLog.addToLog(recievedInt);
+				//testLog.addToLog(recievedInt);
 				cout << "Skrevet til log" << endl;
 				switch (testTemp.checkTemp(recievedInt))
 				{
 				case -1:
 					testUART.sendNed();
-					cout << "Saenk temperatur" << endl;
+					cout << "bit 0" << recieve[0] << " efter konvertering " << recievedInt << "X Saenk temperatur" << endl; // Test cout - Fjern inden final
 					break;
 				case 0:
-					cout << "Temp indenfor interval" << endl;
+					cout << "Temp indenfor interval" << endl; // Test cout - Fjern inden final
 					break;
 				case 1:
 					testUART.sendOp();
-					cout << "Haev temp" << endl;
+					cout << "Haev temp" << endl; // Test cout - Fjern inden final
 					break;
 				default:
 					break;
