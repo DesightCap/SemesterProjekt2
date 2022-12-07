@@ -9,22 +9,6 @@ Discarded input sections
 
  .data          0x00000000        0x0 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega2560/avr6/crtatmega2560.o
  .bss           0x00000000        0x0 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega2560/avr6/crtatmega2560.o
- .text          0x00000000        0x0 KlimaReg.o
- .data          0x00000000        0x0 KlimaReg.o
- .bss           0x00000000        0x0 KlimaReg.o
- .text._ZN8KlimaRegC2Ev
-                0x00000000        0x2 KlimaReg.o
- .text._ZN8KlimaRegD2Ev
-                0x00000000        0x2 KlimaReg.o
- .debug_info    0x00000000      0x173 KlimaReg.o
- .debug_abbrev  0x00000000       0xf0 KlimaReg.o
- .debug_aranges
-                0x00000000       0x28 KlimaReg.o
- .debug_ranges  0x00000000       0x18 KlimaReg.o
- .debug_line    0x00000000       0x5d KlimaReg.o
- .debug_str     0x00000000      0x224 KlimaReg.o
- .comment       0x00000000       0x31 KlimaReg.o
- .debug_frame   0x00000000       0x34 KlimaReg.o
  .text          0x00000000        0x0 main.o
  .data          0x00000000        0x0 main.o
  .bss           0x00000000        0x0 main.o
@@ -81,7 +65,6 @@ Linker script and memory map
 
 Address of section .data set to 0x800200
 LOAD C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega2560/avr6/crtatmega2560.o
-LOAD KlimaReg.o
 LOAD main.o
 START GROUP
 LOAD c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr6\libm.a
@@ -456,11 +439,11 @@ END GROUP
  *(.debug_frame)
  .debug_frame   0x00000000       0x24 main.o
 
-.debug_str      0x00000000      0x5f7
+.debug_str      0x00000000      0x5f5
  *(.debug_str)
  .debug_str     0x00000000      0x3e6 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega2560/avr6/crtatmega2560.o
- .debug_str     0x000003e6      0x211 main.o
-                                0x24a (size before relaxing)
+ .debug_str     0x000003e6      0x20f main.o
+                                0x248 (size before relaxing)
 
 .debug_loc
  *(.debug_loc)

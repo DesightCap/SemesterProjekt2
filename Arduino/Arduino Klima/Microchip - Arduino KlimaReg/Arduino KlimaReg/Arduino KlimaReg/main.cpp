@@ -10,6 +10,58 @@
 uint16_t adressRecieved;
 uint16_t commandRecieved;
 
+
+/*<forslag> 
+			void HeatOrBlowTimer(uint16_t commandRecieved_)
+			{
+					switch (commandRecieved_)
+					{
+						case 0b01110101:
+								blowTime = 16000000 * timeMultiplier;
+								break;
+						case 0b01100100:
+								hotTime = 16000000 * timeMultiplier;
+								break;
+						default:
+								break;
+					}
+			}
+			
+			
+			
+			void StartBlowCDown()
+			{
+					if (blowTime > 0)
+					{
+						PORTA ^= pinCold;
+						blowTime--;
+					}
+					else
+					{
+						PORTA &= ~pinCold;
+					}
+			}
+			
+			
+			
+			void StartHeatCDown()
+			{
+					if (hotTime > 0)
+					{
+						PORTA ^= pinHot;
+						hotTime--;
+					}
+					else
+					{
+						PORTA &= !pinHot;
+					}	
+			}
+			
+<\forslag>*/
+
+
+
+
 int main(void)
 {
 	/* Replace with your application code */
@@ -31,13 +83,13 @@ int main(void)
 		switch (commandRecieved)
 		{
 			case 0b01110101:
-			blowTime = 16000000 * timeMultiplier;
-			break;
+					blowTime = 16000000 * timeMultiplier;
+					break;
 			case 0b01100100:
-			hotTime = 16000000 * timeMultiplier;
-			break;
+					hotTime = 16000000 * timeMultiplier;
+					break;
 			default:
-			break;
+					break;
 			if (blowTime)
 			{
 				PORTA ^= pinCold;
