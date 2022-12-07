@@ -14,27 +14,20 @@ public:
 	//Computer(testUI, testUART, &testLog, &testTemp)
 	Computer(UART* testUART, Log* testLog, Temp* testTemp);
 
-	void TempReg();
-	// Metoder merget ind fra UI klasse
-	int tempInitiate();
-	void readEnable();
 	void readToggle();
-	bool recieveTempInterval();
-	void printLog();
 	void openMenu();
 	void menuPrint(bool clear = true);
 	int UIinput();
 	string dataHandler();
 	double tempCharArrayToDouble(char recieved[]);
+	bool setTempInt();
+	void SletKonsolInputs();
 private:
 	UART* testUART_;
 	Log* testLog_;
 	Temp* testTemp_;
 	int temp_;
 	bool startStop_;
-	//char comport_[] = "COM5"; // Alternativ: char comport[] = "\\\\.\\COM5";
-	//char* port_ = comport;
 	char inputData_[INPUT_DATA_BYTES];
-
 };
 

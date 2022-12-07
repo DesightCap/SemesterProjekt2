@@ -13,42 +13,14 @@ Computer::Computer(UART* testUART, Log* testLog, Temp* testTemp)
 	testUART_ = testUART;
 	testLog_ = testLog;
 	testTemp_ = testTemp;
-}
-
-void Computer::TempReg()
-{
-	// Diskuter
-
-
-}
-
-// Metoder merget fra UI klasse
-
-
-int Computer::tempInitiate()
-{
-	// Diskuter
-	return 0;
-}
-
-void Computer::readEnable()
-{
-
 	startStop_ = true;
 }
+
 
 void Computer::readToggle()
 {
 	startStop_ = !startStop_;
 }
-
-
-bool Computer::recieveTempInterval()
-{
-	// Mangler
-	return false;
-}
-
 
 void Computer::openMenu()
 {
@@ -58,8 +30,7 @@ void Computer::openMenu()
 
 	bool runningTempReg = true;
 
-	this->menuPrint(false);
-	readEnable();
+	this->menuPrint();
 	while (runningTempReg)
 	{
 		int userSelect = 0;
@@ -73,7 +44,7 @@ void Computer::openMenu()
 			break;
 		case 2:
 		{
-			testTemp_->setTempInt();
+			setTempInt();
 			this->menuPrint(false);
 			cout << "Temperatur interval indstillet." << endl;
 		}
@@ -152,20 +123,6 @@ void Computer::openMenu()
 
 		}
 			Sleep(ARDUINO_WAIT_TIME);
-		/*
-		Sleep(65);
-
-		{
-			int tempValidate = testTemp_->checkTemp(temp_);
-			if (tempValidate < 0)
-			{
-				testUART_->sendNed();
-			}
-			else if (tempValidate < 0)
-			{
-				testUART_->sendOp();
-			}
-		}*/
 	}
 }
 
@@ -186,8 +143,6 @@ void Computer::menuPrint(bool clear)
 }
 
 int Computer::UIinput()
-// Overvej at ændre, så metoden kaldes med antallet af tal vi kigger efter
-// det burde bare være at ændre til noget i stil med (int i = 49; i < (49 + maxValue); i++)
 {
 	for (int i = 49; i < 54; i++)
 	{
@@ -201,7 +156,6 @@ int Computer::UIinput()
 		}
 	}
 	return 0;
-	// Overvej at implementere sleep i UIinput(), i stedet for hvor den bliver brugt
 }
 
 string Computer::dataHandler()
@@ -222,13 +176,101 @@ string Computer::dataHandler()
 
 double Computer::tempCharArrayToDouble(char recieved[])
 {
-	//double intRecieve;
 	double doubleRecieve;
-	//stringstream str(recieved);
 	stringstream s2d;
 	s2d << recieved;
 	s2d >> doubleRecieve;
 
-	//str >> intRecieve;
 	return doubleRecieve;
+}
+
+bool Computer::setTempInt()
+{
+	SletKonsolInputs();
+
+	system("CLS");
+	cout << "Temperatur interval minimum nu: " << testTemp_->getMin() << endl
+		<< "Temperatur interval maximum nu: " << testTemp_->getMax() << endl;
+	int minTemp = -1, maxTemp = -1;
+
+	while (minTemp < 0 || maxTemp < 0)
+	{
+
+		try {
+			cout << "indtast minimum temperaturen (mindst 0): \n";
+			cin >> minTemp;
+			if (cin.fail())
+			{
+				minTemp = -1;
+				throw 1;
+			}
+
+			cout << "indtast max temperaturen (hoejest 63): \n";
+			cin >> maxTemp;
+			if (cin.fail())
+			{
+				maxTemp = -1;
+				throw 2;
+			}
+			else if (maxTemp > 63)
+			{
+				maxTemp = -1;
+				throw 3;
+			}
+			else if (maxTemp < minTemp)
+			{
+				maxTemp = -1;
+				minTemp = -1;
+				throw 4;
+			}
+		}
+		catch (int x) {
+			if (x == 1)
+			{
+				system("CLS");
+				cin.clear();
+				cin.ignore(INT_MAX, '\n');
+				cerr << "Minimum ikke valid vaerdi" << endl << endl;
+			}
+			else if (x == 2)
+			{
+				system("CLS");
+				cin.clear();
+				cin.ignore(INT_MAX, '\n');
+				cerr << "Maximum ikke valid vaerdi" << endl << endl;
+			}
+			else if (x == 3)
+			{
+				system("CLS");
+				cin.clear();
+				cin.ignore(INT_MAX, '\n');
+				cerr << "Maximum maa ikke vaere over 63" << endl << endl;
+			}
+			else if (x == 4)
+			{
+				system("CLS");
+				cin.clear();
+				cin.ignore(INT_MAX, '\n');
+				cerr << "Maximum maa ikke vaere mindre end minimum" << endl << endl;
+			}
+		};
+	}
+
+	if (minTemp <= maxTemp && 0 <= minTemp && maxTemp <= 63)
+	{
+		testTemp_->setMin(minTemp);
+		testTemp_->setMax(maxTemp);
+		
+		return true;
+	}
+	else
+		cout << "proev igen" << endl;
+}
+
+void Computer::SletKonsolInputs()
+{
+	PINPUT_RECORD gammeltKonsolInput = new INPUT_RECORD[100];
+	DWORD nyKonsolInput;
+	ReadConsoleInput(GetStdHandle(STD_INPUT_HANDLE), gammeltKonsolInput, 100, &nyKonsolInput);
+	delete[] gammeltKonsolInput;
 }
