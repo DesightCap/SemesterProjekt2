@@ -6,7 +6,7 @@ Temp::Temp(int min, int max)
 	TempMin_ = min;
 	TempMax_ = max;
 }
-void Temp::SletKonsolInputs() // REN COPY PASTE FUNKTION FRA GOOGLE https://stackoverflow.com/questions/20222277/delete-key-press-historygetkeystate-c
+void Temp::SletKonsolInputs()
 {
 	PINPUT_RECORD gammeltKonsolInput = new INPUT_RECORD[100];
 	DWORD nyKonsolInput;
@@ -15,7 +15,7 @@ void Temp::SletKonsolInputs() // REN COPY PASTE FUNKTION FRA GOOGLE https://stac
 }
 bool Temp::setTempInt()
 {
-	SletKonsolInputs(); // REN COPY PASTE FRA NOGET FRA GOOGLE
+	SletKonsolInputs(); 
 	while (1)
 	{
 		int minTemp, maxTemp;
@@ -24,7 +24,7 @@ bool Temp::setTempInt()
 		cout << "indtast max temperaturen: \n";
 		cin >> maxTemp;
 
-		if (minTemp <= maxTemp && 5 <= minTemp && maxTemp <= 30) // lavet min/max validering
+		if (minTemp <= maxTemp && 5 <= minTemp && maxTemp <= 30)
 		{
 			TempMin_ = minTemp;
 			TempMax_ = maxTemp;
