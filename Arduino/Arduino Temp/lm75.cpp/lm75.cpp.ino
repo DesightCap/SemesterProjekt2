@@ -22,43 +22,58 @@ TempI2C_LM75::TempI2C_LM75( uint8_t i2c_addr, Resolution resolution)
 //-------------------------------------------------------------------------------
 float TempI2C_LM75::getTemp()
 {
-    union
-    {
-        unsigned short tempX;
-        short tempS;
+    union //The purpose of union is to save memory by using the same memory region for storing different objects at different times.
+    { //meaning the the value for tempX == tempS;
+        unsigned short tempX; // == for referance, an is a 16 bits of ranges [0, 65,535]
+        short tempS; //== for referance, a short int or short is equal to 16 and indicates a range of [-32,767; 32,767]. ==
+        //           //== this needs clarafication: signed 16 =>                                                         ==
+        //             == 0b01111111 11111111 equals  32,767 int                                                         ==
+        //             == 0b00111111 11111111 equals  16,383 int                                                         == 
+        //             == 0b00011111 11111111 equals   8,191 int                                                         == 
+        //             == 0b00001111 11111111 equals   4,095 int                                                         == 
+        //             == 0b10000000 00000000 equals -32,768 int                                                         == 
+        //             == 0b11000000 00000000 equals -16,384 int                                                         == 
+        //             == 0b11100000 00000000 equals - 8,192 int                                                         == 
+        //             == 0b11110000 00000000 equals - 4,095 int                                                         ==
     } temperature;
 
     temperature.tempX = getReg(temp_reg);
-    return (temperature.tempS / 256.0F);
+    //return (temperature.tempS / 256.0F);
+    return 77777;
+    //
 }
 
 //-------------------------------------------------------------------------------
 unsigned TempI2C_LM75::getReg(LM75Register reg)
 {
-    unsigned Result = 0xFFFF;
+    unsigned Result = 0xFFFF; // meaning Result == 65534;
 
 #ifdef DEBUG
     Serial.print("getReg"); Serial.println(uint8_t(reg),HEX);
 #endif
-
+    // == m_u8I2CAddr is a pravit uint8_t object. why it is named so is beyond me ==.
     Wire.beginTransmission(m_u8I2CAddr);
     Wire.write(reg); // pointer reg
     Wire.endTransmission();
 
-    uint8_t c;
+    uint8_t c;  
 
     Wire.requestFrom(m_u8I2CAddr, uint8_t(2));
     if(Wire.available())
     {
-        c = Wire.read();
-        Result = c;
+        c = Wire.read(); // == the unit_8 c object is assigned to what the Wire.read, reads ==
+        Result = c;      // == assigns Result to c ==
         if(reg != config_reg)
         {
-            Result = (unsigned(c))<<8;
-            if(Wire.available())
+            Result = (unsigned(c))<<8; //== bitShiftes (unsiged converted c) 8 bits to the left ==
+            if(Wire.available())       //== for referance, Result is a 32bits                   ==
             {
-                c = Wire.read();
-                Result |= (unsigned(c));
+                c = Wire.read(); //== Wire.read() returns the next byte received so c is assigned to whatever bytes read ==
+                //                 == for Referance, a byte is equel to 8 bits.                                          ==
+                Result |= (unsigned(c)); //== here the result is OR-assigend to C (unsigend converted) ==
+                //                       //== to be clear: C is 0bxxxxxxxx bits. the convertion changes==
+                //                         == It to: 0b00000000 00000000
+                //                                     00000000 xxxxxxxx or 0xFFFF FFFF                ==
             }
             else
             {

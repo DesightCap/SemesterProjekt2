@@ -4,8 +4,18 @@
 #include <Wire.h>
 #include <lm75.h>
 
-TempI2C_LM75 Temperature = TempI2C_LM75(0x48,TempI2C_LM75::nine_bits);
- 
+float HF(float _t){
+  return (floor((_t*2)+0.5)/2);
+}
+
+TempI2C_LM75 Temperature = TempI2C_LM75(0x48,   TempI2C_LM75::nine_bits);
+//                                      ^           ^              
+//                                      |           |
+//                                      Under the constructer for TempI2C this value
+//                                        is 72 in HEX. but it is also the I2C_addr.
+//                                                  |
+//                                                  this is surpossed to be the 
+//                                                    resolution enum.
  
 void setup()
 {
@@ -20,7 +30,7 @@ void setup()
  
 void loop()
 {
-    Serial.print(Temperature.getTemp());
+    Serial.print(HF(Temperature.getTemp()));
     Serial.println(" oC");
-    delay(1000);
+    delay(2000);
 }

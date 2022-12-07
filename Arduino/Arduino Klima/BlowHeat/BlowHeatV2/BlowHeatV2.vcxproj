@@ -133,6 +133,7 @@
     <ClCompile Include="TempReg.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ArdunioPorts.h" />
     <ClInclude Include="Blow.h" />
     <ClInclude Include="Heat.h" />
     <ClInclude Include="TempReg.h" />
