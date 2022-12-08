@@ -129,7 +129,6 @@ void main()
 }
 
 
-
 void randomBits(int* place, int size) //Randomize an int arrays input with 1s and 0s
 {
 	srand(time(NULL));
@@ -164,6 +163,7 @@ void combineBitArrays(int* adr, int* com, int* combined) //Generating a new bitS
 	}
 
 }
+
 
 int correctModulo(int x, int m) //Modulo in C is not entirely correct, this implementation fixes that
 {
