@@ -10,56 +10,8 @@
 uint16_t adressRecieved;
 uint16_t commandRecieved;
 
-
-/*<forslag> 
-			void HeatOrBlowTimer(uint16_t commandRecieved_)
-			{
-					switch (commandRecieved_)
-					{
-						case 0b01110101:
-								blowTime = 16000000 * timeMultiplier;
-								break;
-						case 0b01100100:
-								hotTime = 16000000 * timeMultiplier;
-								break;
-						default:
-								break;
-					}
-			}
-			
-			
-			
-			void StartBlowCDown()
-			{
-					if (blowTime > 0)
-					{
-						PORTA ^= pinCold;
-						blowTime--;
-					}
-					else
-					{
-						PORTA &= ~pinCold;
-					}
-			}
-			
-			
-			
-			void StartHeatCDown()
-			{
-					if (hotTime > 0)
-					{
-						PORTA ^= pinHot;
-						hotTime--;
-					}
-					else
-					{
-						PORTA &= !pinHot;
-					}	
-			}
-			
-<\forslag>*/
-
-
+ void StartBlow(int hotTime_);
+ void StartHeat(int blowTime_);
 
 
 int main(void)
@@ -80,36 +32,49 @@ int main(void)
 	{
 		// Modtag x10
 		
-		switch (commandRecieved)
-		{
-			case 0b01110101:
-					blowTime = 16000000 * timeMultiplier;
-					break;
-			case 0b01100100:
-					hotTime = 16000000 * timeMultiplier;
-					break;
-			default:
-					break;
-			if (blowTime)
+			switch (commandRecieved)
 			{
-				PORTA ^= pinCold;
-				blowTime--;
+				case 0b01110101:
+						blowTime = 16000000 * timeMultiplier;
+						break;
+				case 0b01100100:
+						hotTime = 16000000 * timeMultiplier;
+						break;
+				default:
+						StartHeat(hotTime);
+						StartBlow(blowTime);
+						break;
 			}
-			else
-			{
-				PORTA &= ~pinCold;
-			}
-			if (hotTime)
-			{
-				PORTA ^= pinHot;
-				hotTime--;
-			}
-			else
-			{
-				PORTA &= !pinHot;
-			}
-		}
-		
+		//switch (commandRecieved)
+		//{
+			//case 0b01110101:
+					//blowTime = 16000000 * timeMultiplier;
+					//break;
+			//case 0b01100100:
+					//hotTime = 16000000 * timeMultiplier;
+					//break;
+			//default:
+					//break;
+			//if (blowTime)
+			//{
+				//PORTA ^= pinCold;
+				//blowTime--;
+			//}
+			//else
+			//{
+				//PORTA &= ~pinCold;
+			//}
+			//if (hotTime)
+			//{
+				//PORTA ^= pinHot;
+				//hotTime--;
+			//}
+			//else
+			//{
+				//PORTA &= !pinHot;
+			//}
+		//}
+		//
 	}
 	
 	while (1)
@@ -151,3 +116,32 @@ PORTA = 0x00; // Omskriv til maske til slukning af bits
 }
 
 */
+
+
+void StartBlow(int blowTime_)
+{
+	if (blowTime_ > 0)
+	{
+		PORTA ^= pinCold;
+		blowTime_--;
+	}
+	else
+	{
+		PORTA &= ~pinCold;
+	}
+}
+
+
+
+void StartHeat(int hotTime_)
+{
+	if (hotTime_ > 0)
+	{
+		PORTA ^= pinHot;
+		hotTime_--;
+	}
+	else
+	{
+		PORTA &= !pinHot;
+	}
+}
