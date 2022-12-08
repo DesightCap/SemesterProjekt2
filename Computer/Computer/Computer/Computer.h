@@ -3,7 +3,7 @@
 #include <iostream>
 #include "UART.h"
 #include "Log.h"
-#include "Temp.h"
+#include "temperature.h"
 //#include "UI.h" // Udgået og merget in i Computer
 
 using namespace std;
@@ -11,22 +11,22 @@ using namespace std;
 class Computer
 {
 public:
-	//Computer(testUI, testUART, &testLog, &testTemp)
-	Computer(UART* testUART, Log* testLog, Temp* testTemp);
+	//Computer(testUI, testUART, &testLog, &testtemperatureerature)
+	Computer(UART* testUART, Log* testLog, Temperature* testtemperature);
 
 	void readToggle();
 	void openMenu();
 	void menuPrint(bool clear = true);
 	int UIinput();
 	string dataHandler();
-	double tempCharArrayToDouble(char recieved[]);
-	bool setTempInt();
-	void SletKonsolInputs();
+	double temperatureCharArrayToDouble(char recieved[]);
+	bool setTemperatureInt();
+	void clearInputBuffer();
 private:
 	UART* testUART_;
 	Log* testLog_;
-	Temp* testTemp_;
-	int temp_;
+	Temperature* temperatureObject_;
+	int temperature_;
 	bool startStop_;
 	char inputData_[INPUT_DATA_BYTES];
 };

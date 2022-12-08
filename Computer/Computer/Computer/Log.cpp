@@ -19,7 +19,7 @@ void Log::print() // Idskriver hele log
 
 }
 
-void Log::addToLog(double temp) // Tilføjer læsning til log
+void Log::addToLog(double temperature) // Tilføjer læsning til log
 {
 
 	time_t currentTime = time(NULL);
@@ -41,7 +41,7 @@ void Log::addToLog(double temp) // Tilføjer læsning til log
 			<< setw(2) << localTime.tm_sec 			// Skriver time som to tal til fil
 			<< " Dato: "
 			<< localTime.tm_mday << "/" << localTime.tm_mon + 1 << "/" << localTime.tm_year + 1900
-			<< " Temperatur: " << temp
+			<< " temperatureeratur: " << temperature
 			<< endl;
 		MyFile.close();
 	}

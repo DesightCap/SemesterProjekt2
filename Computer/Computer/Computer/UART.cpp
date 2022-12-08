@@ -1,7 +1,10 @@
 #include <iostream>
 #include <string>
-
 #include "UART.h"
+
+#define deviceInUse 5
+#define notConnected 2
+#define noError 0
 
 using namespace std;
 
@@ -26,15 +29,15 @@ UART::UART(char* portName)
 	// Fejlkode 2 i DWORD er ERROR_FILE_NOT_FOUND. 
 	// Fejlkode 5 i DWORD er ERROR_ACCESS_DENIED.
 	// Det er de eneste vi er interesseret i. 
-	if (errMsg == 2)
+	if (errMsg == notConnected)
 	{
 		cout << "Tilslut kommunikations enhed. " << endl;
 	}
-	else if (errMsg == 5)
+	else if (errMsg == deviceInUse)
 	{
 		cout << "Kommunikations enheden er allerde i brug. " << endl;
 	}
-	else if (errMsg == 0)
+	else if (errMsg == noError)
 	{
 		// DCB er "Device Control Block", en stuktur til at holde COM port indstillinger 
 		DCB dcbSerialParameters = { 0 };
@@ -67,23 +70,16 @@ UART::UART(char* portName)
 
 UART::~UART()
 {
-	if (connected == true)
+	if (connected)
 	{
 		connected = false;
 		CloseHandle(handleToCOM);
 	}
 }
 
-int UART::initUART(char* port_)
-{
-	// Det ser ud til at settings bliver sat i constructor, så jeg tvivler på at denne er nødvendig
 
 
-
-	return 0;
-}
-
-int UART::getTemp(char* buffer, unsigned int buf_size)
+int UART::getTemperature(char* buffer, unsigned int buf_size)
 {
 	DWORD bytesRead;
 	unsigned int toRead = 0;
@@ -99,7 +95,10 @@ int UART::getTemp(char* buffer, unsigned int buf_size)
 		{
 			toRead = buf_size;
 		}
-		else toRead = status.cbInQue;
+		else
+		{
+			toRead = status.cbInQue;
+		}
 	}
 
 	// Indlæs antal ("toRead") bytes ind i "buffer" og retuner antallet af bytes der er blevet læst
@@ -139,12 +138,6 @@ bool UART::send(char* buffer, unsigned int buf_size)
 	return true;
 }
 
-char UART::getChar()
-{
-
-	// Nødvendig?
-	return 0;
-}
 
 bool UART::isConnected()
 {

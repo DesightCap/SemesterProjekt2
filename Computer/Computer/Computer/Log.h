@@ -13,7 +13,7 @@ class Log
 public:
 	Log(string filename = "Log.txt");
 	void print();
-	void addToLog(double temp);
+	void addToLog(double temperature);
 private:
 	string filename_;
 };

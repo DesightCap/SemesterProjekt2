@@ -18,13 +18,11 @@ public:
 	UART(char* port_); // Opsætning - Overvej om det er bedst her eller i initUART
 	~UART();
 
-	int initUART(char* port_);
 
-	int getTemp(char* buffer, unsigned int buf_size);// Modtage temperatur
+	int getTemperature(char* buffer, unsigned int buf_size);// Modtage temperatur
 	void sendOp();
 	void sendNed(); 
 	bool send(char* buffer, unsigned int buf_size); // Sender et char array på størrelse buf_size // Skal kaldes fra sendOp og ned med relevant data preloadet
-	char getChar();
 	bool isConnected(); // Retunere hvorvidt connected er sat og dermed om vi er forbundet
 
 private:

@@ -15,7 +15,7 @@ char* toSend = "00";
 uint16_t addressRecieved; 
 uint16_t commandRecieved;
 
-void tempChange(char);
+void temperatureChange(char);
 
 
 int main()
@@ -52,11 +52,11 @@ int main()
 			recieved = ReadChar();
 			if (recieved == 'u' || recieved == 'U')
 			{
-				tempChange('u');
+				temperatureChange('u');
 			}
 			else if (recieved == 'd'||recieved == 'D')
 			{
-				tempChange('d');
+				temperatureChange('d');
 			}
 		}
 		
@@ -69,7 +69,7 @@ int main()
 	}
 }
 
-void tempChange(char t)
+void temperatureChange(char t)
 {
 	if (t == 'u')
 	{

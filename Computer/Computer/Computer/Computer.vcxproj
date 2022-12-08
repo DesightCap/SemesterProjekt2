@@ -143,13 +143,13 @@
     <ClCompile Include="Computer.cpp" />
     <ClCompile Include="ComputerMain.cpp" />
     <ClCompile Include="Log.cpp" />
-    <ClCompile Include="Temp.cpp" />
+    <ClCompile Include="Temperature.cpp" />
     <ClCompile Include="UART.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Computer.h" />
     <ClInclude Include="Log.h" />
-    <ClInclude Include="Temp.h" />
+    <ClInclude Include="Temperature.h" />
     <ClInclude Include="UART.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

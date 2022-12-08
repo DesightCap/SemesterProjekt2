@@ -7,12 +7,12 @@
 #include "Computer.h"
 
 
-Computer::Computer(UART* testUART, Log* testLog, Temp* testTemp)
+Computer::Computer(UART* testUART, Log* testLog, Temperature* testTemperature)
 {
-	temp_ = 0;
+	temperature_ = 0;
 	testUART_ = testUART;
 	testLog_ = testLog;
-	testTemp_ = testTemp;
+	temperatureObject_ = testTemperature;
 	startStop_ = true;
 }
 
@@ -28,10 +28,10 @@ void Computer::openMenu()
 	// Vi er evt. nødt til at mixe med multithreading? 
 	// Problem burde være løst - prøv at fjerne diverse Sleep() funktioner og se om UI stadig virker
 
-	bool runningTempReg = true;
+	bool runningTemperatureReg = true;
 
 	this->menuPrint();
-	while (runningTempReg)
+	while (runningTemperatureReg)
 	{
 		int userSelect = 0;
 		switch (UIinput())
@@ -44,20 +44,20 @@ void Computer::openMenu()
 			break;
 		case 2:
 		{
-			setTempInt();
+			setTemperatureInt();
 			this->menuPrint(false);
 			cout << "Temperatur interval indstillet." << endl;
 		}
 		break;
 		case 3:
 			cout << endl << endl << "Koersels loop afsluttes. ";
-			runningTempReg = false;
+			runningTemperatureReg = false;
 			break;
 		case 4:
 			readToggle();
 			if (!startStop_)
 			{
-				cout << "stopper temperatur regulering" << endl;
+				cout << "Stopper temperatur regulering" << endl;
 			}
 			else if (startStop_)
 			{
@@ -74,18 +74,18 @@ void Computer::openMenu()
 			char toSend;
 			while (startStop_ == true)
 			{
-				testUART_->getTemp(recieve, (sizeof(recieve) / sizeof(recieve[0])) - 1);
+				testUART_->getTemperature(recieve, (sizeof(recieve) / sizeof(recieve[0])) - 1);
 				if (recieve[0] != '0' || recieve[1] != '0' || recieve[2] != '\0')
 				{
-
-					double recievedDouble = this->tempCharArrayToDouble(recieve);
+					
+					double recievedDouble = this->temperatureCharArrayToDouble(recieve);
 
 					testLog_->addToLog(recievedDouble);
 					cout << "Skrevet til log"
 						<< " - Double: " << recievedDouble
 						<< " Char: " << recieve[0] << recieve[1] << recieve[2] << recieve[3]
 						<< endl; // test udskriv for skrivning til log
-					switch (this->testTemp_->checkTemp(recievedDouble))
+					switch (this->temperatureObject_->checkTemperature(recievedDouble))
 					{
 					case -1:
 						if (startStop_ == true)
@@ -94,12 +94,12 @@ void Computer::openMenu()
 						break;
 					case 0:
 						if (startStop_ == true)
-							cout << "Temp indenfor interval" << endl;
+							cout << "Temperature indenfor interval" << endl;
 						break;
 					case 1:
 						if (startStop_ == true)
 							testUART_->sendOp();
-						cout << "Haev temp" << endl;
+						cout << "Haev Temperature" << endl;
 						break;
 					default:
 						break;
@@ -111,7 +111,7 @@ void Computer::openMenu()
 					Sleep(50);
 					if (startStop_)
 					{
-						testUART_->getTemp(recieve, sizeof(recieve) / sizeof(recieve[0]));
+						testUART_->getTemperature(recieve, sizeof(recieve) / sizeof(recieve[0]));
 					}
 					if (recieve[0] != '0' || recieve[1] != '0' || recieve[2] != '\0')
 					{
@@ -167,14 +167,14 @@ string Computer::dataHandler()
 		{
 			inputData_[i] = 0;
 		}
-		testUART_->getTemp(inputData_, INPUT_DATA_BYTES);
+		testUART_->getTemperature(inputData_, INPUT_DATA_BYTES);
 	}
 
 	string inputValStr(inputData_);
 	return inputValStr;
 }
 
-double Computer::tempCharArrayToDouble(char recieved[])
+double Computer::temperatureCharArrayToDouble(char recieved[])
 {
 	double doubleRecieve;
 	stringstream s2d;
@@ -184,43 +184,43 @@ double Computer::tempCharArrayToDouble(char recieved[])
 	return doubleRecieve;
 }
 
-bool Computer::setTempInt()
+bool Computer::setTemperatureInt()
 {
-	SletKonsolInputs();
+	clearInputBuffer();
 
 	system("CLS");
-	cout << "Temperatur interval minimum nu: " << testTemp_->getMin() << endl
-		<< "Temperatur interval maximum nu: " << testTemp_->getMax() << endl;
-	int minTemp = -1, maxTemp = -1;
+	cout << "Temperatur interval minimum nu: " << temperatureObject_->getMin() << endl
+		<< "Temperatur interval maximum nu: " << temperatureObject_->getMax() << endl;
+	int minTemperature = -1, maxTemperature = -1;
 
-	while (minTemp < 0 || maxTemp < 0)
+	while (minTemperature < 0 || maxTemperature < 0)
 	{
 
 		try {
 			cout << "indtast minimum temperaturen (mindst 0): \n";
-			cin >> minTemp;
+			cin >> minTemperature;
 			if (cin.fail())
 			{
-				minTemp = -1;
+				minTemperature = -1;
 				throw 1;
 			}
 
 			cout << "indtast max temperaturen (hoejest 63): \n";
-			cin >> maxTemp;
+			cin >> maxTemperature;
 			if (cin.fail())
 			{
-				maxTemp = -1;
+				maxTemperature = -1;
 				throw 2;
 			}
-			else if (maxTemp > 63)
+			else if (maxTemperature > 63)
 			{
-				maxTemp = -1;
+				maxTemperature = -1;
 				throw 3;
 			}
-			else if (maxTemp < minTemp)
+			else if (maxTemperature < minTemperature)
 			{
-				maxTemp = -1;
-				minTemp = -1;
+				maxTemperature = -1;
+				minTemperature = -1;
 				throw 4;
 			}
 		}
@@ -256,10 +256,10 @@ bool Computer::setTempInt()
 		};
 	}
 
-	if (minTemp <= maxTemp && 0 <= minTemp && maxTemp <= 63)
+	if (minTemperature <= maxTemperature && 0 <= minTemperature && maxTemperature <= 63)
 	{
-		testTemp_->setMin(minTemp);
-		testTemp_->setMax(maxTemp);
+		temperatureObject_->setMin(minTemperature);
+		temperatureObject_->setMax(maxTemperature);
 		
 		return true;
 	}
@@ -267,7 +267,7 @@ bool Computer::setTempInt()
 		cout << "proev igen" << endl;
 }
 
-void Computer::SletKonsolInputs()
+void Computer::clearInputBuffer()
 {
 	PINPUT_RECORD gammeltKonsolInput = new INPUT_RECORD[100];
 	DWORD nyKonsolInput;

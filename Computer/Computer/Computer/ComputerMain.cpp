@@ -28,9 +28,9 @@ int main()
 
 	Log testLog;
 	UART testUART(port); // Med UART der opretter forbindelse i constructoren, kunne Complex(d).print(); som vist i OOP være en ide til at hente data ud?
-	Temp testTemp;
+	Temperature testtemperature;
 
-	Computer testComputer(&testUART, &testLog, &testTemp);
+	Computer testComputer(&testUART, &testLog, &testtemperature);
 	testComputer.openMenu();
 }
 
