@@ -28,8 +28,9 @@ void Computer::openMenu()
 	// Vi er evt. nødt til at mixe med multithreading? 
 	// Problem burde være løst - prøv at fjerne diverse Sleep() funktioner og se om UI stadig virker
 
-	bool runningTemperatureReg = true;
+	// char recieve[] = "00.0"; // tester der hører sammen med recieve[0]++ i loopet
 
+	bool runningTemperatureReg = true;
 	this->menuPrint();
 	while (runningTemperatureReg)
 	{
@@ -75,12 +76,14 @@ void Computer::openMenu()
 			while (writeTemperature_)
 			{
 				testUART_->getTemperature(recieve, (sizeof(recieve) / sizeof(recieve[0])) - 1);
-				if (recieve != "00.0")
+				if (recieve != "0.00")
 				{
 					double recievedDouble = this->temperatureCharArrayToDouble(recieve);
 
 					testLog_->addToLog(recievedDouble);
 					seeCurrentTemperature(recieve);
+					//recieve[0]++; // tester der hører sammen med ovenstående char recieve[] = "00.0";
+
 				//	cout << "Skrevet til log: " << recieve[0] << recieve[1] << recieve[2] << recieve[3] << endl; // tester
 
 					switch (this->temperatureObject_->checkTemperature(recievedDouble))
@@ -101,6 +104,7 @@ void Computer::openMenu()
 						break;
 					default:
 						break;
+
 					}
 				}
 				break;
@@ -259,7 +263,7 @@ void Computer::clearInputBuffer()
 	delete[] gammeltKonsolInput;
 }
 
-void Computer::seeCurrentTemperature(char arr[])
+void Computer::seeCurrentTemperature(char arr1[])
 {
-	cout << "nuvaerende temperatur: " << arr[0] << arr[1] << arr[2] << arr[3] << "\r\b\b\b\b";
+		cout << "nuvaerende temperatur: " << arr1[0] << arr1[1] << arr1[2] << arr1[3] << "\r\b\b\b\b";
 }
