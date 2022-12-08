@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Atmel Studio Solution File, Format Version 11.00
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A71EE006-BC12-4EDE-866A-ADB17F676883}"
+	ProjectSection(SolutionItems) = preProject
+		CFile1.c = CFile1.c
+		..\..\..\Users\Johan\Documents\GitHub\SemesterProjekt2\X10 Protokol\x10\x10\x10.cpp = ..\..\..\Users\Johan\Documents\GitHub\SemesterProjekt2\X10 Protokol\x10\x10\x10.cpp
+		..\..\..\Users\Johan\Documents\GitHub\SemesterProjekt2\X10 Protokol\x10\x10\x10.h = ..\..\..\Users\Johan\Documents\GitHub\SemesterProjekt2\X10 Protokol\x10\x10\x10.h
+		..\..\..\Users\Johan\Documents\GitHub\SemesterProjekt2\X10 Protokol\x10\x10\x10_modtager_tester.cpp = ..\..\..\Users\Johan\Documents\GitHub\SemesterProjekt2\X10 Protokol\x10\x10\x10_modtager_tester.cpp
+	EndProjectSection
+EndProject
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "x10modtager", "x10modtager\x10modtager.cproj", "{DCE6C7E3-EE26-4D79-826B-08594B9AD897}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|AVR = Debug|AVR
+		Release|AVR = Release|AVR
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DCE6C7E3-EE26-4D79-826B-08594B9AD897}.Debug|AVR.ActiveCfg = Debug|AVR
+		{DCE6C7E3-EE26-4D79-826B-08594B9AD897}.Debug|AVR.Build.0 = Debug|AVR
+		{DCE6C7E3-EE26-4D79-826B-08594B9AD897}.Release|AVR.ActiveCfg = Release|AVR
+		{DCE6C7E3-EE26-4D79-826B-08594B9AD897}.Release|AVR.Build.0 = Release|AVR
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
