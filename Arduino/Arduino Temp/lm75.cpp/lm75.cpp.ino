@@ -39,7 +39,7 @@ float TempI2C_LM75::getTemp()
 
     temperature.tempX = getReg(temp_reg);
     //return (temperature.tempS / 256.0F);
-    return 77777;
+    //return 77777;
     //
 }
 
