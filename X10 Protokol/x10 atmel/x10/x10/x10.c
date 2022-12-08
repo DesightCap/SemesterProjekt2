@@ -137,6 +137,8 @@ void doubleEncoded(uint16_t* encoded, uint32_t* datapakke)
 
 void sendBurst()
 {
+	_delay_ms(0.1);
+	
 	//timer 0 ctc mode no prescale
 	 TCCR1A = 0b01000000;
 	 TCCR1B = 0b00001001;
