@@ -33,8 +33,8 @@ ISR(INT0_vect) //Interrupt på int0. Tjek pin nummer
 	if (counter <=4)
 	{
 		if (start & (0b00001000 >> (counter - 1)))
-			sendBurst();
-			//PORTA = 0b00000001;
+			//sendBurst();
+			PORTA = 0b00000001;
 		
 	//	else PORTA = 0;
 	}
@@ -43,13 +43,13 @@ ISR(INT0_vect) //Interrupt på int0. Tjek pin nummer
 	if (counter > 4 && counter <= dataSIZE+4)
 		{
 		if (datapakke & (0b10000000000000000000000000000000 >> (counter - 5))) // set PIN high
-			sendBurst();
-			//PORTA = 0b00000001;
+			//sendBurst();
+			PORTA = 0b00000001;
 			
-		//else PORTA = 0; //set PIN low
+		else PORTA = 0; //set PIN low
 		}
 	
-	//if (counter > dataSIZE+4)	
+	if (counter > dataSIZE+4)	
 		//PORTA = 0;
 		
 	counter++;
