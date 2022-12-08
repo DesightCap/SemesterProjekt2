@@ -12,6 +12,9 @@
 char recieved = '0';
 char* toSend = "00";
 
+uint16_t addressRecieved; 
+uint16_t commandRecieved;
+
 void tempChange(char);
 
 
@@ -29,30 +32,24 @@ int main()
 	turnOnLED(5);
 	
 	
+	
 	while (1)
 	{
-		//_delay_ms(2000);
+		// _delay_ms(2000);
 		
-		if ( switchStatus() != 0 )
+		// Placer kode/funktionskald til modtagelse af x10 her
+
+		
+
+		if() // Opdater så vi kan detekte nye modtagne værdier
 		{
-			if(switchOn(7))
-			{
-				toSend = "63";
-				toggleLED(7);
-				SendString(toSend);
-				_delay_ms(2000);
-			}
-			else if(switchOn(0))
-			{
-				toSend = "20";
-				toggleLED(0);
-				SendString(toSend);
-				_delay_ms(2000);
-			}
+			toSend = (recieved ); // bitshift som nødvendigt
+			SendString(toSend);
+			_delay_ms(2000); // juster her og på pc
 		}
 		else
 		{
-			char recieved = ReadChar();
+			recieved = ReadChar();
 			if (recieved == 'u' || recieved == 'U')
 			{
 				tempChange('u');
@@ -60,26 +57,12 @@ int main()
 			else if (recieved == 'd'||recieved == 'D')
 			{
 				tempChange('d');
-			}	
+			}
 		}
 		
 		recieved = '0';
 	}
-	/*
-	while (i != 10)
-	{
-	i ++;
 	
-	for (int i = 0;  TestStreng[i] != '\n'; i++)
-	{
-	//SendInteger(i);
-	SendChar(TestStreng[i]);
-	
-	}
-	
-	
-	}
-	*/
 	while (1)
 	{
 		// for en sikkeheds skyld
