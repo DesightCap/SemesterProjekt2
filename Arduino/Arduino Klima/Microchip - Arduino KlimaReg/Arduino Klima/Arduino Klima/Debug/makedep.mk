@@ -2,5 +2,7 @@
 # Automatically-generated file. Do not edit or delete the file
 ################################################################################
 
-main.cpp
+main.c
+
+x10.c
 
