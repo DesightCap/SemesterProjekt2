@@ -9,7 +9,7 @@
 
 
 #define  pinHot 0b00000100
-#define  pinCold 0b00001000
+#define  pinCold 0b00000001
 #define F_CPU 16000000
 #define dataSIZE 30
 
@@ -31,7 +31,7 @@ uint16_t my_adr = 0b00000101;
 int main(void)
 {
 	// opsæt port/pin
-	DDRA = 0xFF;
+	DDRL = 0xFF;
 	// 1 pin til cold - PINA & 0b00000100
 	// 1 pin til hot  - PINA & 0b00001000
 	int blowTime = 0;
@@ -80,24 +80,24 @@ void StartBlow(int blowTime_)
 {
 	if (blowTime_)
 	{
-		PORTA ^= pinCold;
+		PORTL ^= pinCold;
 		blowTime_--;
 	}
 	else
 	{
-		PORTA &= ~pinCold;
+		PORTL &= ~pinCold;
 	}
 }
 void StartHeat(int hotTime_)
 {
 	if (hotTime_)
 	{
-		PORTA ^= pinHot;
+		PORTL ^= pinHot;
 		hotTime_--;
 	}
 	else
 	{
-		PORTA &= !pinHot;
+		PORTL &= !pinHot;
 	}
 }
 
