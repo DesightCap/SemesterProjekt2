@@ -10,6 +10,7 @@ void Log::print() // Idskriver hele log
 	string myReading;
 	ifstream MyFile;
 	MyFile.open(filename_);
+
 	while (getline(MyFile, myReading))
 	{
 		cout << "Log indslag: " << myReading << endl;
@@ -52,5 +53,4 @@ void Log::addToLog(double temperature) // Tilføjer læsning til log
 		MyFile << "Fejl i hent tid. " << endl;
 		MyFile.close();
 	}
-
 }

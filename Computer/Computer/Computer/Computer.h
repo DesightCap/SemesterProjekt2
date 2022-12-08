@@ -22,12 +22,13 @@ public:
 	double temperatureCharArrayToDouble(char recieved[]);
 	bool setTemperatureInt();
 	void clearInputBuffer();
+	void seeCurrentTemperature(char[]);
 private:
 	UART* testUART_;
 	Log* testLog_;
 	Temperature* temperatureObject_;
 	int temperature_;
-	bool writeTemperature;
+	bool writeTemperature_;
 	char inputData_[INPUT_DATA_BYTES];
 };
 

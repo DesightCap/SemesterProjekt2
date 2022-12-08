@@ -25,7 +25,6 @@ char* port = comport;
 
 int main()
 {
-
 	Log testLog;
 	UART testUART(port); // Med UART der opretter forbindelse i constructoren, kunne Complex(d).print(); som vist i OOP være en ide til at hente data ud?
 	Temperature testtemperature;

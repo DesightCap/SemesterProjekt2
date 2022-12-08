@@ -1,8 +1,5 @@
 ﻿  Computer.cpp
-C:\Users\Anders\Documents\GitHub\SemesterProjekt2\Computer\Computer\Computer\Computer.cpp(88,57): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\Anders\Documents\GitHub\SemesterProjekt2\Computer\Computer\Computer\Computer.cpp(86,57): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
 C:\Users\Anders\Documents\GitHub\SemesterProjekt2\Computer\Computer\Computer\Computer.cpp(74,9): warning C4101: 'toSend': unreferenced local variable
-  ComputerMain.cpp
-C:\Users\Anders\Documents\GitHub\SemesterProjekt2\Computer\Computer\Computer\ComputerMain.cpp(40,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-  Generating Code...
-C:\Users\Anders\Documents\GitHub\SemesterProjekt2\Computer\Computer\Computer\Computer.cpp(268): warning C4715: 'Computer::setTemperatureInt': not all control paths return a value
+C:\Users\Anders\Documents\GitHub\SemesterProjekt2\Computer\Computer\Computer\Computer.cpp(252): warning C4715: 'Computer::setTemperatureInt': not all control paths return a value
   Computer.vcxproj -> C:\Users\Anders\Documents\GitHub\SemesterProjekt2\Computer\Computer\x64\Debug\Computer.exe

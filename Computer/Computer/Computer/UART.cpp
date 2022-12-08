@@ -15,7 +15,6 @@ using namespace std;
 
 UART::UART(char* portName)
 {
-
 	errors = 0;
 	status = { 0 };
 	connected = false;
@@ -107,7 +106,7 @@ int UART::getTemperature(char* buffer, unsigned int buf_size)
 		CancelIo(handleToCOM);
 		return bytesRead;
 	}
-	
+
 	return 0;
 }
 

@@ -13,13 +13,13 @@ Computer::Computer(UART* testUART, Log* testLog, Temperature* testTemperature)
 	testUART_ = testUART;
 	testLog_ = testLog;
 	temperatureObject_ = testTemperature;
-	writeTemperature = true;
+	writeTemperature_ = true;
 }
 
 
 void Computer::readToggle()
 {
-	writeTemperature = !writeTemperature;
+	writeTemperature_ = !writeTemperature_;
 }
 
 void Computer::openMenu()
@@ -55,11 +55,11 @@ void Computer::openMenu()
 			break;
 		case 4:
 			readToggle();
-			if (!writeTemperature)
+			if (!writeTemperature_)
 			{
 				cout << "Stopper temperatur regulering" << endl;
 			}
-			else if (writeTemperature)
+			else if (writeTemperature_)
 			{
 				cout << "starter temperatur regulering" << endl;
 			}
@@ -70,57 +70,41 @@ void Computer::openMenu()
 			break;
 		default:
 
-			char recieve[] = "00.0";
+			char recieve[] = "08.5";
 			char toSend;
-			while (writeTemperature)
+			while (writeTemperature_)
 			{
 				testUART_->getTemperature(recieve, (sizeof(recieve) / sizeof(recieve[0])) - 1);
-				if (recieve[0] != '0' || recieve[1] != '0' || recieve[2] != '\0')
+				if (recieve != "00.0")
 				{
-					
 					double recievedDouble = this->temperatureCharArrayToDouble(recieve);
 
 					testLog_->addToLog(recievedDouble);
-					cout << "Skrevet til log"
-						<< " - Double: " << recievedDouble
-						<< " Char: " << recieve[0] << recieve[1] << recieve[2] << recieve[3]
-						<< endl; // test udskriv for skrivning til log
+					seeCurrentTemperature(recieve);
+				//	cout << "Skrevet til log: " << recieve[0] << recieve[1] << recieve[2] << recieve[3] << endl; // tester
+
 					switch (this->temperatureObject_->checkTemperature(recievedDouble))
 					{
 					case -1:
-						if (writeTemperature)
-							testUART_->sendNed();
-						cout << "Saenk temperatur" << endl;
+						if (writeTemperature_)
+							testUART_->sendOp();
+				//		cout << "Haev Temperatur" << endl; // tester
 						break;
 					case 0:
-						if (writeTemperature)
-							cout << "Temperature indenfor interval" << endl;
+						if (writeTemperature_)
+			//				cout << "Temperatur indenfor interval" << endl; // tester
 						break;
 					case 1:
-						if (writeTemperature)
-							testUART_->sendOp();
-						cout << "Haev Temperature" << endl;
+						if (writeTemperature_)
+							testUART_->sendNed();
+				//		cout << "Saenk temperatur" << endl; // tester
 						break;
 					default:
 						break;
 					}
-
-				}
-				else if (recieve[0] == '0' && recieve[1] == '0' && recieve[2] == '\0')
-				{
-					Sleep(50);
-					if (writeTemperature)
-					{
-						testUART_->getTemperature(recieve, sizeof(recieve) / sizeof(recieve[0]));
-					}
-					if (recieve[0] != '0' || recieve[1] != '0' || recieve[2] != '\0')
-					{
-						cout << recieve << endl;
-					}
 				}
 				break;
 			}
-
 		}
 			Sleep(ARDUINO_WAIT_TIME);
 	}
@@ -139,7 +123,6 @@ void Computer::menuPrint(bool clear)
 		<< "2: Saet temperatur interval" << endl
 		<< "3: Stop korsel af loop" << endl
 		<< "4: start/stop temperatur maaling" << endl << endl;
-
 }
 
 int Computer::UIinput()
@@ -195,7 +178,6 @@ bool Computer::setTemperatureInt()
 
 	while (minTemperature < 0 || maxTemperature < 0)
 	{
-
 		try {
 			cout << "indtast minimum temperaturen (mindst 0): \n";
 			cin >> minTemperature;
@@ -264,7 +246,9 @@ bool Computer::setTemperatureInt()
 		return true;
 	}
 	else
+	{
 		cout << "proev igen" << endl;
+	}
 }
 
 void Computer::clearInputBuffer()
@@ -273,4 +257,9 @@ void Computer::clearInputBuffer()
 	DWORD nyKonsolInput;
 	ReadConsoleInput(GetStdHandle(STD_INPUT_HANDLE), gammeltKonsolInput, 100, &nyKonsolInput);
 	delete[] gammeltKonsolInput;
+}
+
+void Computer::seeCurrentTemperature(char arr[])
+{
+	cout << "nuvaerende temperatur: " << arr[0] << arr[1] << arr[2] << arr[3] << "\r\b\b\b\b";
 }

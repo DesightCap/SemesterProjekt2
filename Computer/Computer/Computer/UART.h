@@ -17,8 +17,6 @@ class UART
 public:
 	UART(char* port_); // Opsætning - Overvej om det er bedst her eller i initUART
 	~UART();
-
-
 	int getTemperature(char* buffer, unsigned int buf_size);// Modtage temperatur
 	void sendOp();
 	void sendNed(); 
