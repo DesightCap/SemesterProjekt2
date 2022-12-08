@@ -904,3 +904,8 @@ Tidspunkt: 16:10:59 Dato: 8/12/2022 temperatureeratur: 0
 Tidspunkt: 16:13:16 Dato: 8/12/2022 temperatureeratur: 0
 Tidspunkt: 16:13:18 Dato: 8/12/2022 temperatureeratur: 0
 Tidspunkt: 16:13:20 Dato: 8/12/2022 temperatureeratur: 0
+Tidspunkt: 17:11:31 Dato: 8/12/2022 temperatureeratur: 0
+Tidspunkt: 17:11:33 Dato: 8/12/2022 temperatureeratur: 0
+Tidspunkt: 17:23:43 Dato: 8/12/2022 temperatureeratur: 0
+Tidspunkt: 17:23:45 Dato: 8/12/2022 temperatureeratur: 0
+Tidspunkt: 17:23:47 Dato: 8/12/2022 temperatureeratur: 0

@@ -27,7 +27,7 @@ private:
 	Log* testLog_;
 	Temperature* temperatureObject_;
 	int temperature_;
-	bool startStop_;
+	bool writeTemperature;
 	char inputData_[INPUT_DATA_BYTES];
 };
 

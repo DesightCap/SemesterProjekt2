@@ -13,13 +13,13 @@ Computer::Computer(UART* testUART, Log* testLog, Temperature* testTemperature)
 	testUART_ = testUART;
 	testLog_ = testLog;
 	temperatureObject_ = testTemperature;
-	startStop_ = true;
+	writeTemperature = true;
 }
 
 
 void Computer::readToggle()
 {
-	startStop_ = !startStop_;
+	writeTemperature = !writeTemperature;
 }
 
 void Computer::openMenu()
@@ -55,11 +55,11 @@ void Computer::openMenu()
 			break;
 		case 4:
 			readToggle();
-			if (!startStop_)
+			if (!writeTemperature)
 			{
 				cout << "Stopper temperatur regulering" << endl;
 			}
-			else if (startStop_)
+			else if (writeTemperature)
 			{
 				cout << "starter temperatur regulering" << endl;
 			}
@@ -72,7 +72,7 @@ void Computer::openMenu()
 
 			char recieve[] = "00.0";
 			char toSend;
-			while (startStop_ == true)
+			while (writeTemperature)
 			{
 				testUART_->getTemperature(recieve, (sizeof(recieve) / sizeof(recieve[0])) - 1);
 				if (recieve[0] != '0' || recieve[1] != '0' || recieve[2] != '\0')
@@ -88,16 +88,16 @@ void Computer::openMenu()
 					switch (this->temperatureObject_->checkTemperature(recievedDouble))
 					{
 					case -1:
-						if (startStop_ == true)
+						if (writeTemperature)
 							testUART_->sendNed();
 						cout << "Saenk temperatur" << endl;
 						break;
 					case 0:
-						if (startStop_ == true)
+						if (writeTemperature)
 							cout << "Temperature indenfor interval" << endl;
 						break;
 					case 1:
-						if (startStop_ == true)
+						if (writeTemperature)
 							testUART_->sendOp();
 						cout << "Haev Temperature" << endl;
 						break;
@@ -109,7 +109,7 @@ void Computer::openMenu()
 				else if (recieve[0] == '0' && recieve[1] == '0' && recieve[2] == '\0')
 				{
 					Sleep(50);
-					if (startStop_)
+					if (writeTemperature)
 					{
 						testUART_->getTemperature(recieve, sizeof(recieve) / sizeof(recieve[0]));
 					}
