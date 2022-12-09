@@ -16,6 +16,8 @@ using namespace std;
 
 UART::UART(char* portName)
 {
+
+
 	errors = 0;
 	status = { 0 };
 	connected = false;

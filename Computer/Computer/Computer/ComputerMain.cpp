@@ -24,7 +24,7 @@ using namespace std;
 
 
 // Vi antager at Ardrino tilsluttes port mellem COM1 og COM9, da vi ellers skal formatere porten som \\\\.\\COM3 som Win32 vil have den // Kan evt. udvides efterfølgende
-char comport[] = "COM5";
+char comport[] = "COM7";
 //char comport[] = "\\\\.\\COM5";
 char* port = comport;
 
@@ -34,22 +34,32 @@ int main()
 	Log testLog;
 	UART testUART(port); // Med UART der opretter forbindelse i constructoren, kunne Complex(d).print(); som vist i OOP være en ide til at hente data ud?
 	Temperature testtemperature;
-
 	Computer testComputer(&testUART, &testLog, &testtemperature);
 	//testComputer.openMenu();
-	for (int i = 0; ; i++)
+for (int i = 0; ; i++)
 	{
 
-		Sleep(ARDUINO_WAIT_TIME);
+		//Sleep(ARDUINO_WAIT_TIME);
 		
-		char buffer[2]{ 0 };
-
+	// kan nu sende besked korrekt til arudino, dog med små forstyrrelser på output pins, når pinnen er low.
 		char x = 'd';
-
-		testFunction_writeToArduino(testUART);
-
+		char y = 'u';
+		char z = 'i';
 		testUART.send(&x, 1);
-		cout << i << endl;
+		//Sleep(200);
+		cout << testUART.send(&x, 1) << endl;
+		//testUART.send(&z, 1);
+
+		Sleep(200);
+
+		testUART.send(&y, 1);
+	//	Sleep(200);	
+		cout << testUART.send(&y, 1) << endl;
+	//	testUART.send(&z, 1);
+
+		Sleep(200);
+		//testFunction_writeToArduino(testUART);
+
 
 	}
 }

@@ -44,6 +44,8 @@ void initPort()
 	
 	DDRC = 0x00;
 	PORTC = 0x00;
+	
+	DDRL = 0x00;
 }
 
 void combineBitArrays(uint16_t* adr, uint16_t* com, uint16_t* combined) //Generating a new bitString by append one bitString to another

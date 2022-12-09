@@ -38,7 +38,7 @@ SUBDIRS :=
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS +=  \
 ../Arduino\ CTRL.c \
-../led1.c \
+../led.c \
 ../uart1.c \
 ../x10.c
 
@@ -51,25 +51,25 @@ ASM_SRCS +=
 
 OBJS +=  \
 Arduino\ CTRL.o \
-led1.o \
+led.o \
 uart1.o \
 x10.o
 
 OBJS_AS_ARGS +=  \
 "Arduino CTRL.o" \
-led1.o \
+led.o \
 uart1.o \
 x10.o
 
 C_DEPS +=  \
 Arduino\ CTRL.d \
-led1.d \
+led.d \
 uart1.d \
 x10.d
 
 C_DEPS_AS_ARGS +=  \
 "Arduino CTRL.d" \
-led1.d \
+led.d \
 uart1.d \
 x10.d
 
@@ -94,7 +94,7 @@ LINKER_SCRIPT_DEP+=
 	@echo Finished building: $<
 	
 
-./led1.o: .././led1.c
+./led.o: .././led.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.6.364\include"  -Og -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -mrelax -g2 -Wall -mmcu=atmega2560 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.6.364\gcc\dev\atmega2560" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 

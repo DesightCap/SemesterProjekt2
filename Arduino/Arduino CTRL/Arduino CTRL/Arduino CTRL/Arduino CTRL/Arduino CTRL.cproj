@@ -129,7 +129,7 @@
     <Compile Include="led.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="led1.c">
+    <Compile Include="led.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="uart1.c">

@@ -55,7 +55,7 @@ void temperatureRequest();
 int main()
 {
 	// Initialize LED port
-	initLEDport();
+	//initLEDport();
 	// Initialize UART: Baud = 9600, 8 data bits, No Parity
 	InitUART(9600,8);
 	//initSwitchPort();
@@ -89,29 +89,38 @@ int main()
 		}
 		else
 		{*/
+			
+				// kan nu sende besked korrekt til arudino, dog med små forstyrrelser på output pins, når pinnen er low.
 			recieved = ReadChar();
 			
-			if (recieved != '0')
+		/*	if (recieved != '0')
 			{
-				toggleLED(0b11111111);
+				//toggleLED(0b11111111);
+				PORTB = 0b11111111;
 			}
-			else if (recieved == 'u' || recieved == 'U')
+		*/
+			if (recieved == 'u' || recieved == 'U')
 			{
-				temperatureChange('u');
+			//	temperatureChange('u');
+			PORTB = 0b11111111;
+			PORTL = 0b00000001; // blow eksempel
+
 			}
-			else if (recieved == 'd'||recieved == 'D')
+
+			if (recieved == 'd'||recieved == 'D')
 			{
-				temperatureChange('d');
+				PORTB = 0b00000001;
+				PORTL = 0b00000100; // heat eksempel
+
+
+				//temperatureChange('d');
 			}
 		
 		
 		//recieved = '0';
 	}
 	
-	while (1)
-	{
-		// for en sikkeheds skyld
-	}
+
 }
 
 void temperatureChange(char t)

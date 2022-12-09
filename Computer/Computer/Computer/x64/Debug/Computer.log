@@ -1,2 +1,3 @@
-﻿  UART.cpp
-  Computer.vcxproj -> C:\Users\hresk\OneDrive\Dokumenter\GitHub\SemesterProjekt2\Computer\Computer\x64\Debug\Computer.exe
+﻿  ComputerMain.cpp
+C:\Users\Anders\Documents\GitHub\SemesterProjekt2\Computer\Computer\Computer\ComputerMain.cpp(70,12): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  Computer.vcxproj -> C:\Users\Anders\Documents\GitHub\SemesterProjekt2\Computer\Computer\x64\Debug\Computer.exe
