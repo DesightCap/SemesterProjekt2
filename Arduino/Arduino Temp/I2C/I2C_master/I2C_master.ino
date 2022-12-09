@@ -4,7 +4,8 @@
 #include <Wire.h>
 #include <lm75.h>
 #include <avr/io.h>
-
+#include "../../../x10/x10.h"
+ #include "utility/twi.h"
 
 float HF(float _t){
   return (floor((_t*2)+0.5)/2);
@@ -48,12 +49,16 @@ void setup()
  
 void loop()
 {
-    byte helperfuntion = (sixBitsSend(HF(Temperature.getTemp())));
+    uint16_t helperfuntion = (sixBitsSend(HF(Temperature.getTemp())));
     Serial.print(HF(Temperature.getTemp()));
     Serial.print(" ");
     Serial.print(helperfuntion,BIN);
     Serial.println(" oC");
-    
-    PORTA = helperfuntion;
+    uint16_t address = 3;
+    uint16_t combined_ = 0;  
+    uint16_t encoded_ = 0;  
+    uint32_t datapakke_ = 0;  
+    volatile int counter_ = 100;  
+    sendx10(&address, &helperfuntion, &combined_, &encoded_, &datapakke_, &counter_);
     delay(1000);
 }
