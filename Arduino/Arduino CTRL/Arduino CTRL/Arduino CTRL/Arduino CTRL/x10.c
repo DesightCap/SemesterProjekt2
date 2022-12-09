@@ -40,7 +40,7 @@ void initPort()
 	PORTA = 0x00;
 	
 	DDRB = 0xFF;
-	PORTB = 0xFF;
+	//PORTB = 0xFF;
 	
 	DDRC = 0x00;
 	PORTC = 0x00;

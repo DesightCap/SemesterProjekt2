@@ -71,7 +71,7 @@ void Computer::openMenu()
 			break;
 		default:
 
-			char recieve[] = "08.5";
+			char recieve[] = "60.5"; // Sat høj for test
 			char toSend;
 			while (writeTemperature_)
 			{
@@ -81,7 +81,7 @@ void Computer::openMenu()
 					double recievedDouble = this->temperatureCharArrayToDouble(recieve);
 
 					testLog_->addToLog(recievedDouble);
-					seeCurrentTemperature(recieve);
+				//	seeCurrentTemperature(recieve);
 					//recieve[0]++; // tester der hører sammen med ovenstående char recieve[] = "00.0";
 
 				//	cout << "Skrevet til log: " << recieve[0] << recieve[1] << recieve[2] << recieve[3] << endl; // tester
@@ -90,17 +90,17 @@ void Computer::openMenu()
 					{
 					case -1:
 						if (writeTemperature_)
-							testUART_->sendOp();
+							testUART_->sendUp();
 				//		cout << "Haev Temperatur" << endl; // tester
 						break;
 					case 0:
 						if (writeTemperature_)
-			//				cout << "Temperatur indenfor interval" << endl; // tester
+				//			cout << "Temperatur indenfor interval" << endl; // tester
 						break;
 					case 1:
 						if (writeTemperature_)
-							testUART_->sendNed();
-				//		cout << "Saenk temperatur" << endl; // tester
+							testUART_->sendDown();
+						cout << "Saenk temperatur " << endl; // tester
 						break;
 					default:
 						break;

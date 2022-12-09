@@ -1,5 +1,2 @@
-﻿  Computer.cpp
-C:\Users\Anders\Documents\GitHub\SemesterProjekt2\Computer\Computer\Computer\Computer.cpp(89,57): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\Anders\Documents\GitHub\SemesterProjekt2\Computer\Computer\Computer\Computer.cpp(75,9): warning C4101: 'toSend': unreferenced local variable
-C:\Users\Anders\Documents\GitHub\SemesterProjekt2\Computer\Computer\Computer\Computer.cpp(256): warning C4715: 'Computer::setTemperatureInt': not all control paths return a value
-  Computer.vcxproj -> C:\Users\Anders\Documents\GitHub\SemesterProjekt2\Computer\Computer\x64\Debug\Computer.exe
+﻿  UART.cpp
+  Computer.vcxproj -> C:\Users\hresk\OneDrive\Dokumenter\GitHub\SemesterProjekt2\Computer\Computer\x64\Debug\Computer.exe

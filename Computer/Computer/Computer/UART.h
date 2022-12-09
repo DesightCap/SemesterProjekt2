@@ -1,8 +1,8 @@
 #pragma once
 
 #define ARDUINO_WAIT_TIME 2000
-#define INPUT_DATA_BYTES 4 // Antallet af bytes vi modtager i string. (Husk \r\n hver tæller for en)
-#define OUTPUT_DATA_BYTES 4
+#define INPUT_DATA_BYTES 1 // Antallet af bytes vi modtager i string. (Husk \r\n hver tæller for en)
+#define OUTPUT_DATA_BYTES 1
 
 #include <iostream>
 #include "UART.h"
@@ -18,9 +18,9 @@ public:
 	UART(char* port_); // Opsætning - Overvej om det er bedst her eller i initUART
 	~UART();
 	int getTemperature(char* buffer, unsigned int buf_size);// Modtage temperatur
-	void sendOp();
-	void sendNed(); 
-	bool send(char* buffer, unsigned int buf_size); // Sender et char array på størrelse buf_size // Skal kaldes fra sendOp og ned med relevant data preloadet
+	void sendUp();
+	void sendDown(); 
+	bool send(char* buffer, unsigned int buf_size); // Sender et char array på størrelse buf_size // Skal kaldes fra sendUp og ned med relevant data preloadet
 	bool isConnected(); // Retunere hvorvidt connected er sat og dermed om vi er forbundet
 
 private:

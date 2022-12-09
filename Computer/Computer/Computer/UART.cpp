@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <string.h>
 #include "UART.h"
 
 #define deviceInUse 5
@@ -110,13 +111,13 @@ int UART::getTemperature(char* buffer, unsigned int buf_size)
 	return 0;
 }
 
-void UART::sendOp()
+void UART::sendUp()
 {
 	char up = 'u';
 	send(&up, 1);
 }
 
-void UART::sendNed()
+void UART::sendDown()
 {
 	char down = 'd';
 	send(&down, 1);
@@ -128,6 +129,9 @@ bool UART::send(char* buffer, unsigned int buf_size)
 	DWORD bytesWritten  = 0;
 	unsigned int toWrite = OUTPUT_DATA_BYTES;
 
+	
+
+
 	if (!WriteFile(handleToCOM, buffer, toWrite, &bytesWritten, NULL))
 	{
 		ClearCommError(handleToCOM, &errors, &status);
@@ -135,6 +139,7 @@ bool UART::send(char* buffer, unsigned int buf_size)
 	}
 
 	return true;
+
 }
 
 

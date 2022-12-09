@@ -55,25 +55,25 @@ void temperatureRequest();
 int main()
 {
 	// Initialize LED port
-	//initLEDport();
+	initLEDport();
 	// Initialize UART: Baud = 9600, 8 data bits, No Parity
 	InitUART(9600,8);
 	//initSwitchPort();
 	initPort();
 	initISR();
 	
-	
 	while (1)
 	{
-		
+			//_delay_ms(2000);
+
 		// Placer kode/funktionskald til modtagelse af x10 her
-		_delay_ms(2000);
 		
-		uint16_t x10recievedTemp = (com << 9);
+		
+	/*	uint16_t x10recievedTemp = (com << 9);
 		x10recievedTemp = (x10recievedTemp >> 9);
 		
 
-		//SendChar((char)x10recievedTemp);
+		SendChar((char)x10recievedTemp);
 		
 		float temp = (x10recievedTemp >> 1);
 		if (x10recievedTemp << 15)
@@ -82,14 +82,20 @@ int main()
 		}
 		if (PORTC != 0)
 		{
+			// Det kan være det går galt her når vi bruger stostrf
 			char charArray[sizeof(temp)];
 			dtostrf(temp, 5, 1, charArray);
 			SendString(charArray);
 		}
 		else
-		{
+		{*/
 			recieved = ReadChar();
-			if (recieved == 'u' || recieved == 'U')
+			
+			if (recieved != '0')
+			{
+				toggleLED(0b11111111);
+			}
+			else if (recieved == 'u' || recieved == 'U')
 			{
 				temperatureChange('u');
 			}
@@ -97,9 +103,9 @@ int main()
 			{
 				temperatureChange('d');
 			}
-		}
 		
-		recieved = '0';
+		
+		//recieved = '0';
 	}
 	
 	while (1)
@@ -112,14 +118,17 @@ void temperatureChange(char t)
 {
 	if (t == 'u')
 	{
-		com = 0b0000000000001111;
-		sendInProcess = sendx10(&address, &com, &combined, &encoded, &datapakke, &counter);
+		toggleLED(0b11001100);
+		//com = 0b0000000000001111;
+		//sendInProcess = sendx10(&address, &com, &combined, &encoded, &datapakke, &counter);
 
 	}
 	else if (t == 'd')
 	{
-		com = 0b0000000011110000;		
-		sendInProcess = sendx10(&address, &com, &combined, &encoded, &datapakke, &counter);
+		
+		toggleLED(0b00110011);
+		//com = 0b0000000011110000;		
+		//sendInProcess = sendx10(&address, &com, &combined, &encoded, &datapakke, &counter);
 		
 	}
 }
