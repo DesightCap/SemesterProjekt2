@@ -9,7 +9,7 @@
 #define dataSIZE 30
 
 volatile int counter = 100; //sender counter
-volatile int count = 100; // modtager counter
+volatile int count = 1; // modtager counter
 uint16_t com;
 uint16_t address;
 uint16_t combined = 0;
@@ -32,7 +32,8 @@ int main(void)
 		charRecieved = ReadChar();
 		
 		switch(charRecieved)
-		
+		{
+	
 		case 'a':
 		{
 			address = 0b0000000000000111;
@@ -50,8 +51,10 @@ int main(void)
 		};
 		break;
 		
-		default;
+		default:
 		break;
+		}
+		_delay_ms(3000);
 		
 		
 
@@ -90,7 +93,7 @@ ISR(INT0_vect)
 	
 	
 	/////////////////////MODTAGER ISR!///////////////
-	{
+	
 
 		_delay_ms(20);
 		uint8_t inputPin = (PINC & 0x1);

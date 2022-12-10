@@ -25,7 +25,7 @@ void sendx10(uint16_t* adr, uint16_t* com, uint16_t* combined, uint16_t* encoded
 void recievex10(uint16_t* adr, uint16_t* com, uint16_t* combined, uint16_t* encoded, uint32_t* datapakke, volatile int* counterPtr)
 {
 		
-		if (counter == dataSIZE+2)
+		if (*counterPtr == dataSIZE+2)
 		{
 			halfEncoded(encoded, datapakke);
 			

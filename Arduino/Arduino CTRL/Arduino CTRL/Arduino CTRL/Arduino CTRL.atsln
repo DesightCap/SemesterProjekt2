@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Atmel Studio Solution File, Format Version 11.00
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "Arduino CTRL", "Arduino CTRL\Arduino CTRL.cproj", "{ADCDF487-5B90-4146-A3AC-597115215AC8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|AVR = Debug|AVR
+		Release|AVR = Release|AVR
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ADCDF487-5B90-4146-A3AC-597115215AC8}.Debug|AVR.ActiveCfg = Debug|AVR
+		{ADCDF487-5B90-4146-A3AC-597115215AC8}.Debug|AVR.Build.0 = Debug|AVR
+		{ADCDF487-5B90-4146-A3AC-597115215AC8}.Release|AVR.ActiveCfg = Release|AVR
+		{ADCDF487-5B90-4146-A3AC-597115215AC8}.Release|AVR.Build.0 = Release|AVR
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
