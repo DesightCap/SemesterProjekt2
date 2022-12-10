@@ -6,6 +6,7 @@
 #include <avr/io.h>
 #include "../../../x10/x10.h"
  #include "utility/twi.h"
+ #include "../../../../Dokumenter/x10/x10.h"
 
 float HF(float _t){
   return (floor((_t*2)+0.5)/2);
@@ -44,21 +45,29 @@ void setup()
   Serial.print(Temperature.getTemp());
   Serial.println(" oC");
   delay(2000);
-  
+      uint16_t address = 3;
+    uint16_t combined_ = 0;  
+    uint16_t encoded_ = 0;  
+    uint32_t datapakke_ = 0;  
+    volatile int counter_ = 100;  
+     uint16_t helperfuntion;
+    sendx10(&address, &helperfuntion, &combined_, &encoded_, &datapakke_, &counter_);
+
 }
  
 void loop()
 {
+ 
     uint16_t helperfuntion = (sixBitsSend(HF(Temperature.getTemp())));
     Serial.print(HF(Temperature.getTemp()));
     Serial.print(" ");
     Serial.print(helperfuntion,BIN);
     Serial.println(" oC");
-    uint16_t address = 3;
+   uint16_t address = 3;
     uint16_t combined_ = 0;  
     uint16_t encoded_ = 0;  
     uint32_t datapakke_ = 0;  
-    volatile int counter_ = 100;  
+    volatile int counter_ = 100; 
     sendx10(&address, &helperfuntion, &combined_, &encoded_, &datapakke_, &counter_);
     delay(1000);
 }
