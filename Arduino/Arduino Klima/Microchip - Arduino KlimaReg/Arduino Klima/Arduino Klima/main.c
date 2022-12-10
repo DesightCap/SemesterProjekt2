@@ -8,12 +8,14 @@
 
 
 #define  pinHot 0b00000100
-#define  pinCold 0b00000001
+//#define  pinColdOn 0b00000001
+//#define  pinColdOff 0b00000000
+#define pinCold 0b00000001
 #define F_CPU 16000000
 #define dataSIZE 30
 
-void StartBlow(int hotTime_);
-void StartHeat(int blowTime_);
+void StartBlow(int);
+void StartHeat(int);
 
 volatile int count = 1;
 
@@ -33,13 +35,12 @@ int main(void)
 	DDRL = 0xFF;
 	// 1 pin til cold - PINA & 0b00000100
 	// 1 pin til hot  - PINA & 0b00001000
-	int blowTime = 0;
+	uint32_t blowTime = 0;
 	int hotTime = 0;
 	int timeMultiplier = 1; // Skal være over 0;
 
 	initPort();
 	initISR();
-
 	
 	startRecieved = 0;
 	datapakkeRecieved = 0x0000;
@@ -54,54 +55,73 @@ int main(void)
 		if (count == (dataSIZE+2))
 			{
 			recievex10(&addressRecieved, &commandRecieved, &combined, &encoded, &datapakkeRecieved, &count);
+			//PORTB = commandRecieved;
 			}
 			
 		//PORTB = addressRecieved;
 		//if (my_adr = addressRecieved)
 		
+		
+		
 			switch (commandRecieved)
 			{
 				case 0b0000000011110000:
-				blowTime = 16000000 * timeMultiplier;
+				blowTime = 1000000 * timeMultiplier;
 				break;
 				case 0b0000000000001111:
 				hotTime = 16000000 * timeMultiplier;
+				StartHeat(hotTime);
 				break;
 				default:
-				StartHeat(hotTime);
-				StartBlow(blowTime);
+				
 				break;
 			}
+			
+			
+			if(blowTime > 0)
+			{
+				PORTL = pinCold;
+				_delay_us(100);
+				blowTime--;
+			}
+			else
+			{
+				PORTL = 0b00000000;
+			}
+			
+			
+		//	addressRecieved = 0;
+			commandRecieved = 0;
+			
 		
 	}
 	
-	while (1)
-	{
-	}
 }
 void StartBlow(int blowTime_)
 {
-	if (blowTime_ > 0)
+				PORTL = pinCold;
+				PORTB = PORTL;
+	while (blowTime_ > 0)
 	{
-		PORTB |= pinCold;
-		blowTime_--;
+			blowTime_--;
 	}
-	else
+		PORTL = 0;
+		PORTB = 0b00010000;
+/*	else
 	{
 		PORTB &= ~pinCold;
 	}
+*/
 }
 void StartHeat(int hotTime_)
 {
-	if (hotTime_ > 0)
+	while (hotTime_ > 0)
 	{
-		PORTB |= pinHot;
-		hotTime_--;
+			PORTL = pinHot;
+			//PORTB |= pinHot;
+			hotTime_--;
 	}
-	else
-	{
-		PORTB &= ~pinHot;
-	}
+		PORTL &= ~pinHot;
 }
 
 
@@ -110,7 +130,7 @@ void StartHeat(int hotTime_)
 ISR(INT0_vect)
 {
 
-	_delay_ms(20);
+	_delay_us(20);
 	uint8_t inputPin = (PINC & 0x1);
 	uint32_t longInputPin = 0x0000;
 	longInputPin|= inputPin;
@@ -132,7 +152,7 @@ ISR(INT0_vect)
 		{
 			datapakkeRecieved = datapakkeRecieved << 2;
 			startRecieved = 0;
-			PORTB = (datapakkeRecieved);
+			//PORTB = (datapakkeRecieved);
 			count++;
 		}
 
