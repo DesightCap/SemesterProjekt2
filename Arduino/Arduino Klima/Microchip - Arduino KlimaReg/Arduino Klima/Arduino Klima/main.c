@@ -1,5 +1,4 @@
 #include <avr/io.h>
-#include <avr/io.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <avr/interrupt.h>
@@ -53,51 +52,55 @@ int main(void)
 	{
 		// Modtag x10
 		if (count == (dataSIZE+2))
-		{
+			{
 			recievex10(&addressRecieved, &commandRecieved, &combined, &encoded, &datapakkeRecieved, &count);
-		}
-		PORTB = addressRecieved;
+			}
+			
+		//PORTB = addressRecieved;
+		//if (my_adr = addressRecieved)
 		
-		switch (commandRecieved)
-		{
-			case 0b0000000011110000:
-			blowTime = 16000000 * timeMultiplier;
-			break;
-			case 0b0000000000001111:
-			hotTime = 16000000 * timeMultiplier;
-			break;
-			default:
-			StartHeat(hotTime);
-			StartBlow(blowTime);
-			break;
-		}
+			switch (commandRecieved)
+			{
+				case 0b0000000011110000:
+				blowTime = 16000000 * timeMultiplier;
+				break;
+				case 0b0000000000001111:
+				hotTime = 16000000 * timeMultiplier;
+				break;
+				default:
+				StartHeat(hotTime);
+				StartBlow(blowTime);
+				break;
+			}
+		
 	}
+	
 	while (1)
 	{
 	}
 }
 void StartBlow(int blowTime_)
 {
-	if (blowTime_)
+	if (blowTime_ > 0)
 	{
-		PORTL ^= pinCold;
+		PORTB |= pinCold;
 		blowTime_--;
 	}
 	else
 	{
-		PORTL &= ~pinCold;
+		PORTB &= ~pinCold;
 	}
 }
 void StartHeat(int hotTime_)
 {
-	if (hotTime_)
+	if (hotTime_ > 0)
 	{
-		PORTL ^= pinHot;
+		PORTB |= pinHot;
 		hotTime_--;
 	}
 	else
 	{
-		PORTL &= !pinHot;
+		PORTB &= ~pinHot;
 	}
 }
 
@@ -129,7 +132,7 @@ ISR(INT0_vect)
 		{
 			datapakkeRecieved = datapakkeRecieved << 2;
 			startRecieved = 0;
-			//PORTB = (datapakkeRecieved);
+			PORTB = (datapakkeRecieved);
 			count++;
 		}
 

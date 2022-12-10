@@ -241,7 +241,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x64a
+.text           0x00000000      0x638
  *(.vectors)
  .vectors       0x00000000       0xe4 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/Atmel/ATmega_DFP/1.7.374/gcc/dev/atmega2560/avr6/crtatmega2560.o
                 0x00000000                __vector_default
@@ -359,38 +359,38 @@ END GROUP
                 0x00000124                . = ALIGN (0x2)
  *(.text.*)
  .text.StartBlow
-                0x00000124       0x1e main.o
+                0x00000124       0x16 main.o
                 0x00000124                StartBlow
  .text.StartHeat
-                0x00000142       0x1c main.o
-                0x00000142                StartHeat
- .text.main     0x0000015e       0xaa main.o
-                0x0000015e                main
+                0x0000013a       0x16 main.o
+                0x0000013a                StartHeat
+ .text.main     0x00000150       0xa4 main.o
+                0x00000150                main
  .text.__vector_1
-                0x00000208      0x10c main.o
-                0x00000208                __vector_1
- .text.initISR  0x00000314        0xc x10.o
-                0x00000314                initISR
+                0x000001f4      0x10e main.o
+                0x000001f4                __vector_1
+ .text.initISR  0x00000302        0xc x10.o
+                0x00000302                initISR
  .text.initPort
-                0x00000320       0x10 x10.o
-                0x00000320                initPort
+                0x0000030e       0x10 x10.o
+                0x0000030e                initPort
  .text.hammingDecoding
-                0x00000330      0x1e8 x10.o
-                0x00000330                hammingDecoding
+                0x0000031e      0x1e8 x10.o
+                0x0000031e                hammingDecoding
  .text.halfEncoded
-                0x00000518       0xa8 x10.o
-                0x00000518                halfEncoded
+                0x00000506       0xa8 x10.o
+                0x00000506                halfEncoded
  .text.splitCombine
-                0x000005c0       0x1a x10.o
-                0x000005c0                splitCombine
+                0x000005ae       0x1a x10.o
+                0x000005ae                splitCombine
  .text.recievex10
-                0x000005da       0x6c x10.o
-                0x000005da                recievex10
-                0x00000646                . = ALIGN (0x2)
+                0x000005c8       0x6c x10.o
+                0x000005c8                recievex10
+                0x00000634                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x00000646        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr6\libgcc.a(_exit.o)
-                0x00000646                _exit
-                0x00000646                exit
+ .fini9         0x00000634        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr6\libgcc.a(_exit.o)
+                0x00000634                _exit
+                0x00000634                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -409,11 +409,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x00000646        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr6\libgcc.a(_exit.o)
+ .fini0         0x00000634        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr6\libgcc.a(_exit.o)
  *(.fini0)
-                0x0000064a                _etext = .
+                0x00000638                _etext = .
 
-.data           0x00800200        0x2 load address 0x0000064a
+.data           0x00800200        0x2 load address 0x00000638
                 0x00800200                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -449,8 +449,8 @@ END GROUP
                 0x0080020e                startRecieved
  *(COMMON)
                 0x0080020f                PROVIDE (__bss_end, .)
-                0x0000064a                __data_load_start = LOADADDR (.data)
-                0x0000064c                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x00000638                __data_load_start = LOADADDR (.data)
+                0x0000063a                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x0080020f        0x0
                 [!provide]                PROVIDE (__noinit_start, .)
