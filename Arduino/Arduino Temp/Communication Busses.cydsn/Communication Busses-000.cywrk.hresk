@@ -208,7 +208,18 @@
 </userData>
 </CyGuid_fdba8dfd-b15b-4469-9bbb-9e40c3e70997>
 <Unloaded />
-<OpenDocs />
+<OpenDocs>
+<name v=".\main.c" />
+<name v=".\Communication Busses.cydwr" />
+<name v=".\TopDesign\TopDesign.cysch" />
+</OpenDocs>
+<OpenDocsLayout><![CDATA[<?xml version="1.0"?><!--
+
+  Actipro Docking/MDI for WinForms
+  Copyright (c) 2001-2016 Actipro Software LLC.  All rights reserved.
+  http://www.actiprosoftware.com
+
+--><DocumentLayout Version="1.0"><LayoutData><TabbedMdiRootContainer Orientation="Horizontal"><TabbedMdiContainer Size="1010, 475" SelectedTabbedMdiWindow="61244ab0-29fa-45ef-a3c7-29d7439d8322"><DocumentWindow Key="C:\Users\hresk\OneDrive\Dokumenter\GitHub\SemesterProjekt2\Arduino\Arduino Temp\Communication Busses.cydsn\main.c" Guid="61244ab0-29fa-45ef-a3c7-29d7439d8322" /><DocumentWindow Key="C:\Users\hresk\OneDrive\Dokumenter\GitHub\SemesterProjekt2\Arduino\Arduino Temp\Communication Busses.cydsn\Communication Busses.cydwr" Guid="654ab2fc-82cb-4c28-b8ee-c6600fb1c6f0" /><ToolWindow Key="Start Page:bd4649ab-da6b-4d04-a663-c722b8bf99db:Start Page" Guid="92ec32d7-9d1d-4db9-8594-cd04315f1d94" /><DocumentWindow Key="C:\Users\hresk\OneDrive\Dokumenter\GitHub\SemesterProjekt2\Arduino\Arduino Temp\Communication Busses.cydsn\TopDesign\TopDesign.cysch" Guid="8fd57812-ce0f-46a6-8ce6-94bdc680c0bb" /></TabbedMdiContainer></TabbedMdiRootContainer><FloatingContainers /></LayoutData></DocumentLayout>]]></OpenDocsLayout>
 <config v="" />
 <AutoUpdate v="true" />
 </CyGuid_843a90a4-0c4b-4e44-991d-05e7fb117a21>

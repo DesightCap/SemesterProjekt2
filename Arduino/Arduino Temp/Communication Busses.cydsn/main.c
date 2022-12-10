@@ -25,7 +25,7 @@ int main(void)
 	
 	UART_TERMINAL_Start(); // Klargøre UART
 	
-	float dec = 0; // Variable til opbevaring af beregnet temperatur data
+	float temp = 0; // Variable til opbevaring af beregnet temperatur data
 	
 	
 	char buffer[256]; // Chart array til udskrivning af temperatur data
@@ -50,11 +50,20 @@ int main(void)
     for(;;)
     {
 		// Hent temperatur data fra parameter adresse
-		dec = fetchData(slaveAddr1);
+		temp = fetchData(slaveAddr1);
 		
-		snprintf(buffer, sizeof(buffer), "%.1f", dec);
-		UART_TERMINAL_PutString(buffer); 
+		uint8_t whole = (int)temp;
+		uint8_t decimal = temp - whole;
 		
+		whole = whole << 1;
+		if (decimal)
+			whole++;
+		
+		
+		//snprintf(buffer, sizeof(buffer), "%.1f\r\n", whole);
+		//UART_TERMINAL_PutString((char)whole);
+		UART_TERMINAL_PutChar((char)whole);
+		CyDelay(2000);
 		/*
 		// Klargøre buffer til udskrive med adresse på I2C enhed og float temperatur
 		snprintf(buffer, sizeof(buffer), "Enhed med adresse %u har temperatur: %.1f \r\n", slaveAddr1, dec);

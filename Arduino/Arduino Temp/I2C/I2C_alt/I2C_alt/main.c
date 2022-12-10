@@ -32,9 +32,9 @@ ISR(USART0_RX_vect)
 	}*/
 	
 	char buffer[5];
-	unsigned char recievedData = UDR0;
-	unsigned char number = recievedData - '0';
-	sprintf(buffer, "%d", number);
+	//unsigned char recievedData = UDR0;
+	//unsigned char number = recievedData - '0';
+	sprintf(buffer, "%d\r\n", number);
 	SendString(buffer);
 	
 }
