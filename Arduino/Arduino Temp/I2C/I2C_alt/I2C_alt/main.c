@@ -71,7 +71,7 @@ int main(void)
 #include <avr/io.h>
 //#include "x10.h"
 #include <math.h>
-#include "uart1.h"
+#include "uart_int.h"
 #include <util/delay.h>
 #include <avr/interrupt.h>
 
@@ -101,6 +101,7 @@ ISR(USART0_RX_vect)
 	char buffer[5];
 	unsigned char recievedData = UDR0;
 	unsigned char number = recievedData - '0';
+	
 	sprintf(buffer, "%d\n", number);
 	
 	SendString(buffer);
