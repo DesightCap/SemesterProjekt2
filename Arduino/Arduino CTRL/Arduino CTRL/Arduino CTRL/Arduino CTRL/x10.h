@@ -11,7 +11,7 @@
 //#define F_CPU 16000000
 
 
-	int sendx10(uint16_t *adr, uint16_t* com, uint16_t* combined, uint16_t* encoded, uint32_t* datapakke, volatile int* counterPtr);
+	void sendx10(uint16_t *adr, uint16_t* com, uint16_t* combined, uint16_t* encoded, uint32_t* datapakke, volatile int* counterPtr);
 	//uint8_t recievex10();
 	void initISR();
 	void initPort();

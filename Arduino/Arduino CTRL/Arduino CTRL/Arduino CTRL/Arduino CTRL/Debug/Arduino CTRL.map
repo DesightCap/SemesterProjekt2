@@ -19,6 +19,11 @@ c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/..
 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr6\libc.a(strrev.o)
                               c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/../../../../avr/lib/avr6\libc.a(utoa_ncheck.o) (strrev)
 
+Allocating common symbols
+Common symbol       size              file
+
+com                 0x2               Arduino CTRL.o
+
 Discarded input sections
 
  .data          0x00000000        0x0 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega2560/avr6/crtatmega2560.o
@@ -29,10 +34,11 @@ Discarded input sections
  .text.temperatureChange
                 0x00000000       0x18 Arduino CTRL.o
  .text.temperatureRequest
-                0x00000000       0x4a Arduino CTRL.o
+                0x00000000        0xe Arduino CTRL.o
  .rodata.str1.1
                 0x00000000        0x5 Arduino CTRL.o
  .data.toSend   0x00000000        0x2 Arduino CTRL.o
+ .data.count    0x00000000        0x2 Arduino CTRL.o
  .data.counterPtr
                 0x00000000        0x2 Arduino CTRL.o
  .data.my_adr   0x00000000        0x2 Arduino CTRL.o
@@ -40,10 +46,14 @@ Discarded input sections
                 0x00000000        0x2 Arduino CTRL.o
  .bss.addressRecieved
                 0x00000000        0x2 Arduino CTRL.o
+ .bss.datapakkeRecieved
+                0x00000000        0x4 Arduino CTRL.o
+ .bss.startRecieved
+                0x00000000        0x1 Arduino CTRL.o
  .bss.encoded   0x00000000        0x2 Arduino CTRL.o
  .bss.combined  0x00000000        0x2 Arduino CTRL.o
- .data.com      0x00000000        0x2 Arduino CTRL.o
  .data.address  0x00000000        0x2 Arduino CTRL.o
+ COMMON         0x00000000        0x2 Arduino CTRL.o
  .text          0x00000000        0x0 led.o
  .data          0x00000000        0x0 led.o
  .bss           0x00000000        0x0 led.o
@@ -337,7 +347,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x474
+.text           0x00000000      0x3d2
  *(.vectors)
  .vectors       0x00000000       0xe4 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega2560/avr6/crtatmega2560.o
                 0x00000000                __vector_default
@@ -454,30 +464,30 @@ END GROUP
                 0x00000122                __vector_42
                 0x00000124                . = ALIGN (0x2)
  *(.text.*)
- .text.main     0x00000124       0x40 Arduino CTRL.o
+ .text.main     0x00000124       0x70 Arduino CTRL.o
                 0x00000124                main
  .text.__vector_1
-                0x00000164      0x1e8 Arduino CTRL.o
-                0x00000164                __vector_1
+                0x00000194      0x112 Arduino CTRL.o
+                0x00000194                __vector_1
  .text.InitUART
-                0x0000034c       0xb4 uart1.o
-                0x0000034c                InitUART
+                0x000002a6       0xb4 uart1.o
+                0x000002a6                InitUART
  .text.ReadChar
-                0x00000400        0xe uart1.o
-                0x00000400                ReadChar
- .text.initISR  0x0000040e        0xc x10.o
-                0x0000040e                initISR
+                0x0000035a        0xe uart1.o
+                0x0000035a                ReadChar
+ .text.initISR  0x00000368        0xc x10.o
+                0x00000368                initISR
  .text.initPort
-                0x0000041a       0x12 x10.o
-                0x0000041a                initPort
+                0x00000374       0x16 x10.o
+                0x00000374                initPort
  .text.libgcc.div
-                0x0000042c       0x44 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr6\libgcc.a(_udivmodsi4.o)
-                0x0000042c                __udivmodsi4
-                0x00000470                . = ALIGN (0x2)
+                0x0000038a       0x44 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr6\libgcc.a(_udivmodsi4.o)
+                0x0000038a                __udivmodsi4
+                0x000003ce                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x00000470        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr6\libgcc.a(_exit.o)
-                0x00000470                _exit
-                0x00000470                exit
+ .fini9         0x000003ce        0x0 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr6\libgcc.a(_exit.o)
+                0x000003ce                _exit
+                0x000003ce                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -496,57 +506,49 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x00000470        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr6\libgcc.a(_exit.o)
+ .fini0         0x000003ce        0x4 c:/program files (x86)/atmel/studio/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr6\libgcc.a(_exit.o)
  *(.fini0)
-                0x00000474                _etext = .
+                0x000003d2                _etext = .
 
-.data           0x00800200        0x6 load address 0x00000474
+.data           0x00800200        0x4 load address 0x000003d2
                 0x00800200                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
  .data.recieved
                 0x00800200        0x1 Arduino CTRL.o
                 0x00800200                recieved
- .data.count    0x00800201        0x2 Arduino CTRL.o
-                0x00800201                count
- .data.counter  0x00800203        0x2 Arduino CTRL.o
-                0x00800203                counter
- .data.start    0x00800205        0x1 Arduino CTRL.o
-                0x00800205                start
+ .data.counter  0x00800201        0x2 Arduino CTRL.o
+                0x00800201                counter
+ .data.start    0x00800203        0x1 Arduino CTRL.o
+                0x00800203                start
  *(.gnu.linkonce.d*)
  *(.rodata)
  *(.rodata*)
  *(.gnu.linkonce.r*)
-                0x00800206                . = ALIGN (0x2)
-                0x00800206                _edata = .
-                0x00800206                PROVIDE (__data_end, .)
+                0x00800204                . = ALIGN (0x2)
+                0x00800204                _edata = .
+                0x00800204                PROVIDE (__data_end, .)
 
-.bss            0x00800206        0xb
-                0x00800206                PROVIDE (__bss_start, .)
+.bss            0x00800204        0x6
+                0x00800204                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
  .bss.sendInProcess
-                0x00800206        0x2 Arduino CTRL.o
-                0x00800206                sendInProcess
+                0x00800204        0x2 Arduino CTRL.o
+                0x00800204                sendInProcess
  .bss.datapakke
-                0x00800208        0x4 Arduino CTRL.o
-                0x00800208                datapakke
- .bss.datapakkeRecieved
-                0x0080020c        0x4 Arduino CTRL.o
-                0x0080020c                datapakkeRecieved
- .bss.startRecieved
-                0x00800210        0x1 Arduino CTRL.o
-                0x00800210                startRecieved
+                0x00800206        0x4 Arduino CTRL.o
+                0x00800206                datapakke
  *(COMMON)
-                0x00800211                PROVIDE (__bss_end, .)
-                0x00000474                __data_load_start = LOADADDR (.data)
-                0x0000047a                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x0080020a                PROVIDE (__bss_end, .)
+                0x000003d2                __data_load_start = LOADADDR (.data)
+                0x000003d6                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00800211        0x0
+.noinit         0x0080020a        0x0
                 [!provide]                PROVIDE (__noinit_start, .)
  *(.noinit*)
                 [!provide]                PROVIDE (__noinit_end, .)
-                0x00800211                _end = .
+                0x0080020a                _end = .
                 [!provide]                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
@@ -626,48 +628,48 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000     0x1868
+.debug_info     0x00000000     0x1758
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0xbbc C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega2560/avr6/crtatmega2560.o
- .debug_info    0x00000bbc      0x3f0 Arduino CTRL.o
- .debug_info    0x00000fac      0x28a uart1.o
- .debug_info    0x00001236      0x632 x10.o
+ .debug_info    0x00000bbc      0x2e4 Arduino CTRL.o
+ .debug_info    0x00000ea0      0x28a uart1.o
+ .debug_info    0x0000112a      0x62e x10.o
 
-.debug_abbrev   0x00000000     0x10bb
+.debug_abbrev   0x00000000     0x1026
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0xb1a C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega2560/avr6/crtatmega2560.o
- .debug_abbrev  0x00000b1a      0x199 Arduino CTRL.o
- .debug_abbrev  0x00000cb3      0x19b uart1.o
- .debug_abbrev  0x00000e4e      0x26d x10.o
+ .debug_abbrev  0x00000b1a      0x120 Arduino CTRL.o
+ .debug_abbrev  0x00000c3a      0x19b uart1.o
+ .debug_abbrev  0x00000dd5      0x251 x10.o
 
-.debug_line     0x00000000      0xc5b
+.debug_line     0x00000000      0xbc1
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x1fa C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega2560/avr6/crtatmega2560.o
- .debug_line    0x000001fa      0x295 Arduino CTRL.o
- .debug_line    0x0000048f      0x19d uart1.o
- .debug_line    0x0000062c      0x62f x10.o
+ .debug_line    0x000001fa      0x1f5 Arduino CTRL.o
+ .debug_line    0x000003ef      0x19d uart1.o
+ .debug_line    0x0000058c      0x635 x10.o
 
-.debug_frame    0x00000000      0x2f4
+.debug_frame    0x00000000      0x2e0
  *(.debug_frame)
- .debug_frame   0x00000000       0xa4 Arduino CTRL.o
- .debug_frame   0x000000a4       0xb0 uart1.o
- .debug_frame   0x00000154      0x1a0 x10.o
+ .debug_frame   0x00000000       0x90 Arduino CTRL.o
+ .debug_frame   0x00000090       0xb0 uart1.o
+ .debug_frame   0x00000140      0x1a0 x10.o
 
-.debug_str      0x00000000      0x8a2
+.debug_str      0x00000000      0x88c
  *(.debug_str)
  .debug_str     0x00000000      0x3e6 C:/Program Files (x86)/Atmel/Studio/7.0/Packs/atmel/ATmega_DFP/1.6.364/gcc/dev/atmega2560/avr6/crtatmega2560.o
- .debug_str     0x000003e6      0x2f1 Arduino CTRL.o
-                                0x32a (size before relaxing)
- .debug_str     0x000006d7       0xef uart1.o
+ .debug_str     0x000003e6      0x291 Arduino CTRL.o
+                                0x2ca (size before relaxing)
+ .debug_str     0x00000677       0xef uart1.o
                                 0x236 (size before relaxing)
- .debug_str     0x000007c6       0xdc x10.o
+ .debug_str     0x00000766      0x126 x10.o
                                 0x30a (size before relaxing)
 
-.debug_loc      0x00000000      0xc44
+.debug_loc      0x00000000      0xb57
  *(.debug_loc)
- .debug_loc     0x00000000      0x1d8 Arduino CTRL.o
- .debug_loc     0x000001d8      0x1de uart1.o
- .debug_loc     0x000003b6      0x88e x10.o
+ .debug_loc     0x00000000       0xeb Arduino CTRL.o
+ .debug_loc     0x000000eb      0x1de uart1.o
+ .debug_loc     0x000002c9      0x88e x10.o
 
 .debug_macinfo
  *(.debug_macinfo)

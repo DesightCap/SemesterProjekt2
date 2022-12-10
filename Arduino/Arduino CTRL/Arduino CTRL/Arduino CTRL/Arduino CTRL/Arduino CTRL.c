@@ -20,7 +20,7 @@
 
 
 uint16_t address = 0b0000000000000101;
-uint16_t com = 0b0000000010101010;
+uint16_t com;
 uint16_t combined = 0;
 uint16_t encoded = 0;
 uint8_t start = 0b00001110;
@@ -99,22 +99,36 @@ int main()
 				PORTB = 0b11111111;
 			}
 		*/
+		
 			if (recieved == 'u' || recieved == 'U')
 			{
 			//	temperatureChange('u');
 			PORTB = 0b11111111;
-			PORTL = 0b00000001; // blow eksempel
+				if ( PORTL == 0b00000001 || PORTL == 0b00000100)
+				{
+					PORTL = 0b00000000;
+				}
+			PORTL |= 1; // blow eksempel
+			//com = 0b1111111100000000;
 
 			}
 
 			if (recieved == 'd'||recieved == 'D')
 			{
 				PORTB = 0b00000001;
-				PORTL = 0b00000100; // heat eksempel
-
+			
+			if ( PORTL == 0b00000001 || PORTL == 0b00000100)
+			{
+				PORTL = 0b00000000;
+				} 
+					PORTL |=1<<2; // heat eksempel
+			//	com = 0b0000000011111111;
 
 				//temperatureChange('d');
 			}
+
+	
+		//	sendx10(&address, &com, &combined, &encoded, &datapakke, &counter);
 		
 		
 		//recieved = '0';
@@ -145,7 +159,7 @@ void temperatureChange(char t)
 void temperatureRequest()
 {
 	com = 0b0000000000111100;
-	sendInProcess = sendx10(&address, &com, &combined, &encoded, &datapakke, &counter);
+	//sendInProcess = sendx10(&address, &com, &combined, &encoded, &datapakke, &counter);
 
 }
 
@@ -183,7 +197,7 @@ ISR(INT0_vect) //Interrupt på int0. Tjek pin nummer
 		counter++;
 
 	}
-	else if (!sendInProcess)
+	/*else if (!sendInProcess)
 	{
 		_delay_ms(20);
 		uint8_t inputPin = (PINC & 0x1);
@@ -214,5 +228,5 @@ ISR(INT0_vect) //Interrupt på int0. Tjek pin nummer
 			
 		}
 	}
-	
+	*/
 }

@@ -70,6 +70,7 @@ UART::UART(char* portName)
 	}
 }
 
+	//UART destructor, sørger for at stoppe comporten i at indlæse.
 UART::~UART()
 {
 	if (connected)
@@ -113,6 +114,7 @@ int UART::getTemperature(char* buffer, unsigned int buf_size)
 	return 0;
 }
 
+	// sender 
 void UART::sendUp()
 {
 	char up = 'u';

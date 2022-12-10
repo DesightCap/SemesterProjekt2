@@ -30,6 +30,10 @@ char* port = comport;
 
 int main()
 {
+	int userPort;
+	cout << "Indtast COM port nummer som kommunikationsenhed er tilsluttet: ";
+	cin >> userPort;
+	comport[3] = (char)userPort + 48;
 	
 	Log testLog;
 	UART testUART(port); // Med UART der opretter forbindelse i constructoren, kunne Complex(d).print(); som vist i OOP være en ide til at hente data ud?
@@ -44,20 +48,19 @@ for (int i = 0; ; i++)
 	// kan nu sende besked korrekt til arudino, dog med små forstyrrelser på output pins, når pinnen er low.
 		char x = 'd';
 		char y = 'u';
-		char z = 'i';
 		testUART.send(&x, 1);
 		//Sleep(200);
 		cout << testUART.send(&x, 1) << endl;
 		//testUART.send(&z, 1);
 
-		Sleep(200);
+		Sleep(1000);
 
 		testUART.send(&y, 1);
 	//	Sleep(200);	
 		cout << testUART.send(&y, 1) << endl;
 	//	testUART.send(&z, 1);
 
-		Sleep(200);
+		Sleep(1000);
 		//testFunction_writeToArduino(testUART);
 
 

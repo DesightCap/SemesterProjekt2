@@ -10,7 +10,7 @@
 
 
 
-int sendx10(uint16_t *adr, uint16_t* com, uint16_t* combined, uint16_t* encoded, uint32_t* datapakke, volatile int* counterPtr)
+void sendx10(uint16_t *adr, uint16_t* com, uint16_t* combined, uint16_t* encoded, uint32_t* datapakke, volatile int* counterPtr)
 {
 	
 combineBitArrays(adr, com, combined);
@@ -22,7 +22,6 @@ doubleEncoded(encoded, datapakke);
 
 	*counterPtr = 1;
 	
-	return 1;
 }
 
 
@@ -45,6 +44,7 @@ void initPort()
 	DDRC = 0x00;
 	PORTC = 0x00;
 	
+	PORTL = 0x00;
 	DDRL = 0x00;
 }
 
