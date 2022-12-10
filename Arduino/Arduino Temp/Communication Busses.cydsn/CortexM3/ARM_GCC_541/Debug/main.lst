@@ -1,0 +1,1295 @@
+ARM GAS  C:\Users\hresk\AppData\Local\Temp\cc78wdlT.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.syntax unified
+  15              		.file	"main.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.global	__aeabi_ui2f
+  20              		.global	__aeabi_i2f
+  21              		.global	__aeabi_fadd
+  22              		.section	.text.fetchData,"ax",%progbits
+  23              		.align	2
+  24              		.global	fetchData
+  25              		.thumb
+  26              		.thumb_func
+  27              		.type	fetchData, %function
+  28              	fetchData:
+  29              	.LFB65:
+  30              		.file 1 "main.c"
+   1:main.c        **** /* ========================================
+   2:main.c        ****  *
+   3:main.c        ****  * Copyright YOUR COMPANY, THE YEAR
+   4:main.c        ****  * All Rights Reserved
+   5:main.c        ****  * UNPUBLISHED, LICENSED SOFTWARE.
+   6:main.c        ****  *
+   7:main.c        ****  * CONFIDENTIAL AND PROPRIETARY INFORMATION
+   8:main.c        ****  * WHICH IS THE PROPERTY OF your company.
+   9:main.c        ****  *
+  10:main.c        ****  * ========================================
+  11:main.c        **** */
+  12:main.c        **** #include "project.h"
+  13:main.c        **** #include <stdio.h>
+  14:main.c        **** 
+  15:main.c        **** float fetchData(uint8_t adress);
+  16:main.c        **** 
+  17:main.c        **** int main(void)
+  18:main.c        **** {
+  19:main.c        ****     CyGlobalIntEnable; // Enable global interrupts.
+  20:main.c        ****     
+  21:main.c        **** 	
+  22:main.c        **** 	I2C_LM75_Start(); // Klargøre I2C 
+  23:main.c        **** 	// Fra datablad: 
+  24:main.c        **** 	// You must set up the I2C Slave buffers before this function call to avoid reading or writing par
+  25:main.c        **** 	
+  26:main.c        **** 	UART_TERMINAL_Start(); // Klargøre UART
+  27:main.c        **** 	
+ARM GAS  C:\Users\hresk\AppData\Local\Temp\cc78wdlT.s 			page 2
+
+
+  28:main.c        **** 	float dec = 0; // Variable til opbevaring af beregnet temperatur data
+  29:main.c        **** 	
+  30:main.c        **** 	
+  31:main.c        **** 	char buffer[256]; // Chart array til udskrivning af temperatur data
+  32:main.c        **** 	uint8_t status = 0; // Til tjek om I2C er klar
+  33:main.c        **** 	
+  34:main.c        **** 
+  35:main.c        **** 	/*
+  36:main.c        **** 	Adresse opsætning: 
+  37:main.c        **** 	Adressens første fire bit er faste
+  38:main.c        **** 	De sidste fire bit er hhv. 3 bit indstillet på LM75 kredsløb og et bit som fortæller om du skri
+  39:main.c        **** 	1001xxxy
+  40:main.c        **** 	x = valgt via den røde kasse på LM75
+  41:main.c        **** 	y = 1 for læs || 0 for skriv
+  42:main.c        **** 	y sættes i funktionskald.
+  43:main.c        **** 	Eksempel: I2C_LM75_MasterSendStart(0x48, 1) 
+  44:main.c        **** 	*/
+  45:main.c        **** 	
+  46:main.c        **** 	uint8_t slaveAddr1 = 0x48; // 1 == on; 2 == on; 3 == 0n -> 0b01001000 
+  47:main.c        **** 	//uint8_t slaveAddr2 = 0x4F; // 1 == off; 2 == off; 3 == 0ff -> 0b01001111
+  48:main.c        **** 
+  49:main.c        **** 	
+  50:main.c        ****     for(;;)
+  51:main.c        ****     {
+  52:main.c        **** 		// Hent temperatur data fra parameter adresse
+  53:main.c        **** 		dec = fetchData(slaveAddr1);
+  54:main.c        **** 		
+  55:main.c        **** 		snprintf(buffer, sizeof(buffer), "%.1f", dec);
+  56:main.c        **** 		UART_TERMINAL_PutString(buffer); 
+  57:main.c        **** 		
+  58:main.c        **** 		/*
+  59:main.c        **** 		// Klargøre buffer til udskrive med adresse på I2C enhed og float temperatur
+  60:main.c        **** 		snprintf(buffer, sizeof(buffer), "Enhed med adresse %u har temperatur: %.1f \r\n", slaveAddr1, de
+  61:main.c        **** 		UART_TERMINAL_PutString(buffer); 
+  62:main.c        **** 
+  63:main.c        **** 		// Hent temperatur data fra parameter adresse
+  64:main.c        **** 		dec = fetchData(slaveAddr2);
+  65:main.c        **** 		// Klargøre buffer til udskrive med adresse på I2C enhed og temperatur float
+  66:main.c        **** 		snprintf(buffer, sizeof(buffer), "Enhed med adresse %u har temperatur: %.1f \r\n", slaveAddr2, de
+  67:main.c        **** 		UART_TERMINAL_PutString(buffer);
+  68:main.c        **** 		
+  69:main.c        **** 		UART_TERMINAL_PutString("\r\n");
+  70:main.c        **** 		*/
+  71:main.c        **** 		// Forsinkelse mellem data hentning og udskrift
+  72:main.c        **** 		CyDelay(2000);
+  73:main.c        ****     }
+  74:main.c        **** }
+  75:main.c        **** 
+  76:main.c        **** // Henter temperatur data fra LM75, omregner anden komplement til float værdi og behandler data og
+  77:main.c        **** float fetchData(uint8_t adress)
+  78:main.c        **** {
+  31              		.loc 1 78 0
+  32              		.cfi_startproc
+  33              		@ args = 0, pretend = 0, frame = 0
+  34              		@ frame_needed = 0, uses_anonymous_args = 0
+  35              	.LVL0:
+  36 0000 38B5     		push	{r3, r4, r5, lr}
+ARM GAS  C:\Users\hresk\AppData\Local\Temp\cc78wdlT.s 			page 3
+
+
+  37              		.cfi_def_cfa_offset 16
+  38              		.cfi_offset 3, -16
+  39              		.cfi_offset 4, -12
+  40              		.cfi_offset 5, -8
+  41              		.cfi_offset 14, -4
+  42              	.LVL1:
+  79:main.c        **** 	uint8_t recievedValue1 = 0;
+  80:main.c        **** 	uint8_t recievedValue2 = 0;
+  81:main.c        **** 	// starter dataoverførsel og sikre at der ikke er fejl 
+  82:main.c        **** 	uint8_t status = I2C_LM75_MasterSendStart(adress, 1);
+  43              		.loc 1 82 0
+  44 0002 0121     		movs	r1, #1
+  45 0004 FFF7FEFF 		bl	I2C_LM75_MasterSendStart
+  46              	.LVL2:
+  83:main.c        **** 	if (I2C_LM75_MSTR_NO_ERROR == status)
+  47              		.loc 1 83 0
+  48 0008 D0B9     		cbnz	r0, .L2
+  49              	.LBB2:
+  84:main.c        **** 		{
+  85:main.c        **** 			// Første modtagede byte gemmes i recievedValue1 og anden i recievedValue2
+  86:main.c        **** 			// Rå data
+  87:main.c        **** 		    recievedValue1 = I2C_LM75_MasterReadByte(I2C_LM75_ACK_DATA); // Indeholder temperatur heltals
+  50              		.loc 1 87 0
+  51 000a 0120     		movs	r0, #1
+  52              	.LVL3:
+  53 000c FFF7FEFF 		bl	I2C_LM75_MasterReadByte
+  54              	.LVL4:
+  55 0010 0446     		mov	r4, r0
+  56              	.LVL5:
+  88:main.c        **** 			recievedValue2 = I2C_LM75_MasterReadByte(I2C_LM75_NAK_DATA); // Indeholder temperatur komma
+  57              		.loc 1 88 0
+  58 0012 0020     		movs	r0, #0
+  59 0014 FFF7FEFF 		bl	I2C_LM75_MasterReadByte
+  60              	.LVL6:
+  61 0018 0546     		mov	r5, r0
+  62              	.LVL7:
+  89:main.c        **** 			I2C_LM75_MasterSendStop(); // Dataoverførsel slut
+  63              		.loc 1 89 0
+  64 001a FFF7FEFF 		bl	I2C_LM75_MasterSendStop
+  65              	.LVL8:
+  90:main.c        **** 			
+  91:main.c        **** 			// Vi indsætter vores først modtagede byte i dec variablen
+  92:main.c        **** 			float dec = recievedValue1; // Til behandling af data
+  66              		.loc 1 92 0
+  67 001e 2046     		mov	r0, r4
+  68 0020 FFF7FEFF 		bl	__aeabi_ui2f
+  69              	.LVL9:
+  93:main.c        **** 			
+  94:main.c        **** 			// Vi undersøger om recievedValue1 (som er to's komplements binær) er et negativt tal
+  95:main.c        **** 			if (recievedValue1 >> 7)  
+  70              		.loc 1 95 0
+  71 0024 14F0800F 		tst	r4, #128
+  72 0028 02D0     		beq	.L3
+  96:main.c        **** 			{
+  97:main.c        **** 				// recievedValue1 omregnes fra to-komplement til decimal og gemmes i variablen dec
+  98:main.c        **** 			    dec = (~recievedValue1+1); // omregn 2-komp -> decimal
+  73              		.loc 1 98 0
+ARM GAS  C:\Users\hresk\AppData\Local\Temp\cc78wdlT.s 			page 4
+
+
+  74 002a 6042     		negs	r0, r4
+  75              	.LVL10:
+  76 002c FFF7FEFF 		bl	__aeabi_i2f
+  77              	.LVL11:
+  78              	.L3:
+  99:main.c        **** 				
+ 100:main.c        **** 			}
+ 101:main.c        **** 			
+ 102:main.c        **** 			// Herunder One-line databeregning - Potentilt mere effektiv (dekompiler for at teste effektivit
+ 103:main.c        **** 			//float combinedValue = ((((~recievedValue1+1) << 8) + (recievedValue2)) >> 7)/2; 
+ 104:main.c        **** 			
+ 105:main.c        **** 			// vi er intresseret i om MSB i recievedValue2 er forskellig fra 0
+ 106:main.c        **** 			if ((recievedValue2>>7) != 0) 
+  79              		.loc 1 106 0
+  80 0030 15F0800F 		tst	r5, #128
+  81 0034 07D0     		beq	.L4
+ 107:main.c        **** 			{
+ 108:main.c        **** 			    // Hvis MSB i recievedValue2 byte er forskellig fra 0 tilføjes en halv grad til float varia
+ 109:main.c        **** 				dec += 0.5;
+  82              		.loc 1 109 0
+  83 0036 4FF07C51 		mov	r1, #1056964608
+  84 003a FFF7FEFF 		bl	__aeabi_fadd
+  85              	.LVL12:
+  86 003e 38BD     		pop	{r3, r4, r5, pc}
+  87              	.LVL13:
+  88              	.L2:
+  89              	.LBE2:
+ 110:main.c        **** 			}
+ 111:main.c        **** 			//  Data beregning slut
+ 112:main.c        **** 			return dec;
+ 113:main.c        **** 			
+ 114:main.c        **** 		}
+ 115:main.c        **** 		else
+ 116:main.c        **** 		{
+ 117:main.c        **** 			I2C_LM75_MasterSendStop();
+  90              		.loc 1 117 0
+  91 0040 FFF7FEFF 		bl	I2C_LM75_MasterSendStop
+  92              	.LVL14:
+ 118:main.c        **** 			return 0;
+  93              		.loc 1 118 0
+  94 0044 0020     		movs	r0, #0
+  95              	.LVL15:
+  96              	.L4:
+ 119:main.c        **** 		}
+ 120:main.c        **** }
+  97              		.loc 1 120 0
+  98 0046 38BD     		pop	{r3, r4, r5, pc}
+  99              		.cfi_endproc
+ 100              	.LFE65:
+ 101              		.size	fetchData, .-fetchData
+ 102              		.global	__aeabi_f2d
+ 103              		.section	.text.main,"ax",%progbits
+ 104              		.align	2
+ 105              		.global	main
+ 106              		.thumb
+ 107              		.thumb_func
+ 108              		.type	main, %function
+ARM GAS  C:\Users\hresk\AppData\Local\Temp\cc78wdlT.s 			page 5
+
+
+ 109              	main:
+ 110              	.LFB64:
+  18:main.c        ****     CyGlobalIntEnable; // Enable global interrupts.
+ 111              		.loc 1 18 0
+ 112              		.cfi_startproc
+ 113              		@ args = 0, pretend = 0, frame = 256
+ 114              		@ frame_needed = 0, uses_anonymous_args = 0
+ 115 0000 00B5     		push	{lr}
+ 116              		.cfi_def_cfa_offset 4
+ 117              		.cfi_offset 14, -4
+ 118 0002 C3B0     		sub	sp, sp, #268
+ 119              		.cfi_def_cfa_offset 272
+  19:main.c        ****     
+ 120              		.loc 1 19 0
+ 121              		.syntax unified
+ 122              	@ 19 "main.c" 1
+ 123 0004 62B6     		CPSIE   i
+ 124              	@ 0 "" 2
+  22:main.c        **** 	// Fra datablad: 
+ 125              		.loc 1 22 0
+ 126              		.thumb
+ 127              		.syntax unified
+ 128 0006 FFF7FEFF 		bl	I2C_LM75_Start
+ 129              	.LVL16:
+  26:main.c        **** 	
+ 130              		.loc 1 26 0
+ 131 000a FFF7FEFF 		bl	UART_TERMINAL_Start
+ 132              	.LVL17:
+ 133              	.L8:
+  53:main.c        **** 		
+ 134              		.loc 1 53 0 discriminator 1
+ 135 000e 4820     		movs	r0, #72
+ 136 0010 FFF7FEFF 		bl	fetchData
+ 137              	.LVL18:
+  55:main.c        **** 		UART_TERMINAL_PutString(buffer); 
+ 138              		.loc 1 55 0 discriminator 1
+ 139 0014 FFF7FEFF 		bl	__aeabi_f2d
+ 140              	.LVL19:
+ 141 0018 CDE90001 		strd	r0, [sp]
+ 142 001c 064A     		ldr	r2, .L10
+ 143 001e 4FF48071 		mov	r1, #256
+ 144 0022 02A8     		add	r0, sp, #8
+ 145 0024 FFF7FEFF 		bl	snprintf
+ 146              	.LVL20:
+  56:main.c        **** 		
+ 147              		.loc 1 56 0 discriminator 1
+ 148 0028 02A8     		add	r0, sp, #8
+ 149 002a FFF7FEFF 		bl	UART_TERMINAL_PutString
+ 150              	.LVL21:
+  72:main.c        ****     }
+ 151              		.loc 1 72 0 discriminator 1
+ 152 002e 4FF4FA60 		mov	r0, #2000
+ 153 0032 FFF7FEFF 		bl	CyDelay
+ 154              	.LVL22:
+ 155 0036 EAE7     		b	.L8
+ 156              	.L11:
+ 157              		.align	2
+ARM GAS  C:\Users\hresk\AppData\Local\Temp\cc78wdlT.s 			page 6
+
+
+ 158              	.L10:
+ 159 0038 00000000 		.word	.LC0
+ 160              		.cfi_endproc
+ 161              	.LFE64:
+ 162              		.size	main, .-main
+ 163              		.section	.rodata.str1.4,"aMS",%progbits,1
+ 164              		.align	2
+ 165              	.LC0:
+ 166 0000 252E3166 		.ascii	"%.1f\000"
+ 166      00
+ 167              		.text
+ 168              	.Letext0:
+ 169              		.file 2 "c:\\program files (x86)\\cypress\\psoc creator\\4.4\\psoc creator\\import\\gnu\\arm\\5.4.
+ 170              		.file 3 "c:\\program files (x86)\\cypress\\psoc creator\\4.4\\psoc creator\\import\\gnu\\arm\\5.4.
+ 171              		.file 4 "Generated_Source\\PSoC5/I2C_LM75.h"
+ 172              		.file 5 "Generated_Source\\PSoC5/UART_TERMINAL.h"
+ 173              		.file 6 "c:\\program files (x86)\\cypress\\psoc creator\\4.4\\psoc creator\\import\\gnu\\arm\\5.4.
+ 174              		.file 7 "Generated_Source\\PSoC5/CyLib.h"
+ 175              		.file 8 "Generated_Source\\PSoC5/core_cm3.h"
+ 176              		.section	.debug_info,"",%progbits
+ 177              	.Ldebug_info0:
+ 178 0000 AF020000 		.4byte	0x2af
+ 179 0004 0400     		.2byte	0x4
+ 180 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 181 000a 04       		.byte	0x4
+ 182 000b 01       		.uleb128 0x1
+ 183 000c 75000000 		.4byte	.LASF31
+ 184 0010 0C       		.byte	0xc
+ 185 0011 5F020000 		.4byte	.LASF32
+ 186 0015 03010000 		.4byte	.LASF33
+ 187 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 188 001d 00000000 		.4byte	0
+ 189 0021 00000000 		.4byte	.Ldebug_line0
+ 190 0025 02       		.uleb128 0x2
+ 191 0026 01       		.byte	0x1
+ 192 0027 06       		.byte	0x6
+ 193 0028 AA020000 		.4byte	.LASF0
+ 194 002c 03       		.uleb128 0x3
+ 195 002d 00000000 		.4byte	.LASF4
+ 196 0031 02       		.byte	0x2
+ 197 0032 1D       		.byte	0x1d
+ 198 0033 37000000 		.4byte	0x37
+ 199 0037 02       		.uleb128 0x2
+ 200 0038 01       		.byte	0x1
+ 201 0039 08       		.byte	0x8
+ 202 003a 67000000 		.4byte	.LASF1
+ 203 003e 02       		.uleb128 0x2
+ 204 003f 02       		.byte	0x2
+ 205 0040 05       		.byte	0x5
+ 206 0041 84020000 		.4byte	.LASF2
+ 207 0045 02       		.uleb128 0x2
+ 208 0046 02       		.byte	0x2
+ 209 0047 07       		.byte	0x7
+ 210 0048 98010000 		.4byte	.LASF3
+ 211 004c 03       		.uleb128 0x3
+ 212 004d 1B000000 		.4byte	.LASF5
+ 213 0051 02       		.byte	0x2
+ARM GAS  C:\Users\hresk\AppData\Local\Temp\cc78wdlT.s 			page 7
+
+
+ 214 0052 3F       		.byte	0x3f
+ 215 0053 57000000 		.4byte	0x57
+ 216 0057 02       		.uleb128 0x2
+ 217 0058 04       		.byte	0x4
+ 218 0059 05       		.byte	0x5
+ 219 005a 95020000 		.4byte	.LASF6
+ 220 005e 02       		.uleb128 0x2
+ 221 005f 04       		.byte	0x4
+ 222 0060 07       		.byte	0x7
+ 223 0061 6E010000 		.4byte	.LASF7
+ 224 0065 02       		.uleb128 0x2
+ 225 0066 08       		.byte	0x8
+ 226 0067 05       		.byte	0x5
+ 227 0068 51020000 		.4byte	.LASF8
+ 228 006c 02       		.uleb128 0x2
+ 229 006d 08       		.byte	0x8
+ 230 006e 07       		.byte	0x7
+ 231 006f 21020000 		.4byte	.LASF9
+ 232 0073 04       		.uleb128 0x4
+ 233 0074 04       		.byte	0x4
+ 234 0075 05       		.byte	0x5
+ 235 0076 696E7400 		.ascii	"int\000"
+ 236 007a 02       		.uleb128 0x2
+ 237 007b 04       		.byte	0x4
+ 238 007c 07       		.byte	0x7
+ 239 007d 14020000 		.4byte	.LASF10
+ 240 0081 03       		.uleb128 0x3
+ 241 0082 38020000 		.4byte	.LASF11
+ 242 0086 03       		.byte	0x3
+ 243 0087 18       		.byte	0x18
+ 244 0088 2C000000 		.4byte	0x2c
+ 245 008c 03       		.uleb128 0x3
+ 246 008d 40020000 		.4byte	.LASF12
+ 247 0091 03       		.byte	0x3
+ 248 0092 2C       		.byte	0x2c
+ 249 0093 4C000000 		.4byte	0x4c
+ 250 0097 02       		.uleb128 0x2
+ 251 0098 04       		.byte	0x4
+ 252 0099 04       		.byte	0x4
+ 253 009a 49000000 		.4byte	.LASF13
+ 254 009e 02       		.uleb128 0x2
+ 255 009f 08       		.byte	0x8
+ 256 00a0 04       		.byte	0x4
+ 257 00a1 D0010000 		.4byte	.LASF14
+ 258 00a5 02       		.uleb128 0x2
+ 259 00a6 01       		.byte	0x1
+ 260 00a7 08       		.byte	0x8
+ 261 00a8 66020000 		.4byte	.LASF15
+ 262 00ac 02       		.uleb128 0x2
+ 263 00ad 08       		.byte	0x8
+ 264 00ae 04       		.byte	0x4
+ 265 00af 9E020000 		.4byte	.LASF16
+ 266 00b3 02       		.uleb128 0x2
+ 267 00b4 04       		.byte	0x4
+ 268 00b5 07       		.byte	0x7
+ 269 00b6 48020000 		.4byte	.LASF17
+ 270 00ba 05       		.uleb128 0x5
+ARM GAS  C:\Users\hresk\AppData\Local\Temp\cc78wdlT.s 			page 8
+
+
+ 271 00bb 11000000 		.4byte	.LASF34
+ 272 00bf 01       		.byte	0x1
+ 273 00c0 4D       		.byte	0x4d
+ 274 00c1 97000000 		.4byte	0x97
+ 275 00c5 00000000 		.4byte	.LFB65
+ 276 00c9 48000000 		.4byte	.LFE65-.LFB65
+ 277 00cd 01       		.uleb128 0x1
+ 278 00ce 9C       		.byte	0x9c
+ 279 00cf 78010000 		.4byte	0x178
+ 280 00d3 06       		.uleb128 0x6
+ 281 00d4 0A000000 		.4byte	.LASF35
+ 282 00d8 01       		.byte	0x1
+ 283 00d9 4D       		.byte	0x4d
+ 284 00da 81000000 		.4byte	0x81
+ 285 00de 00000000 		.4byte	.LLST0
+ 286 00e2 07       		.uleb128 0x7
+ 287 00e3 D7010000 		.4byte	.LASF18
+ 288 00e7 01       		.byte	0x1
+ 289 00e8 4F       		.byte	0x4f
+ 290 00e9 81000000 		.4byte	0x81
+ 291 00ed 21000000 		.4byte	.LLST1
+ 292 00f1 07       		.uleb128 0x7
+ 293 00f2 E6010000 		.4byte	.LASF19
+ 294 00f6 01       		.byte	0x1
+ 295 00f7 50       		.byte	0x50
+ 296 00f8 81000000 		.4byte	0x81
+ 297 00fc 4C000000 		.4byte	.LLST2
+ 298 0100 07       		.uleb128 0x7
+ 299 0101 2E000000 		.4byte	.LASF20
+ 300 0105 01       		.byte	0x1
+ 301 0106 52       		.byte	0x52
+ 302 0107 81000000 		.4byte	0x81
+ 303 010b 77000000 		.4byte	.LLST3
+ 304 010f 08       		.uleb128 0x8
+ 305 0110 0A000000 		.4byte	.LBB2
+ 306 0114 36000000 		.4byte	.LBE2-.LBB2
+ 307 0118 5B010000 		.4byte	0x15b
+ 308 011c 09       		.uleb128 0x9
+ 309 011d 64656300 		.ascii	"dec\000"
+ 310 0121 01       		.byte	0x1
+ 311 0122 5C       		.byte	0x5c
+ 312 0123 97000000 		.4byte	0x97
+ 313 0127 95000000 		.4byte	.LLST4
+ 314 012b 0A       		.uleb128 0xa
+ 315 012c 10000000 		.4byte	.LVL4
+ 316 0130 5A020000 		.4byte	0x25a
+ 317 0134 3E010000 		.4byte	0x13e
+ 318 0138 0B       		.uleb128 0xb
+ 319 0139 01       		.uleb128 0x1
+ 320 013a 50       		.byte	0x50
+ 321 013b 01       		.uleb128 0x1
+ 322 013c 31       		.byte	0x31
+ 323 013d 00       		.byte	0
+ 324 013e 0A       		.uleb128 0xa
+ 325 013f 18000000 		.4byte	.LVL6
+ 326 0143 5A020000 		.4byte	0x25a
+ 327 0147 51010000 		.4byte	0x151
+ARM GAS  C:\Users\hresk\AppData\Local\Temp\cc78wdlT.s 			page 9
+
+
+ 328 014b 0B       		.uleb128 0xb
+ 329 014c 01       		.uleb128 0x1
+ 330 014d 50       		.byte	0x50
+ 331 014e 01       		.uleb128 0x1
+ 332 014f 30       		.byte	0x30
+ 333 0150 00       		.byte	0
+ 334 0151 0C       		.uleb128 0xc
+ 335 0152 1E000000 		.4byte	.LVL8
+ 336 0156 65020000 		.4byte	0x265
+ 337 015a 00       		.byte	0
+ 338 015b 0A       		.uleb128 0xa
+ 339 015c 08000000 		.4byte	.LVL2
+ 340 0160 70020000 		.4byte	0x270
+ 341 0164 6E010000 		.4byte	0x16e
+ 342 0168 0B       		.uleb128 0xb
+ 343 0169 01       		.uleb128 0x1
+ 344 016a 51       		.byte	0x51
+ 345 016b 01       		.uleb128 0x1
+ 346 016c 31       		.byte	0x31
+ 347 016d 00       		.byte	0
+ 348 016e 0C       		.uleb128 0xc
+ 349 016f 44000000 		.4byte	.LVL14
+ 350 0173 65020000 		.4byte	0x265
+ 351 0177 00       		.byte	0
+ 352 0178 0D       		.uleb128 0xd
+ 353 0179 F5010000 		.4byte	.LASF36
+ 354 017d 01       		.byte	0x1
+ 355 017e 11       		.byte	0x11
+ 356 017f 73000000 		.4byte	0x73
+ 357 0183 00000000 		.4byte	.LFB64
+ 358 0187 3C000000 		.4byte	.LFE64-.LFB64
+ 359 018b 01       		.uleb128 0x1
+ 360 018c 9C       		.byte	0x9c
+ 361 018d 39020000 		.4byte	0x239
+ 362 0191 09       		.uleb128 0x9
+ 363 0192 64656300 		.ascii	"dec\000"
+ 364 0196 01       		.byte	0x1
+ 365 0197 1C       		.byte	0x1c
+ 366 0198 97000000 		.4byte	0x97
+ 367 019c BE000000 		.4byte	.LLST5
+ 368 01a0 0E       		.uleb128 0xe
+ 369 01a1 8E020000 		.4byte	.LASF21
+ 370 01a5 01       		.byte	0x1
+ 371 01a6 1F       		.byte	0x1f
+ 372 01a7 39020000 		.4byte	0x239
+ 373 01ab 03       		.uleb128 0x3
+ 374 01ac 91       		.byte	0x91
+ 375 01ad F87D     		.sleb128 -264
+ 376 01af 0F       		.uleb128 0xf
+ 377 01b0 2E000000 		.4byte	.LASF20
+ 378 01b4 01       		.byte	0x1
+ 379 01b5 20       		.byte	0x20
+ 380 01b6 81000000 		.4byte	0x81
+ 381 01ba 00       		.byte	0
+ 382 01bb 0F       		.uleb128 0xf
+ 383 01bc 09020000 		.4byte	.LASF22
+ 384 01c0 01       		.byte	0x1
+ARM GAS  C:\Users\hresk\AppData\Local\Temp\cc78wdlT.s 			page 10
+
+
+ 385 01c1 2E       		.byte	0x2e
+ 386 01c2 81000000 		.4byte	0x81
+ 387 01c6 48       		.byte	0x48
+ 388 01c7 0C       		.uleb128 0xc
+ 389 01c8 0A000000 		.4byte	.LVL16
+ 390 01cc 7B020000 		.4byte	0x27b
+ 391 01d0 0C       		.uleb128 0xc
+ 392 01d1 0E000000 		.4byte	.LVL17
+ 393 01d5 86020000 		.4byte	0x286
+ 394 01d9 0A       		.uleb128 0xa
+ 395 01da 14000000 		.4byte	.LVL18
+ 396 01de BA000000 		.4byte	0xba
+ 397 01e2 ED010000 		.4byte	0x1ed
+ 398 01e6 0B       		.uleb128 0xb
+ 399 01e7 01       		.uleb128 0x1
+ 400 01e8 50       		.byte	0x50
+ 401 01e9 02       		.uleb128 0x2
+ 402 01ea 08       		.byte	0x8
+ 403 01eb 48       		.byte	0x48
+ 404 01ec 00       		.byte	0
+ 405 01ed 0A       		.uleb128 0xa
+ 406 01ee 28000000 		.4byte	.LVL20
+ 407 01f2 91020000 		.4byte	0x291
+ 408 01f6 12020000 		.4byte	0x212
+ 409 01fa 0B       		.uleb128 0xb
+ 410 01fb 01       		.uleb128 0x1
+ 411 01fc 50       		.byte	0x50
+ 412 01fd 03       		.uleb128 0x3
+ 413 01fe 91       		.byte	0x91
+ 414 01ff F87D     		.sleb128 -264
+ 415 0201 0B       		.uleb128 0xb
+ 416 0202 01       		.uleb128 0x1
+ 417 0203 51       		.byte	0x51
+ 418 0204 03       		.uleb128 0x3
+ 419 0205 0A       		.byte	0xa
+ 420 0206 0001     		.2byte	0x100
+ 421 0208 0B       		.uleb128 0xb
+ 422 0209 01       		.uleb128 0x1
+ 423 020a 52       		.byte	0x52
+ 424 020b 05       		.uleb128 0x5
+ 425 020c 03       		.byte	0x3
+ 426 020d 00000000 		.4byte	.LC0
+ 427 0211 00       		.byte	0
+ 428 0212 0A       		.uleb128 0xa
+ 429 0213 2E000000 		.4byte	.LVL21
+ 430 0217 9C020000 		.4byte	0x29c
+ 431 021b 27020000 		.4byte	0x227
+ 432 021f 0B       		.uleb128 0xb
+ 433 0220 01       		.uleb128 0x1
+ 434 0221 50       		.byte	0x50
+ 435 0222 03       		.uleb128 0x3
+ 436 0223 91       		.byte	0x91
+ 437 0224 F87D     		.sleb128 -264
+ 438 0226 00       		.byte	0
+ 439 0227 10       		.uleb128 0x10
+ 440 0228 36000000 		.4byte	.LVL22
+ 441 022c A7020000 		.4byte	0x2a7
+ARM GAS  C:\Users\hresk\AppData\Local\Temp\cc78wdlT.s 			page 11
+
+
+ 442 0230 0B       		.uleb128 0xb
+ 443 0231 01       		.uleb128 0x1
+ 444 0232 50       		.byte	0x50
+ 445 0233 03       		.uleb128 0x3
+ 446 0234 0A       		.byte	0xa
+ 447 0235 D007     		.2byte	0x7d0
+ 448 0237 00       		.byte	0
+ 449 0238 00       		.byte	0
+ 450 0239 11       		.uleb128 0x11
+ 451 023a A5000000 		.4byte	0xa5
+ 452 023e 49020000 		.4byte	0x249
+ 453 0242 12       		.uleb128 0x12
+ 454 0243 B3000000 		.4byte	0xb3
+ 455 0247 FF       		.byte	0xff
+ 456 0248 00       		.byte	0
+ 457 0249 13       		.uleb128 0x13
+ 458 024a AB010000 		.4byte	.LASF37
+ 459 024e 08       		.byte	0x8
+ 460 024f 1207     		.2byte	0x712
+ 461 0251 55020000 		.4byte	0x255
+ 462 0255 14       		.uleb128 0x14
+ 463 0256 8C000000 		.4byte	0x8c
+ 464 025a 15       		.uleb128 0x15
+ 465 025b 4F000000 		.4byte	.LASF23
+ 466 025f 4F000000 		.4byte	.LASF23
+ 467 0263 04       		.byte	0x4
+ 468 0264 B7       		.byte	0xb7
+ 469 0265 15       		.uleb128 0x15
+ 470 0266 B8010000 		.4byte	.LASF24
+ 471 026a B8010000 		.4byte	.LASF24
+ 472 026e 04       		.byte	0x4
+ 473 026f B5       		.byte	0xb5
+ 474 0270 15       		.uleb128 0x15
+ 475 0271 6B020000 		.4byte	.LASF25
+ 476 0275 6B020000 		.4byte	.LASF25
+ 477 0279 04       		.byte	0x4
+ 478 027a B1       		.byte	0xb1
+ 479 027b 15       		.uleb128 0x15
+ 480 027c FA010000 		.4byte	.LASF26
+ 481 0280 FA010000 		.4byte	.LASF26
+ 482 0284 04       		.byte	0x4
+ 483 0285 93       		.byte	0x93
+ 484 0286 15       		.uleb128 0x15
+ 485 0287 35000000 		.4byte	.LASF27
+ 486 028b 35000000 		.4byte	.LASF27
+ 487 028f 05       		.byte	0x5
+ 488 0290 54       		.byte	0x54
+ 489 0291 15       		.uleb128 0x15
+ 490 0292 25000000 		.4byte	.LASF28
+ 491 0296 25000000 		.4byte	.LASF28
+ 492 029a 06       		.byte	0x6
+ 493 029b FD       		.byte	0xfd
+ 494 029c 15       		.uleb128 0x15
+ 495 029d 80010000 		.4byte	.LASF29
+ 496 02a1 80010000 		.4byte	.LASF29
+ 497 02a5 05       		.byte	0x5
+ 498 02a6 8B       		.byte	0x8b
+ARM GAS  C:\Users\hresk\AppData\Local\Temp\cc78wdlT.s 			page 12
+
+
+ 499 02a7 15       		.uleb128 0x15
+ 500 02a8 B6020000 		.4byte	.LASF30
+ 501 02ac B6020000 		.4byte	.LASF30
+ 502 02b0 07       		.byte	0x7
+ 503 02b1 76       		.byte	0x76
+ 504 02b2 00       		.byte	0
+ 505              		.section	.debug_abbrev,"",%progbits
+ 506              	.Ldebug_abbrev0:
+ 507 0000 01       		.uleb128 0x1
+ 508 0001 11       		.uleb128 0x11
+ 509 0002 01       		.byte	0x1
+ 510 0003 25       		.uleb128 0x25
+ 511 0004 0E       		.uleb128 0xe
+ 512 0005 13       		.uleb128 0x13
+ 513 0006 0B       		.uleb128 0xb
+ 514 0007 03       		.uleb128 0x3
+ 515 0008 0E       		.uleb128 0xe
+ 516 0009 1B       		.uleb128 0x1b
+ 517 000a 0E       		.uleb128 0xe
+ 518 000b 55       		.uleb128 0x55
+ 519 000c 17       		.uleb128 0x17
+ 520 000d 11       		.uleb128 0x11
+ 521 000e 01       		.uleb128 0x1
+ 522 000f 10       		.uleb128 0x10
+ 523 0010 17       		.uleb128 0x17
+ 524 0011 00       		.byte	0
+ 525 0012 00       		.byte	0
+ 526 0013 02       		.uleb128 0x2
+ 527 0014 24       		.uleb128 0x24
+ 528 0015 00       		.byte	0
+ 529 0016 0B       		.uleb128 0xb
+ 530 0017 0B       		.uleb128 0xb
+ 531 0018 3E       		.uleb128 0x3e
+ 532 0019 0B       		.uleb128 0xb
+ 533 001a 03       		.uleb128 0x3
+ 534 001b 0E       		.uleb128 0xe
+ 535 001c 00       		.byte	0
+ 536 001d 00       		.byte	0
+ 537 001e 03       		.uleb128 0x3
+ 538 001f 16       		.uleb128 0x16
+ 539 0020 00       		.byte	0
+ 540 0021 03       		.uleb128 0x3
+ 541 0022 0E       		.uleb128 0xe
+ 542 0023 3A       		.uleb128 0x3a
+ 543 0024 0B       		.uleb128 0xb
+ 544 0025 3B       		.uleb128 0x3b
+ 545 0026 0B       		.uleb128 0xb
+ 546 0027 49       		.uleb128 0x49
+ 547 0028 13       		.uleb128 0x13
+ 548 0029 00       		.byte	0
+ 549 002a 00       		.byte	0
+ 550 002b 04       		.uleb128 0x4
+ 551 002c 24       		.uleb128 0x24
+ 552 002d 00       		.byte	0
+ 553 002e 0B       		.uleb128 0xb
+ 554 002f 0B       		.uleb128 0xb
+ 555 0030 3E       		.uleb128 0x3e
+ARM GAS  C:\Users\hresk\AppData\Local\Temp\cc78wdlT.s 			page 13
+
+
+ 556 0031 0B       		.uleb128 0xb
+ 557 0032 03       		.uleb128 0x3
+ 558 0033 08       		.uleb128 0x8
+ 559 0034 00       		.byte	0
+ 560 0035 00       		.byte	0
+ 561 0036 05       		.uleb128 0x5
+ 562 0037 2E       		.uleb128 0x2e
+ 563 0038 01       		.byte	0x1
+ 564 0039 3F       		.uleb128 0x3f
+ 565 003a 19       		.uleb128 0x19
+ 566 003b 03       		.uleb128 0x3
+ 567 003c 0E       		.uleb128 0xe
+ 568 003d 3A       		.uleb128 0x3a
+ 569 003e 0B       		.uleb128 0xb
+ 570 003f 3B       		.uleb128 0x3b
+ 571 0040 0B       		.uleb128 0xb
+ 572 0041 27       		.uleb128 0x27
+ 573 0042 19       		.uleb128 0x19
+ 574 0043 49       		.uleb128 0x49
+ 575 0044 13       		.uleb128 0x13
+ 576 0045 11       		.uleb128 0x11
+ 577 0046 01       		.uleb128 0x1
+ 578 0047 12       		.uleb128 0x12
+ 579 0048 06       		.uleb128 0x6
+ 580 0049 40       		.uleb128 0x40
+ 581 004a 18       		.uleb128 0x18
+ 582 004b 9642     		.uleb128 0x2116
+ 583 004d 19       		.uleb128 0x19
+ 584 004e 01       		.uleb128 0x1
+ 585 004f 13       		.uleb128 0x13
+ 586 0050 00       		.byte	0
+ 587 0051 00       		.byte	0
+ 588 0052 06       		.uleb128 0x6
+ 589 0053 05       		.uleb128 0x5
+ 590 0054 00       		.byte	0
+ 591 0055 03       		.uleb128 0x3
+ 592 0056 0E       		.uleb128 0xe
+ 593 0057 3A       		.uleb128 0x3a
+ 594 0058 0B       		.uleb128 0xb
+ 595 0059 3B       		.uleb128 0x3b
+ 596 005a 0B       		.uleb128 0xb
+ 597 005b 49       		.uleb128 0x49
+ 598 005c 13       		.uleb128 0x13
+ 599 005d 02       		.uleb128 0x2
+ 600 005e 17       		.uleb128 0x17
+ 601 005f 00       		.byte	0
+ 602 0060 00       		.byte	0
+ 603 0061 07       		.uleb128 0x7
+ 604 0062 34       		.uleb128 0x34
+ 605 0063 00       		.byte	0
+ 606 0064 03       		.uleb128 0x3
+ 607 0065 0E       		.uleb128 0xe
+ 608 0066 3A       		.uleb128 0x3a
+ 609 0067 0B       		.uleb128 0xb
+ 610 0068 3B       		.uleb128 0x3b
+ 611 0069 0B       		.uleb128 0xb
+ 612 006a 49       		.uleb128 0x49
+ARM GAS  C:\Users\hresk\AppData\Local\Temp\cc78wdlT.s 			page 14
+
+
+ 613 006b 13       		.uleb128 0x13
+ 614 006c 02       		.uleb128 0x2
+ 615 006d 17       		.uleb128 0x17
+ 616 006e 00       		.byte	0
+ 617 006f 00       		.byte	0
+ 618 0070 08       		.uleb128 0x8
+ 619 0071 0B       		.uleb128 0xb
+ 620 0072 01       		.byte	0x1
+ 621 0073 11       		.uleb128 0x11
+ 622 0074 01       		.uleb128 0x1
+ 623 0075 12       		.uleb128 0x12
+ 624 0076 06       		.uleb128 0x6
+ 625 0077 01       		.uleb128 0x1
+ 626 0078 13       		.uleb128 0x13
+ 627 0079 00       		.byte	0
+ 628 007a 00       		.byte	0
+ 629 007b 09       		.uleb128 0x9
+ 630 007c 34       		.uleb128 0x34
+ 631 007d 00       		.byte	0
+ 632 007e 03       		.uleb128 0x3
+ 633 007f 08       		.uleb128 0x8
+ 634 0080 3A       		.uleb128 0x3a
+ 635 0081 0B       		.uleb128 0xb
+ 636 0082 3B       		.uleb128 0x3b
+ 637 0083 0B       		.uleb128 0xb
+ 638 0084 49       		.uleb128 0x49
+ 639 0085 13       		.uleb128 0x13
+ 640 0086 02       		.uleb128 0x2
+ 641 0087 17       		.uleb128 0x17
+ 642 0088 00       		.byte	0
+ 643 0089 00       		.byte	0
+ 644 008a 0A       		.uleb128 0xa
+ 645 008b 898201   		.uleb128 0x4109
+ 646 008e 01       		.byte	0x1
+ 647 008f 11       		.uleb128 0x11
+ 648 0090 01       		.uleb128 0x1
+ 649 0091 31       		.uleb128 0x31
+ 650 0092 13       		.uleb128 0x13
+ 651 0093 01       		.uleb128 0x1
+ 652 0094 13       		.uleb128 0x13
+ 653 0095 00       		.byte	0
+ 654 0096 00       		.byte	0
+ 655 0097 0B       		.uleb128 0xb
+ 656 0098 8A8201   		.uleb128 0x410a
+ 657 009b 00       		.byte	0
+ 658 009c 02       		.uleb128 0x2
+ 659 009d 18       		.uleb128 0x18
+ 660 009e 9142     		.uleb128 0x2111
+ 661 00a0 18       		.uleb128 0x18
+ 662 00a1 00       		.byte	0
+ 663 00a2 00       		.byte	0
+ 664 00a3 0C       		.uleb128 0xc
+ 665 00a4 898201   		.uleb128 0x4109
+ 666 00a7 00       		.byte	0
+ 667 00a8 11       		.uleb128 0x11
+ 668 00a9 01       		.uleb128 0x1
+ 669 00aa 31       		.uleb128 0x31
+ARM GAS  C:\Users\hresk\AppData\Local\Temp\cc78wdlT.s 			page 15
+
+
+ 670 00ab 13       		.uleb128 0x13
+ 671 00ac 00       		.byte	0
+ 672 00ad 00       		.byte	0
+ 673 00ae 0D       		.uleb128 0xd
+ 674 00af 2E       		.uleb128 0x2e
+ 675 00b0 01       		.byte	0x1
+ 676 00b1 3F       		.uleb128 0x3f
+ 677 00b2 19       		.uleb128 0x19
+ 678 00b3 03       		.uleb128 0x3
+ 679 00b4 0E       		.uleb128 0xe
+ 680 00b5 3A       		.uleb128 0x3a
+ 681 00b6 0B       		.uleb128 0xb
+ 682 00b7 3B       		.uleb128 0x3b
+ 683 00b8 0B       		.uleb128 0xb
+ 684 00b9 27       		.uleb128 0x27
+ 685 00ba 19       		.uleb128 0x19
+ 686 00bb 49       		.uleb128 0x49
+ 687 00bc 13       		.uleb128 0x13
+ 688 00bd 8701     		.uleb128 0x87
+ 689 00bf 19       		.uleb128 0x19
+ 690 00c0 11       		.uleb128 0x11
+ 691 00c1 01       		.uleb128 0x1
+ 692 00c2 12       		.uleb128 0x12
+ 693 00c3 06       		.uleb128 0x6
+ 694 00c4 40       		.uleb128 0x40
+ 695 00c5 18       		.uleb128 0x18
+ 696 00c6 9642     		.uleb128 0x2116
+ 697 00c8 19       		.uleb128 0x19
+ 698 00c9 01       		.uleb128 0x1
+ 699 00ca 13       		.uleb128 0x13
+ 700 00cb 00       		.byte	0
+ 701 00cc 00       		.byte	0
+ 702 00cd 0E       		.uleb128 0xe
+ 703 00ce 34       		.uleb128 0x34
+ 704 00cf 00       		.byte	0
+ 705 00d0 03       		.uleb128 0x3
+ 706 00d1 0E       		.uleb128 0xe
+ 707 00d2 3A       		.uleb128 0x3a
+ 708 00d3 0B       		.uleb128 0xb
+ 709 00d4 3B       		.uleb128 0x3b
+ 710 00d5 0B       		.uleb128 0xb
+ 711 00d6 49       		.uleb128 0x49
+ 712 00d7 13       		.uleb128 0x13
+ 713 00d8 02       		.uleb128 0x2
+ 714 00d9 18       		.uleb128 0x18
+ 715 00da 00       		.byte	0
+ 716 00db 00       		.byte	0
+ 717 00dc 0F       		.uleb128 0xf
+ 718 00dd 34       		.uleb128 0x34
+ 719 00de 00       		.byte	0
+ 720 00df 03       		.uleb128 0x3
+ 721 00e0 0E       		.uleb128 0xe
+ 722 00e1 3A       		.uleb128 0x3a
+ 723 00e2 0B       		.uleb128 0xb
+ 724 00e3 3B       		.uleb128 0x3b
+ 725 00e4 0B       		.uleb128 0xb
+ 726 00e5 49       		.uleb128 0x49
+ARM GAS  C:\Users\hresk\AppData\Local\Temp\cc78wdlT.s 			page 16
+
+
+ 727 00e6 13       		.uleb128 0x13
+ 728 00e7 1C       		.uleb128 0x1c
+ 729 00e8 0B       		.uleb128 0xb
+ 730 00e9 00       		.byte	0
+ 731 00ea 00       		.byte	0
+ 732 00eb 10       		.uleb128 0x10
+ 733 00ec 898201   		.uleb128 0x4109
+ 734 00ef 01       		.byte	0x1
+ 735 00f0 11       		.uleb128 0x11
+ 736 00f1 01       		.uleb128 0x1
+ 737 00f2 31       		.uleb128 0x31
+ 738 00f3 13       		.uleb128 0x13
+ 739 00f4 00       		.byte	0
+ 740 00f5 00       		.byte	0
+ 741 00f6 11       		.uleb128 0x11
+ 742 00f7 01       		.uleb128 0x1
+ 743 00f8 01       		.byte	0x1
+ 744 00f9 49       		.uleb128 0x49
+ 745 00fa 13       		.uleb128 0x13
+ 746 00fb 01       		.uleb128 0x1
+ 747 00fc 13       		.uleb128 0x13
+ 748 00fd 00       		.byte	0
+ 749 00fe 00       		.byte	0
+ 750 00ff 12       		.uleb128 0x12
+ 751 0100 21       		.uleb128 0x21
+ 752 0101 00       		.byte	0
+ 753 0102 49       		.uleb128 0x49
+ 754 0103 13       		.uleb128 0x13
+ 755 0104 2F       		.uleb128 0x2f
+ 756 0105 0B       		.uleb128 0xb
+ 757 0106 00       		.byte	0
+ 758 0107 00       		.byte	0
+ 759 0108 13       		.uleb128 0x13
+ 760 0109 34       		.uleb128 0x34
+ 761 010a 00       		.byte	0
+ 762 010b 03       		.uleb128 0x3
+ 763 010c 0E       		.uleb128 0xe
+ 764 010d 3A       		.uleb128 0x3a
+ 765 010e 0B       		.uleb128 0xb
+ 766 010f 3B       		.uleb128 0x3b
+ 767 0110 05       		.uleb128 0x5
+ 768 0111 49       		.uleb128 0x49
+ 769 0112 13       		.uleb128 0x13
+ 770 0113 3F       		.uleb128 0x3f
+ 771 0114 19       		.uleb128 0x19
+ 772 0115 3C       		.uleb128 0x3c
+ 773 0116 19       		.uleb128 0x19
+ 774 0117 00       		.byte	0
+ 775 0118 00       		.byte	0
+ 776 0119 14       		.uleb128 0x14
+ 777 011a 35       		.uleb128 0x35
+ 778 011b 00       		.byte	0
+ 779 011c 49       		.uleb128 0x49
+ 780 011d 13       		.uleb128 0x13
+ 781 011e 00       		.byte	0
+ 782 011f 00       		.byte	0
+ 783 0120 15       		.uleb128 0x15
+ARM GAS  C:\Users\hresk\AppData\Local\Temp\cc78wdlT.s 			page 17
+
+
+ 784 0121 2E       		.uleb128 0x2e
+ 785 0122 00       		.byte	0
+ 786 0123 3F       		.uleb128 0x3f
+ 787 0124 19       		.uleb128 0x19
+ 788 0125 3C       		.uleb128 0x3c
+ 789 0126 19       		.uleb128 0x19
+ 790 0127 6E       		.uleb128 0x6e
+ 791 0128 0E       		.uleb128 0xe
+ 792 0129 03       		.uleb128 0x3
+ 793 012a 0E       		.uleb128 0xe
+ 794 012b 3A       		.uleb128 0x3a
+ 795 012c 0B       		.uleb128 0xb
+ 796 012d 3B       		.uleb128 0x3b
+ 797 012e 0B       		.uleb128 0xb
+ 798 012f 00       		.byte	0
+ 799 0130 00       		.byte	0
+ 800 0131 00       		.byte	0
+ 801              		.section	.debug_loc,"",%progbits
+ 802              	.Ldebug_loc0:
+ 803              	.LLST0:
+ 804 0000 00000000 		.4byte	.LVL0
+ 805 0004 07000000 		.4byte	.LVL2-1
+ 806 0008 0100     		.2byte	0x1
+ 807 000a 50       		.byte	0x50
+ 808 000b 07000000 		.4byte	.LVL2-1
+ 809 000f 48000000 		.4byte	.LFE65
+ 810 0013 0400     		.2byte	0x4
+ 811 0015 F3       		.byte	0xf3
+ 812 0016 01       		.uleb128 0x1
+ 813 0017 50       		.byte	0x50
+ 814 0018 9F       		.byte	0x9f
+ 815 0019 00000000 		.4byte	0
+ 816 001d 00000000 		.4byte	0
+ 817              	.LLST1:
+ 818 0021 02000000 		.4byte	.LVL1
+ 819 0025 12000000 		.4byte	.LVL5
+ 820 0029 0200     		.2byte	0x2
+ 821 002b 30       		.byte	0x30
+ 822 002c 9F       		.byte	0x9f
+ 823 002d 12000000 		.4byte	.LVL5
+ 824 0031 40000000 		.4byte	.LVL13
+ 825 0035 0100     		.2byte	0x1
+ 826 0037 54       		.byte	0x54
+ 827 0038 40000000 		.4byte	.LVL13
+ 828 003c 46000000 		.4byte	.LVL15
+ 829 0040 0200     		.2byte	0x2
+ 830 0042 30       		.byte	0x30
+ 831 0043 9F       		.byte	0x9f
+ 832 0044 00000000 		.4byte	0
+ 833 0048 00000000 		.4byte	0
+ 834              	.LLST2:
+ 835 004c 02000000 		.4byte	.LVL1
+ 836 0050 1A000000 		.4byte	.LVL7
+ 837 0054 0200     		.2byte	0x2
+ 838 0056 30       		.byte	0x30
+ 839 0057 9F       		.byte	0x9f
+ 840 0058 1A000000 		.4byte	.LVL7
+ARM GAS  C:\Users\hresk\AppData\Local\Temp\cc78wdlT.s 			page 18
+
+
+ 841 005c 40000000 		.4byte	.LVL13
+ 842 0060 0100     		.2byte	0x1
+ 843 0062 55       		.byte	0x55
+ 844 0063 40000000 		.4byte	.LVL13
+ 845 0067 46000000 		.4byte	.LVL15
+ 846 006b 0200     		.2byte	0x2
+ 847 006d 30       		.byte	0x30
+ 848 006e 9F       		.byte	0x9f
+ 849 006f 00000000 		.4byte	0
+ 850 0073 00000000 		.4byte	0
+ 851              	.LLST3:
+ 852 0077 08000000 		.4byte	.LVL2
+ 853 007b 0C000000 		.4byte	.LVL3
+ 854 007f 0100     		.2byte	0x1
+ 855 0081 50       		.byte	0x50
+ 856 0082 40000000 		.4byte	.LVL13
+ 857 0086 43000000 		.4byte	.LVL14-1
+ 858 008a 0100     		.2byte	0x1
+ 859 008c 50       		.byte	0x50
+ 860 008d 00000000 		.4byte	0
+ 861 0091 00000000 		.4byte	0
+ 862              	.LLST4:
+ 863 0095 24000000 		.4byte	.LVL9
+ 864 0099 2C000000 		.4byte	.LVL10
+ 865 009d 0100     		.2byte	0x1
+ 866 009f 50       		.byte	0x50
+ 867 00a0 30000000 		.4byte	.LVL11
+ 868 00a4 3D000000 		.4byte	.LVL12-1
+ 869 00a8 0100     		.2byte	0x1
+ 870 00aa 50       		.byte	0x50
+ 871 00ab 3E000000 		.4byte	.LVL12
+ 872 00af 40000000 		.4byte	.LVL13
+ 873 00b3 0100     		.2byte	0x1
+ 874 00b5 50       		.byte	0x50
+ 875 00b6 00000000 		.4byte	0
+ 876 00ba 00000000 		.4byte	0
+ 877              	.LLST5:
+ 878 00be 14000000 		.4byte	.LVL18
+ 879 00c2 17000000 		.4byte	.LVL19-1
+ 880 00c6 0100     		.2byte	0x1
+ 881 00c8 50       		.byte	0x50
+ 882 00c9 00000000 		.4byte	0
+ 883 00cd 00000000 		.4byte	0
+ 884              		.section	.debug_aranges,"",%progbits
+ 885 0000 24000000 		.4byte	0x24
+ 886 0004 0200     		.2byte	0x2
+ 887 0006 00000000 		.4byte	.Ldebug_info0
+ 888 000a 04       		.byte	0x4
+ 889 000b 00       		.byte	0
+ 890 000c 0000     		.2byte	0
+ 891 000e 0000     		.2byte	0
+ 892 0010 00000000 		.4byte	.LFB65
+ 893 0014 48000000 		.4byte	.LFE65-.LFB65
+ 894 0018 00000000 		.4byte	.LFB64
+ 895 001c 3C000000 		.4byte	.LFE64-.LFB64
+ 896 0020 00000000 		.4byte	0
+ 897 0024 00000000 		.4byte	0
+ARM GAS  C:\Users\hresk\AppData\Local\Temp\cc78wdlT.s 			page 19
+
+
+ 898              		.section	.debug_ranges,"",%progbits
+ 899              	.Ldebug_ranges0:
+ 900 0000 00000000 		.4byte	.LFB65
+ 901 0004 48000000 		.4byte	.LFE65
+ 902 0008 00000000 		.4byte	.LFB64
+ 903 000c 3C000000 		.4byte	.LFE64
+ 904 0010 00000000 		.4byte	0
+ 905 0014 00000000 		.4byte	0
+ 906              		.section	.debug_line,"",%progbits
+ 907              	.Ldebug_line0:
+ 908 0000 2B020000 		.section	.debug_str,"MS",%progbits,1
+ 908      0200DE01 
+ 908      00000201 
+ 908      FB0E0D00 
+ 908      01010101 
+ 909              	.LASF4:
+ 910 0000 5F5F7569 		.ascii	"__uint8_t\000"
+ 910      6E74385F 
+ 910      7400
+ 911              	.LASF35:
+ 912 000a 61647265 		.ascii	"adress\000"
+ 912      737300
+ 913              	.LASF34:
+ 914 0011 66657463 		.ascii	"fetchData\000"
+ 914      68446174 
+ 914      6100
+ 915              	.LASF5:
+ 916 001b 5F5F696E 		.ascii	"__int32_t\000"
+ 916      7433325F 
+ 916      7400
+ 917              	.LASF28:
+ 918 0025 736E7072 		.ascii	"snprintf\000"
+ 918      696E7466 
+ 918      00
+ 919              	.LASF20:
+ 920 002e 73746174 		.ascii	"status\000"
+ 920      757300
+ 921              	.LASF27:
+ 922 0035 55415254 		.ascii	"UART_TERMINAL_Start\000"
+ 922      5F544552 
+ 922      4D494E41 
+ 922      4C5F5374 
+ 922      61727400 
+ 923              	.LASF13:
+ 924 0049 666C6F61 		.ascii	"float\000"
+ 924      7400
+ 925              	.LASF23:
+ 926 004f 4932435F 		.ascii	"I2C_LM75_MasterReadByte\000"
+ 926      4C4D3735 
+ 926      5F4D6173 
+ 926      74657252 
+ 926      65616442 
+ 927              	.LASF1:
+ 928 0067 756E7369 		.ascii	"unsigned char\000"
+ 928      676E6564 
+ 928      20636861 
+ 928      7200
+ARM GAS  C:\Users\hresk\AppData\Local\Temp\cc78wdlT.s 			page 20
+
+
+ 929              	.LASF31:
+ 930 0075 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 930      43313120 
+ 930      352E342E 
+ 930      31203230 
+ 930      31363036 
+ 931 00a8 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m3 -mthumb -g -O"
+ 931      20726576 
+ 931      6973696F 
+ 931      6E203233 
+ 931      37373135 
+ 932 00db 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 932      66756E63 
+ 932      74696F6E 
+ 932      2D736563 
+ 932      74696F6E 
+ 933              	.LASF33:
+ 934 0103 433A5C55 		.ascii	"C:\\Users\\hresk\\OneDrive\\Dokumenter\\GitHub\\Sem"
+ 934      73657273 
+ 934      5C687265 
+ 934      736B5C4F 
+ 934      6E654472 
+ 935 0130 65737465 		.ascii	"esterProjekt2\\Arduino\\Arduino Temp\\Communication"
+ 935      7250726F 
+ 935      6A656B74 
+ 935      325C4172 
+ 935      6475696E 
+ 936 0160 20427573 		.ascii	" Busses.cydsn\000"
+ 936      7365732E 
+ 936      63796473 
+ 936      6E00
+ 937              	.LASF7:
+ 938 016e 6C6F6E67 		.ascii	"long unsigned int\000"
+ 938      20756E73 
+ 938      69676E65 
+ 938      6420696E 
+ 938      7400
+ 939              	.LASF29:
+ 940 0180 55415254 		.ascii	"UART_TERMINAL_PutString\000"
+ 940      5F544552 
+ 940      4D494E41 
+ 940      4C5F5075 
+ 940      74537472 
+ 941              	.LASF3:
+ 942 0198 73686F72 		.ascii	"short unsigned int\000"
+ 942      7420756E 
+ 942      7369676E 
+ 942      65642069 
+ 942      6E7400
+ 943              	.LASF37:
+ 944 01ab 49544D5F 		.ascii	"ITM_RxBuffer\000"
+ 944      52784275 
+ 944      66666572 
+ 944      00
+ 945              	.LASF24:
+ 946 01b8 4932435F 		.ascii	"I2C_LM75_MasterSendStop\000"
+ 946      4C4D3735 
+ARM GAS  C:\Users\hresk\AppData\Local\Temp\cc78wdlT.s 			page 21
+
+
+ 946      5F4D6173 
+ 946      74657253 
+ 946      656E6453 
+ 947              	.LASF14:
+ 948 01d0 646F7562 		.ascii	"double\000"
+ 948      6C6500
+ 949              	.LASF18:
+ 950 01d7 72656369 		.ascii	"recievedValue1\000"
+ 950      65766564 
+ 950      56616C75 
+ 950      653100
+ 951              	.LASF19:
+ 952 01e6 72656369 		.ascii	"recievedValue2\000"
+ 952      65766564 
+ 952      56616C75 
+ 952      653200
+ 953              	.LASF36:
+ 954 01f5 6D61696E 		.ascii	"main\000"
+ 954      00
+ 955              	.LASF26:
+ 956 01fa 4932435F 		.ascii	"I2C_LM75_Start\000"
+ 956      4C4D3735 
+ 956      5F537461 
+ 956      727400
+ 957              	.LASF22:
+ 958 0209 736C6176 		.ascii	"slaveAddr1\000"
+ 958      65416464 
+ 958      723100
+ 959              	.LASF10:
+ 960 0214 756E7369 		.ascii	"unsigned int\000"
+ 960      676E6564 
+ 960      20696E74 
+ 960      00
+ 961              	.LASF9:
+ 962 0221 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 962      206C6F6E 
+ 962      6720756E 
+ 962      7369676E 
+ 962      65642069 
+ 963              	.LASF11:
+ 964 0238 75696E74 		.ascii	"uint8_t\000"
+ 964      385F7400 
+ 965              	.LASF12:
+ 966 0240 696E7433 		.ascii	"int32_t\000"
+ 966      325F7400 
+ 967              	.LASF17:
+ 968 0248 73697A65 		.ascii	"sizetype\000"
+ 968      74797065 
+ 968      00
+ 969              	.LASF8:
+ 970 0251 6C6F6E67 		.ascii	"long long int\000"
+ 970      206C6F6E 
+ 970      6720696E 
+ 970      7400
+ 971              	.LASF32:
+ 972 025f 6D61696E 		.ascii	"main.c\000"
+ 972      2E6300
+ARM GAS  C:\Users\hresk\AppData\Local\Temp\cc78wdlT.s 			page 22
+
+
+ 973              	.LASF15:
+ 974 0266 63686172 		.ascii	"char\000"
+ 974      00
+ 975              	.LASF25:
+ 976 026b 4932435F 		.ascii	"I2C_LM75_MasterSendStart\000"
+ 976      4C4D3735 
+ 976      5F4D6173 
+ 976      74657253 
+ 976      656E6453 
+ 977              	.LASF2:
+ 978 0284 73686F72 		.ascii	"short int\000"
+ 978      7420696E 
+ 978      7400
+ 979              	.LASF21:
+ 980 028e 62756666 		.ascii	"buffer\000"
+ 980      657200
+ 981              	.LASF6:
+ 982 0295 6C6F6E67 		.ascii	"long int\000"
+ 982      20696E74 
+ 982      00
+ 983              	.LASF16:
+ 984 029e 6C6F6E67 		.ascii	"long double\000"
+ 984      20646F75 
+ 984      626C6500 
+ 985              	.LASF0:
+ 986 02aa 7369676E 		.ascii	"signed char\000"
+ 986      65642063 
+ 986      68617200 
+ 987              	.LASF30:
+ 988 02b6 43794465 		.ascii	"CyDelay\000"
+ 988      6C617900 
+ 989              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran
