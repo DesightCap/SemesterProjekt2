@@ -71,7 +71,7 @@ int main(void)
 #include <avr/io.h>
 //#include "x10.h"
 #include <math.h>
-#include "uart_int.h"
+#include "uart1"
 #include <util/delay.h>
 #include <avr/interrupt.h>
 

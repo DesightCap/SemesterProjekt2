@@ -52,8 +52,9 @@ int main(void)
 		// Hent temperatur data fra parameter adresse
 		temp = fetchData(slaveAddr1);
 		
-		uint8_t whole = (int)temp;
-		uint8_t decimal = temp - whole;
+		uint8_t whole = (uint8_t)temp;
+		
+		float decimal = temp - whole;
 		
 		whole = whole << 1;
 		if (decimal)
@@ -62,7 +63,9 @@ int main(void)
 		
 		//snprintf(buffer, sizeof(buffer), "%.1f\r\n", whole);
 		//UART_TERMINAL_PutString((char)whole);
-		UART_TERMINAL_PutChar((char)whole);
+		//UART_TERMINAL_PutChar(whole);
+		UART_TERMINAL_WriteTxData(whole);
+		
 		CyDelay(2000);
 		/*
 		// Klargøre buffer til udskrive med adresse på I2C enhed og float temperatur
