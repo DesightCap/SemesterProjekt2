@@ -48,18 +48,19 @@ for (int i = 0; ; i++)
 	// kan nu sende besked korrekt til arudino, dog med små forstyrrelser på output pins, når pinnen er low.
 		char x = 'd';
 		char y = 'u';
-		testUART.send(&x, 1);
+		char z = 'a';
+	//	testUART.send(&x, 1);
 		//Sleep(200);
-		cout << testUART.send(&x, 1) << endl;
+	//	cout << testUART.send(&x, 1) << endl;
 		//testUART.send(&z, 1);
 
 		Sleep(1000);
 
-		testUART.send(&y, 1);
+	//	testUART.send(&y, 1);
 	//	Sleep(200);	
-		cout << testUART.send(&y, 1) << endl;
-	//	testUART.send(&z, 1);
-
+	//	cout << testUART.send(&y, 1) << endl;
+	testUART.send(&z, 1);
+	cout << testUART.send(&z, 1) << endl;
 		Sleep(1000);
 		//testFunction_writeToArduino(testUART);
 
