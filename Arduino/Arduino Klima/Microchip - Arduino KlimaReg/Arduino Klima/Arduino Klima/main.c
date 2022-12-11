@@ -12,8 +12,8 @@
 #define F_CPU 16000000
 #define dataSIZE 30
 
-void runBlower();
-void runHeater();
+void blowerOn();
+void heaterOn();
 
 volatile int count = 1;
 
@@ -24,7 +24,13 @@ uint16_t commandRecieved = 0x00;
 uint16_t encoded = 0;
 uint16_t combined = 0;
 
-uint16_t my_adr = 0b00000101;
+int timeMultiplier = 1; 
+	
+uint16_t myAddress = 0b0000000000000110;
+
+
+uint16_t blowCommand = 0b0000000011110000;
+uint16_t heatCommand = 0b0000000000001111;
 
 uint32_t blowTime = 0;
 uint32_t hotTime = 0;
@@ -32,21 +38,14 @@ uint32_t hotTime = 0;
 
 int main(void)
 {
-	// opsæt port/pin
+
 	DDRL = 0xFF;
-	// 1 pin til cold - PINA & 0b00000100
-	// 1 pin til hot  - PINA & 0b00001000
-	int timeMultiplier = 1; // Skal være over 0;
+	
+
 
 	initPort();
 	initISR();
-	
-	startRecieved = 0;
-	datapakkeRecieved = 0x0000;
-	addressRecieved = 0;
-	commandRecieved = 0x00;
-	encoded = 0;
-	combined = 0;
+
 	
 	while (1)
 	{
@@ -54,43 +53,40 @@ int main(void)
 		if (count == (dataSIZE+2))
 		{
 			recievex10(&addressRecieved, &commandRecieved, &combined, &encoded, &datapakkeRecieved, &count);
-			//PORTB = commandRecieved;
 		}
 			
-		//PORTB = addressRecieved;
-		//if (my_adr = addressRecieved)
-		
-		
-		
-		switch (commandRecieved)
+
+		if(addressRecieved == myAddress)
 		{
-			case 0b0000000011110000:
-			blowTime = 1000000 * timeMultiplier;
-			break;
-			
-			case 0b0000000000001111:
-			hotTime = 1000000 * timeMultiplier;
-			
-			break;
-			default:
-			
-			break;
+				switch (commandRecieved)
+				{
+					case blowCommand:
+					blowTime = 1000000 * timeMultiplier;
+					break;
+					
+					case heatCommand:
+					hotTime = 1000000 * timeMultiplier;
+					
+					break;
+					default:
+					
+					break;
+				}
+				
+				addressRecieved = 0;
+				commandRecieved = 0;
 		}
+
 		
-		
-		addressRecieved = 0;
-		commandRecieved = 0;
-		
-		
-		runBlower();
-		runHeater();
+		blowerOn();
+		heaterOn();
 			
 		
 	}
 	
 }
 
-void runBlower()
+void blowerOn()
 {
 		if(blowTime > 0)
 		{
@@ -105,7 +101,7 @@ void runBlower()
 		}
 }
 
-void runHeater()
+void heaterOn()
 {
 		if(hotTime > 0)
 		{
