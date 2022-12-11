@@ -34,6 +34,7 @@ void Computer::openMenu()
 	this->menuPrint();
 	while (runningTemperatureReg)
 	{
+		Sleep(ARDUINO_WAIT_TIME);
 		int userSelect = 0;
 		switch (UIinput())
 		{
@@ -58,30 +59,31 @@ void Computer::openMenu()
 			readToggle();
 			if (!writeTemperature_)
 			{
-				cout << "Stopper temperatur regulering" << endl;
+				cout << "Stopper temperatur maaling" << endl;
 			}
 			else if (writeTemperature_)
 			{
-				cout << "starter temperatur regulering" << endl;
+				cout << "starter temperatur maaling" << endl;
 			}
 			break;
 		case 5:
 			//
-			cout << "invalid input ";
+			//cout << "invalid input ";
 			break;
 		default:
 
-			char recieve[] = "60.5"; // Sat høj for test
+			char recieve[] = "00.0"; // Sat høj for test
 			char toSend;
+
 			while (writeTemperature_)
 			{
 				testUART_->getTemperature(recieve, (sizeof(recieve) / sizeof(recieve[0])) - 1);
-				if (recieve != "0.00")
+				if (recieve[2] == '.')
 				{
 					double recievedDouble = this->temperatureCharArrayToDouble(recieve);
 
 					testLog_->addToLog(recievedDouble);
-				//	seeCurrentTemperature(recieve);
+					seeCurrentTemperature(recieve);
 					//recieve[0]++; // tester der hører sammen med ovenstående char recieve[] = "00.0";
 
 				//	cout << "Skrevet til log: " << recieve[0] << recieve[1] << recieve[2] << recieve[3] << endl; // tester
@@ -100,7 +102,7 @@ void Computer::openMenu()
 					case 1:
 						if (writeTemperature_)
 							testUART_->sendDown();
-						cout << "Saenk temperatur " << endl; // tester
+				//		cout << "Saenk temperatur " << endl; // tester
 						break;
 					default:
 						break;
@@ -110,7 +112,6 @@ void Computer::openMenu()
 				break;
 			}
 		}
-			Sleep(ARDUINO_WAIT_TIME);
 	}
 }
 

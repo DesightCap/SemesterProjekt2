@@ -39,8 +39,8 @@ int main()
 	UART testUART(port); // Med UART der opretter forbindelse i constructoren, kunne Complex(d).print(); som vist i OOP være en ide til at hente data ud?
 	Temperature testtemperature;
 	Computer testComputer(&testUART, &testLog, &testtemperature);
-	//testComputer.openMenu();
-for (int i = 0; ; i++)
+	testComputer.openMenu();
+for (int i = 0; i < 10; i++)
 	{
 
 		//Sleep(ARDUINO_WAIT_TIME);
@@ -53,19 +53,24 @@ for (int i = 0; ; i++)
 		//Sleep(200);
 	//	cout << testUART.send(&x, 1) << endl;
 		//testUART.send(&z, 1);
+		char recieve[] = "00.0";
 
-		Sleep(1000);
+		testUART.getTemperature(recieve, (sizeof(recieve) / sizeof(recieve[0])) - 1);
+		double temp = testComputer.temperatureCharArrayToDouble(recieve);
 
+		testLog.addToLog(temp);
+		Sleep(500);
 	//	testUART.send(&y, 1);
 	//	Sleep(200);	
 	//	cout << testUART.send(&y, 1) << endl;
-	testUART.send(&z, 1);
-	cout << testUART.send(&z, 1) << endl;
-		Sleep(1000);
+	//testUART.send(&z, 1);
+	//cout << testUART.send(&z, 1) << endl;
+
 		//testFunction_writeToArduino(testUART);
 
 
 	}
+		testLog.print();
 }
 
 void testFunction_writeToLog(Log testLog)
