@@ -29,8 +29,8 @@ int timeMultiplier = 1;
 uint16_t myAddress = 0b0000000000000110;
 
 
-uint16_t blowCommand = 0b0000000011110000;
-uint16_t heatCommand = 0b0000000000001111;
+#define blowCommand 0b0000000011000000
+#define heatCommand 0b0000000010110000
 
 uint32_t blowTime = 0;
 uint32_t hotTime = 0;
@@ -61,11 +61,11 @@ int main(void)
 				switch (commandRecieved)
 				{
 					case blowCommand:
-					blowTime = 1000000 * timeMultiplier;
+					blowTime = 100000 * timeMultiplier;
 					break;
 					
 					case heatCommand:
-					hotTime = 1000000 * timeMultiplier;
+					hotTime = 100000 * timeMultiplier;
 					
 					break;
 					default:
@@ -92,6 +92,7 @@ void blowerOn()
 		{
 			PORTL |= pinCold;
 			_delay_us(100);
+			
 			blowTime--;
 		}
 			

@@ -140,18 +140,22 @@ int main(){
 
 	InitUART(9600,8,1);
 	sei();
-	
+	initISR();
 	initPort();
 	
 	while (1)
 	{
-		recievex10(&addressRecieved,&commandRecieved,&combined,&encoded,&datapakkeRecieved,&count);
+		if (count == dataSIZE+2)
+			{recievex10(&addressRecieved,&commandRecieved,&combined,&encoded,&datapakkeRecieved,&count);
+			}
+			
+	PORTB = commandRecieved;
 		
 		if (addressRecieved == myAddress)
 		{
 			if (commandRecieved == requestTemperature)
-				sendx10(&address,&cleanedData,&combined,&encoded,&datapakke,&counter);
-			_delay_ms(2000);
+				sendx10(&address,&cleanedData,&combined,&encoded,&datapakke,&counter); // &cleanedData byttet ud med &commandRecieved for test	
 		}
+		commandRecieved = 0;
 	}
 }

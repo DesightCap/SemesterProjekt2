@@ -277,9 +277,15 @@ void doubleEncoded(uint16_t* encoded, uint32_t* datapakke)
 	for (int i = 0; i < 15; i++)
 	{
 		if (*encoded & (0b0100000000000000 >> i))
+		{
 			*datapakke = (*datapakke | (0b10000000000000000000000000000000 >> (i * 2)));
-
-		else *datapakke = (*datapakke | (0b01000000000000000000000000000000 >> (i * 2)));
+			*datapakke = (*datapakke & ~(0b01000000000000000000000000000000 >> (i * 2)));
+		}
+		else
+		{
+			*datapakke = (*datapakke | (0b01000000000000000000000000000000 >> (i * 2)));
+			*datapakke = (*datapakke & ~(0b10000000000000000000000000000000 >> (i * 2)));
+		}
 	}
 }
 
