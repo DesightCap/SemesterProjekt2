@@ -1,0 +1,29 @@
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+use work.all;
+
+
+entity code_lock_simple_fsm_tester is
+	port
+	(
+		-- Input ports
+		SW		: in  std_logic_vector(3 downto 0);
+		KEY 	: in 	std_logic_vector(2 downto 0);
+		-- Output ports
+		LEDR	: out	std_logic_vector(0 downto 0)
+	);
+end code_lock_simple_fsm_tester;
+
+
+architecture code_lock_simple_fsm_tester_impl of code_lock_simple_fsm_tester is
+begin
+	call_code_lock_simple_fsm: entity code_lock_simple_fsm(code_lock_simple_fsm_impl)
+		port map(
+			clk => KEY(0),
+			reset => KEY(1),
+			enter => KEY(2),
+			code => SW,
+			lock => LEDR(0)
+			);
+end code_lock_simple_fsm_tester_impl;

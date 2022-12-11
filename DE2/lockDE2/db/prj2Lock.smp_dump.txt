@@ -1,0 +1,6 @@
+
+State Machine - |code_lock_simple_fsm_tester|code_lock_simple_fsm:call_code_lock_simple_fsm|present_state
+Name present_state.unlocked present_state.ev_code present_state.idle 
+present_state.idle 0 0 0 
+present_state.ev_code 0 1 1 
+present_state.unlocked 1 0 1 

@@ -1,0 +1,100 @@
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+use work.all;
+
+entity code_lock_simple_fsm is
+	port
+	(
+		-- Input ports
+		clk, reset, enter	:	in std_logic;
+		code					: 	in std_logic_vector(3 downto 0);
+		-- Output ports
+		lock 	:	out std_logic
+	);
+end code_lock_simple_fsm;
+
+architecture code_lock_simple_fsm_impl of code_lock_simple_fsm is
+	type state is (idle, ev_code1, get_code2, ev_code2, unlocked);
+	signal present_state, next_state : state;
+	
+	-- Hardcoded koder
+	constant code1	:	std_logic_vector := "1100";
+	constant code2 :	std_logic_vector := "1110";
+	
+begin
+
+	state_reg : process (clk, reset)
+	begin
+		if reset = '0' then
+			present_state <= idle;
+		elsif rising_edge(clk) then
+			present_state <= next_state;
+		end if;
+	end process;
+
+
+
+	outputs: process (present_state)
+	begin
+		case present_state is
+			when idle =>
+				lock <= '1';
+				
+			when ev_code1 =>
+				lock <= '1';
+				
+			when get_code2 =>
+				lock <= '1';
+				
+			when ev_code2 =>
+				lock <= '1';
+			
+			when unlocked =>
+				lock <= '0';
+		end case;
+	end process;
+	
+
+	nxt_state : process (present_state, enter, code)
+	begin
+		case present_state is
+			when idle =>
+				if enter = '0' then
+					next_state <= ev_code1;
+				else
+					next_state <= idle;
+				end if;
+				
+			when ev_code1 =>
+				if code = code1 then
+					next_state <= get_code2;
+				else
+					next_state <= idle;
+				end if;
+				
+			when get_code2 =>
+				if enter = '0' then
+					next_state <= ev_code2;
+				else
+					next_state <= get_code2;
+				end if;		
+				
+			when ev_code2 =>
+				if code = code2 then
+					next_state <= unlocked;
+				else
+					next_state <= idle;
+				end if;		
+			
+			when unlocked =>
+				if enter = '0' then
+					next_state <= idle;
+				else
+					next_state <= unlocked;
+				end if;		
+				
+			end case;
+	end process;
+
+end code_lock_simple_fsm_impl;

@@ -1,0 +1,61 @@
+------------------------------------------------------------
+TimeQuest Timing Analyzer Summary
+------------------------------------------------------------
+
+Type  : Slow Model Setup 'CLOCK_50'
+Slack : -4.761
+TNS   : -60.271
+
+Type  : Slow Model Setup 'code_lock_simple_fsm:call_code_lock_simple_fsm|present_state.ev_code'
+Slack : -3.108
+TNS   : -3.108
+
+Type  : Slow Model Hold 'CLOCK_50'
+Slack : -1.852
+TNS   : -55.392
+
+Type  : Slow Model Hold 'code_lock_simple_fsm:call_code_lock_simple_fsm|present_state.ev_code'
+Slack : 3.068
+TNS   : 0.000
+
+Type  : Slow Model Minimum Pulse Width 'CLOCK_50'
+Slack : -1.380
+TNS   : -36.380
+
+Type  : Slow Model Minimum Pulse Width 'GPIO_0[0]'
+Slack : -1.222
+TNS   : -1.222
+
+Type  : Slow Model Minimum Pulse Width 'code_lock_simple_fsm:call_code_lock_simple_fsm|present_state.ev_code'
+Slack : 0.500
+TNS   : 0.000
+
+Type  : Fast Model Setup 'CLOCK_50'
+Slack : -1.677
+TNS   : -12.450
+
+Type  : Fast Model Setup 'code_lock_simple_fsm:call_code_lock_simple_fsm|present_state.ev_code'
+Slack : -1.317
+TNS   : -1.317
+
+Type  : Fast Model Hold 'CLOCK_50'
+Slack : -1.294
+TNS   : -40.875
+
+Type  : Fast Model Hold 'code_lock_simple_fsm:call_code_lock_simple_fsm|present_state.ev_code'
+Slack : 1.827
+TNS   : 0.000
+
+Type  : Fast Model Minimum Pulse Width 'CLOCK_50'
+Slack : -1.380
+TNS   : -36.380
+
+Type  : Fast Model Minimum Pulse Width 'GPIO_0[0]'
+Slack : -1.222
+TNS   : -1.222
+
+Type  : Fast Model Minimum Pulse Width 'code_lock_simple_fsm:call_code_lock_simple_fsm|present_state.ev_code'
+Slack : 0.500
+TNS   : 0.000
+
+------------------------------------------------------------
