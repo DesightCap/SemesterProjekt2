@@ -59,9 +59,10 @@ int main(void)
 			break;
 			
 
-			case 'b': // change code
-			
+			case 'p': // change code
+			char pwdRecieved = ReadChar();
 			address = 0b0000000000000101;
+			// Mask pwdRecieved ind i com
 			com = 0b0000000010000000; // sidste 4 = XXXX?
 			sendx10(&address, &com, &combined, &encoded, &datapakke, &counter);
 			

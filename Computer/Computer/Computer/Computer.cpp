@@ -69,9 +69,50 @@ void Computer::openMenu()
 			}
 			break;
 		case 5:
-			//
-			//cout << "invalid input ";
+		{
+			clearInputBuffer();
+			bool pwd[4]{ false };
+			cout << "Indtast ny kode:" << endl;
+			for (int i = 0; i < 4; i++)
+			{
+				cout << "Cifer " << i + 1 << ": ";
+				int c;
+				cin >> c;
+				while (cin.fail())
+				{
+
+					cout << endl << "Fejl!" << endl << "Godtager 0 eller tal derover. ";
+					cin.clear();
+					cin.ignore(256, '\n');
+					cin >> c;
+				}
+				if (c)
+					pwd[i] = true;
+			}
+			system("CLS");
+			this->menuPrint(false);
+			cout << "Kode indstilles til: " << endl;
+			for (int i = 0; i < 4; i++)
+			{
+				cout << pwd[i] << endl;
+			}
+			uint8_t pwdInt = 0;
+			for (int i = 0; i < 4; i++)
+			{
+				if (pwd[i])
+				{
+					pwdInt = (pwdInt << 1) + 1;
+				}
+				else
+				{
+					pwdInt = (pwdInt << 1);
+
+				}
+			}
+			testUART_->changePassword((char)pwdInt);
+			cout << endl << endl;
 			break;
+		}
 		default:
 
 			char recieve[] = "00.0"; // Sat høj for test
@@ -139,7 +180,9 @@ void Computer::menuPrint(bool clear)
 		<< "1: Udskriv log" << endl
 		<< "2: Saet temperatur interval" << endl
 		<< "3: Stop korsel af loop" << endl
-		<< "4: start/stop temperatur maaling" << endl << endl;
+		<< "4: Start/Stop temperatur maaling" << endl
+		<< "5: Skift kode" << endl
+		<< endl;
 }
 
 int Computer::UIinput()

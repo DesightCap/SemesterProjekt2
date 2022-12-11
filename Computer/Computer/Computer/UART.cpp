@@ -127,6 +127,14 @@ void UART::sendDown()
 	send(&down, 1);
 }
 
+void UART::changePassword(char pwd)
+{
+	char down = 'p';
+	send(&down, 1);
+	Sleep(5);
+	send(&pwd, 1); //Fungere det at sende kode sådan her? 
+}
+
 
 bool UART::send(char* buffer, unsigned int buf_size)
 {

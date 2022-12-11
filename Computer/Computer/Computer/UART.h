@@ -19,7 +19,8 @@ public:
 	~UART();
 	int getTemperature(char* buffer, unsigned int buf_size);// Modtage temperatur
 	void sendUp();
-	void sendDown(); 
+	void sendDown();
+	void changePassword(char pwd);
 	bool send(char* buffer, unsigned int buf_size); // Sender et char array på størrelse buf_size // Skal kaldes fra sendUp og ned med relevant data preloadet
 	bool isConnected(); // Retunere hvorvidt connected er sat og dermed om vi er forbundet
 
