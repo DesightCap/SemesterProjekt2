@@ -40,7 +40,7 @@ int main()
 	Temperature testtemperature;
 	Computer testComputer(&testUART, &testLog, &testtemperature);
 	testComputer.openMenu();
-for (int i = 0; i < 10; i++)
+/*for (int i = 0; ; i++)
 	{
 
 		//Sleep(ARDUINO_WAIT_TIME);
@@ -48,21 +48,24 @@ for (int i = 0; i < 10; i++)
 	// kan nu sende besked korrekt til arudino, dog med små forstyrrelser på output pins, når pinnen er low.
 		char x = 'd';
 		char y = 'u';
-		char z = 'a';
-	//	testUART.send(&x, 1);
+		char tempRequest = 'a';
+		char changeCode = 'b';
+		char temperatur = 'c';
+	testUART.send(&x, 1);
 		//Sleep(200);
-	//	cout << testUART.send(&x, 1) << endl;
+		cout << testUART.send(&x, 1) << endl;
 		//testUART.send(&z, 1);
 		char recieve[] = "00.0";
+		*/
+	//	testUART.getTemperature(recieve, (sizeof(recieve) / sizeof(recieve[0])) - 1);
+	//	double temp = testComputer.temperatureCharArrayToDouble(recieve);
 
-		testUART.getTemperature(recieve, (sizeof(recieve) / sizeof(recieve[0])) - 1);
-		double temp = testComputer.temperatureCharArrayToDouble(recieve);
-
-		testLog.addToLog(temp);
+	//	testLog.addToLog(temp);
 		Sleep(500);
-	//	testUART.send(&y, 1);
+	//testUART.send(&y, 1);
 	//	Sleep(200);	
-	//	cout << testUART.send(&y, 1) << endl;
+	//cout << testUART.send(&y, 1) << endl;
+	Sleep(500);
 	//testUART.send(&z, 1);
 	//cout << testUART.send(&z, 1) << endl;
 
@@ -70,8 +73,8 @@ for (int i = 0; i < 10; i++)
 
 
 	}
-		testLog.print();
-}
+	//	testLog.print();
+
 
 void testFunction_writeToLog(Log testLog)
 {

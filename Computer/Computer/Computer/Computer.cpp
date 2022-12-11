@@ -24,6 +24,8 @@ void Computer::readToggle()
 
 void Computer::openMenu()
 {
+	//char x = 'd';
+	//testUART_->send(&x, 1);
 	// Jeg har været nødt til at sætte en sleep ind ved UIinput kald, det ødelægger lidt ideen med at omgå at blokere for kørslen.
 	// Vi er evt. nødt til at mixe med multithreading? 
 	// Problem burde være løst - prøv at fjerne diverse Sleep() funktioner og se om UI stadig virker
@@ -78,7 +80,7 @@ void Computer::openMenu()
 			while (writeTemperature_)
 			{
 				testUART_->getTemperature(recieve, (sizeof(recieve) / sizeof(recieve[0])) - 1);
-				if (recieve[2] == '.')
+				if (recieve[2] == '.' && recieve[1] != '0' && recieve[0] != '0')
 				{
 					double recievedDouble = this->temperatureCharArrayToDouble(recieve);
 
@@ -93,21 +95,31 @@ void Computer::openMenu()
 					case -1:
 						if (writeTemperature_)
 							testUART_->sendUp();
-				//		cout << "Haev Temperatur" << endl; // tester
+						//		cout << "Haev Temperatur" << endl; // tester
 						break;
 					case 0:
 						if (writeTemperature_)
-				//			cout << "Temperatur indenfor interval" << endl; // tester
+						{
+							char x = 'x';
+							testUART_->send(&x, 1);
+						}
+						//			cout << "Temperatur indenfor interval" << endl; // tester
 						break;
 					case 1:
 						if (writeTemperature_)
 							testUART_->sendDown();
-				//		cout << "Saenk temperatur " << endl; // tester
+						//		cout << "Saenk temperatur " << endl; // tester
 						break;
 					default:
 						break;
 
 					}
+				}
+				else
+				{
+
+					char x = 'x';
+					testUART_->send(&x, 1);
 				}
 				break;
 			}
@@ -247,7 +259,7 @@ bool Computer::setTemperatureInt()
 	{
 		temperatureObject_->setMin(minTemperature);
 		temperatureObject_->setMax(maxTemperature);
-		
+
 		return true;
 	}
 	else
@@ -266,5 +278,5 @@ void Computer::clearInputBuffer()
 
 void Computer::seeCurrentTemperature(char arr1[])
 {
-		cout << "nuvaerende temperatur: " << arr1[0] << arr1[1] << arr1[2] << arr1[3] << "\r\b\b\b\b";
+	cout << "nuvaerende temperatur: " << arr1[0] << arr1[1] << arr1[2] << arr1[3] << "\r\b\b\b\b";
 }

@@ -146,7 +146,6 @@ bool UART::send(char* buffer, unsigned int buf_size)
 
 }
 
-
 bool UART::isConnected()
 {
 	return connected;
