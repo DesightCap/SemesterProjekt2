@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <avr/interrupt.h>
 #define F_CPU 16000000
-#define dataSIZE 16
+#define dataSIZE 30
 #define COMBINEDSIZE 11
 
 

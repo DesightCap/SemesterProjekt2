@@ -65,8 +65,8 @@ int main(void)
 ISR(INT0_vect) 
 {
 	//////////////////////SENDER ISR!///////////////
-	/*Saetter PIN til high / low på ZC interrupt.Counter saettes til 1 når sendx10() kaldes og
-	datastroemmen slutter når det sidste bit i datapakke er sat på PORTA*/
+	/*Saetter PIN til high / low pÃ¥ ZC interrupt.Counter saettes til 1 nÃ¥r sendx10() kaldes og
+	datastroemmen slutter nÃ¥r det sidste bit i datapakke er sat pÃ¥ PORTA*/
 	
 	if (counter <=4)
 	{
