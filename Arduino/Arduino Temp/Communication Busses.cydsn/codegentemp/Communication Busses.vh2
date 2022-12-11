@@ -2,7 +2,7 @@
 --	Conversion of Communication Busses.v to vh2:
 --
 --	Cypress Semiconductor - WARP Version 6.3 IR 41
---	Sat Dec 10 13:35:28 2022
+--	Sun Dec 11 12:09:32 2022
 --
 
 USE cypress.cypress.all;

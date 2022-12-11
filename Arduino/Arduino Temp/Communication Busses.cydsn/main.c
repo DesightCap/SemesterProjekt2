@@ -21,41 +21,51 @@ int main(void)
 	
 	I2C_LM75_Start(); // Klargøre I2C 
 	// Fra datablad: 
-	// You must set up the I2C Slave buffers before this function call to avoid reading or writing partial data while the buffers are setting up.
 	
 	UART_TERMINAL_Start(); // Klargøre UART
 	
-	float dec = 0; // Variable til opbevaring af beregnet temperatur data
-	
-	
-	char buffer[256]; // Chart array til udskrivning af temperatur data
-	uint8_t status = 0; // Til tjek om I2C er klar
+	float temp = 0; // Variable til opbevaring af beregnet temperatur data
 	
 
 	/*
-	Adresse opsætning: 
+	I2C adresse opsætning: 
 	Adressens første fire bit er faste
 	De sidste fire bit er hhv. 3 bit indstillet på LM75 kredsløb og et bit som fortæller om du skriver eller læser
-	1001xxxy
+	Det vil sige at vi skal bruge 1001xxxy, hvor: 
 	x = valgt via den røde kasse på LM75
 	y = 1 for læs || 0 for skriv
 	y sættes i funktionskald.
 	Eksempel: I2C_LM75_MasterSendStart(0x48, 1) 
+	For brug af slaveAddr1 = 0x48 skal A0(3), A1(2) og A2(1) sættes ON
 	*/
 	
 	uint8_t slaveAddr1 = 0x48; // 1 == on; 2 == on; 3 == 0n -> 0b01001000 
-	//uint8_t slaveAddr2 = 0x4F; // 1 == off; 2 == off; 3 == 0ff -> 0b01001111
+	// slaveAddr2 udgået, da den ikke længere er relevant
+	//uint8_t slaveAddr2 = 0x4F; // 1 == off; 2 == off; 3 == 0ff -> 0b01001111 
 
 	
     for(;;)
     {
-		// Hent temperatur data fra parameter adresse
-		dec = fetchData(slaveAddr1);
+		// Hent temperatur data fra parameter adresse til float variable
+		temp = fetchData(slaveAddr1); 
+		// Vi caster temp til uint8_t, for at fjerne kommatal og gemmer i uint8_t variablen Whole
+		uint8_t whole = (uint8_t)temp;
+		// Vi trækker vores heltal fra vores oprindelige float og gemmer resultatet i en decimal variabel.
+		// Den decimal variable vil nu indeholde 0 eller 0.5
+		float decimal = temp - whole;
+		// Vi bitshifter whole variablem en plads og gemmer det i en ny variabel.
+		uint8_t treatedTemperature = whole << 1;
+		if (decimal)
+			treatedTemperature++; // Hvis decimal er forskellig fra nul lægger i en til whole
 		
-		snprintf(buffer, sizeof(buffer), "%.1f", dec);
-		UART_TERMINAL_PutString(buffer); 
-		
+		// Vi overføre treatedTemperature variablen via UART til arduino temp
+		UART_TERMINAL_WriteTxData(treatedTemperature);
+		// Vi tilføjer et to sekunders delay mellem data hentning. 
+		// Dels for ikke at overvælde LM75, dels for ikke at overvælde Arduino, da den køre over interrutp. 
+		CyDelay(2000);
 		/*
+		// Udgået funktionalitet til læsning over 2 LM75 kredsløb. - Ikke relevant til vores brug. 
+		
 		// Klargøre buffer til udskrive med adresse på I2C enhed og float temperatur
 		snprintf(buffer, sizeof(buffer), "Enhed med adresse %u har temperatur: %.1f \r\n", slaveAddr1, dec);
 		UART_TERMINAL_PutString(buffer); 
@@ -68,12 +78,11 @@ int main(void)
 		
 		UART_TERMINAL_PutString("\r\n");
 		*/
-		// Forsinkelse mellem data hentning og udskrift
-		CyDelay(2000);
     }
 }
 
-// Henter temperatur data fra LM75, omregner anden komplement til float værdi og behandler data og returnere float med beregnet data
+// Henter temperatur data fra LM75.
+// Omregner anden komplement til float værdi og behandler data og returnere float med beregnet data
 float fetchData(uint8_t adress)
 {
 	uint8_t recievedValue1 = 0;
@@ -118,16 +127,6 @@ float fetchData(uint8_t adress)
 			return 0;
 		}
 }
-
-/*
-// Funktion fungere ikke og er derfor fjernet. Implementeret direkte i main. 
-// Udskriver "Enh". Kan evt. fixes ved at passe sizeof(buffer) i stedet for at gøre det i snprintf
-void printData(uint8_t adress, float* decPtr, char* buffer)
-{
-	snprintf(&buffer, sizeof(buffer), "Enhed med adresse %u har temperatur: %.1f \r\n", adress, *decPtr);
-	UART_TERMINAL_PutString(&buffer);
-}
-*/
 /*TO DO*/
 /*
 Hvad er LM75's adresse? - ox48 - Implementeret

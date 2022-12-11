@@ -25,7 +25,7 @@ extern "C" {
   #include <stdlib.h>
   #include <string.h>
   #include <inttypes.h>
-  #include "twi.h"
+  #include "utility/twi.h"
 }
 
 #include "Wire.h"
@@ -44,13 +44,6 @@ uint8_t TwoWire::txBufferLength = 0;
 uint8_t TwoWire::transmitting = 0;
 void (*TwoWire::user_onRequest)(void);
 void (*TwoWire::user_onReceive)(int);
-
- // indicate that we are transmitting
-
- // set address of targeted slave
-
- // reset tx buffer iterator vars
-
 
 // Constructors ////////////////////////////////////////////////////////////////
 

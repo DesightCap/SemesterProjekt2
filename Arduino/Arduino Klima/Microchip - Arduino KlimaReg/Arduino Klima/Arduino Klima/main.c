@@ -7,15 +7,13 @@
 
 
 
-#define  pinHot 0b00000100
-//#define  pinColdOn 0b00000001
-//#define  pinColdOff 0b00000000
+#define pinHot 0b00000100
 #define pinCold 0b00000001
 #define F_CPU 16000000
 #define dataSIZE 30
 
-void StartBlow(int);
-void StartHeat(int);
+void runBlower();
+void runHeater();
 
 volatile int count = 1;
 
@@ -28,6 +26,9 @@ uint16_t combined = 0;
 
 uint16_t my_adr = 0b00000101;
 
+uint32_t blowTime = 0;
+uint32_t hotTime = 0;
+
 
 int main(void)
 {
@@ -35,8 +36,6 @@ int main(void)
 	DDRL = 0xFF;
 	// 1 pin til cold - PINA & 0b00000100
 	// 1 pin til hot  - PINA & 0b00001000
-	uint32_t blowTime = 0;
-	int hotTime = 0;
 	int timeMultiplier = 1; // Skal være over 0;
 
 	initPort();
@@ -53,75 +52,72 @@ int main(void)
 	{
 		// Modtag x10
 		if (count == (dataSIZE+2))
-			{
+		{
 			recievex10(&addressRecieved, &commandRecieved, &combined, &encoded, &datapakkeRecieved, &count);
 			//PORTB = commandRecieved;
-			}
+		}
 			
 		//PORTB = addressRecieved;
 		//if (my_adr = addressRecieved)
 		
 		
 		
-			switch (commandRecieved)
-			{
-				case 0b0000000011110000:
-				blowTime = 1000000 * timeMultiplier;
-				break;
-				case 0b0000000000001111:
-				hotTime = 16000000 * timeMultiplier;
-				StartHeat(hotTime);
-				break;
-				default:
-				
-				break;
-			}
+		switch (commandRecieved)
+		{
+			case 0b0000000011110000:
+			blowTime = 1000000 * timeMultiplier;
+			break;
 			
+			case 0b0000000000001111:
+			hotTime = 1000000 * timeMultiplier;
 			
-			if(blowTime > 0)
-			{
-				PORTL = pinCold;
-				_delay_us(100);
-				blowTime--;
-			}
-			else
-			{
-				PORTL = 0b00000000;
-			}
+			break;
+			default:
 			
-			
-		//	addressRecieved = 0;
-			commandRecieved = 0;
+			break;
+		}
+		
+		
+		addressRecieved = 0;
+		commandRecieved = 0;
+		
+		
+		runBlower();
+		runHeater();
 			
 		
 	}
 	
 }
-void StartBlow(int blowTime_)
+
+void runBlower()
 {
-				PORTL = pinCold;
-				PORTB = PORTL;
-	while (blowTime_ > 0)
-	{
-			blowTime_--;
-	}
-		PORTL = 0;
-		PORTB = 0b00010000;
-/*	else
-	{
-		PORTB &= ~pinCold;
-	}
-*/
+		if(blowTime > 0)
+		{
+			PORTL |= pinCold;
+			_delay_us(100);
+			blowTime--;
+		}
+			
+		else
+		{
+			PORTL &= ~pinCold;
+		}
 }
-void StartHeat(int hotTime_)
+
+void runHeater()
 {
-	while (hotTime_ > 0)
-	{
-			PORTL = pinHot;
-			//PORTB |= pinHot;
-			hotTime_--;
-	}
-		PORTL &= ~pinHot;
+		if(hotTime > 0)
+		{
+			PORTL |= pinHot;
+			_delay_us(100);
+			hotTime--;
+		}
+		
+		else
+		{
+			PORTL &= ~pinHot;
+		}
 }
 
 
