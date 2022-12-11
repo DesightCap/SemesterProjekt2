@@ -1,1 +1,4 @@
 Placer kode til temperatur sensor Arduinoen her
+
+Sebastians LAB12 - løsning.zip
+Fra MSYS 2021 lektion 12 > Løsningsforslag til LAB12 > Tidligere studerende Sebastian Hatt har lavet en løsning på en UART software-modtage
