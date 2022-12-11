@@ -33,10 +33,14 @@ uint16_t requestTemperature = 0b0000000011111111;
 
 ISR(USART0_RX_vect)
 {
-	
+	// Vi modtager UART data og gemmer i recievedData
 	uint8_t recievedData = UDR0;
+	// Vi gemmer den modtagede uint8_t data i global uint16_t variable og sætter alle ubrugte pins til 0
 	cleanedData = recievedData;
 	cleanedData &= 0b0000000001111111;
+	// Visuel test udskrift på LED'er 
+	// OBS: Data er pakket. Bit 0 == 0.5, Bit 1 - 6 == binær talt mellem 0 og 63
+	// Dvs. at 1111111 svare til temperatur værdien 63.5
 	PORTB = cleanedData;
 	
 	// Udskrivning over ATMEL -> Data Visualizer -> Terminal
@@ -130,10 +134,9 @@ ISR(INT0_vect)
 }
 
 int main(){
-
+	
 	DDRE = 0x00;
 	DDRB =0xFF;
-
 
 	InitUART(9600,8,1);
 	sei();

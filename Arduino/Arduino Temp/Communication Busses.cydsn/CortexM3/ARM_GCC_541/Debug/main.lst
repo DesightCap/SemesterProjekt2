@@ -1,4 +1,4 @@
-ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccQb0PU9.s 			page 1
+ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccCqYfyT.s 			page 1
 
 
    1              		.syntax unified
@@ -54,80 +54,77 @@ ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccQb0PU9.s 			page 1
   21:main.c        **** 	
   22:main.c        **** 	I2C_LM75_Start(); // Klargøre I2C 
   23:main.c        **** 	// Fra datablad: 
-  24:main.c        **** 	// You must set up the I2C Slave buffers before this function call to avoid reading or writing par
-  25:main.c        **** 	
-  26:main.c        **** 	UART_TERMINAL_Start(); // Klargøre UART
-  27:main.c        **** 	
-ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccQb0PU9.s 			page 2
+  24:main.c        **** 	
+  25:main.c        **** 	UART_TERMINAL_Start(); // Klargøre UART
+  26:main.c        **** 	
+  27:main.c        **** 	float temp = 0; // Variable til opbevaring af beregnet temperatur data
+ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccCqYfyT.s 			page 2
 
 
-  28:main.c        **** 	float temp = 0; // Variable til opbevaring af beregnet temperatur data
-  29:main.c        **** 	
-  30:main.c        **** 	
-  31:main.c        **** 	char buffer[256]; // Chart array til udskrivning af temperatur data
-  32:main.c        **** 	uint8_t status = 0; // Til tjek om I2C er klar
-  33:main.c        **** 	
-  34:main.c        **** 
-  35:main.c        **** 	/*
-  36:main.c        **** 	Adresse opsætning: 
-  37:main.c        **** 	Adressens første fire bit er faste
-  38:main.c        **** 	De sidste fire bit er hhv. 3 bit indstillet på LM75 kredsløb og et bit som fortæller om du skri
-  39:main.c        **** 	1001xxxy
-  40:main.c        **** 	x = valgt via den røde kasse på LM75
-  41:main.c        **** 	y = 1 for læs || 0 for skriv
-  42:main.c        **** 	y sættes i funktionskald.
-  43:main.c        **** 	Eksempel: I2C_LM75_MasterSendStart(0x48, 1) 
-  44:main.c        **** 	*/
-  45:main.c        **** 	
-  46:main.c        **** 	uint8_t slaveAddr1 = 0x48; // 1 == on; 2 == on; 3 == 0n -> 0b01001000 
-  47:main.c        **** 	//uint8_t slaveAddr2 = 0x4F; // 1 == off; 2 == off; 3 == 0ff -> 0b01001111
-  48:main.c        **** 
-  49:main.c        **** 	
-  50:main.c        ****     for(;;)
-  51:main.c        ****     {
-  52:main.c        **** 		// Hent temperatur data fra parameter adresse
-  53:main.c        **** 		temp = fetchData(slaveAddr1);
-  54:main.c        **** 		
-  55:main.c        **** 		uint8_t whole = (uint8_t)temp;
-  56:main.c        **** 		
-  57:main.c        **** 		float decimal = temp - whole;
-  58:main.c        **** 		
-  59:main.c        **** 		whole = whole << 1;
-  60:main.c        **** 		if (decimal)
-  61:main.c        **** 			whole++;
-  62:main.c        **** 		
-  63:main.c        **** 		
-  64:main.c        **** 		//snprintf(buffer, sizeof(buffer), "%.1f\r\n", whole);
-  65:main.c        **** 		//UART_TERMINAL_PutString((char)whole);
-  66:main.c        **** 		//UART_TERMINAL_PutChar(whole);
-  67:main.c        **** 		UART_TERMINAL_WriteTxData(whole);
+  28:main.c        **** 	
+  29:main.c        **** 
+  30:main.c        **** 	/*
+  31:main.c        **** 	I2C adresse opsætning: 
+  32:main.c        **** 	Adressens første fire bit er faste
+  33:main.c        **** 	De sidste fire bit er hhv. 3 bit indstillet på LM75 kredsløb og et bit som fortæller om du skri
+  34:main.c        **** 	Det vil sige at vi skal bruge 1001xxxy, hvor: 
+  35:main.c        **** 	x = valgt via den røde kasse på LM75
+  36:main.c        **** 	y = 1 for læs || 0 for skriv
+  37:main.c        **** 	y sættes i funktionskald.
+  38:main.c        **** 	Eksempel: I2C_LM75_MasterSendStart(0x48, 1) 
+  39:main.c        **** 	For brug af slaveAddr1 = 0x48 skal A0(3), A1(2) og A2(1) sættes ON
+  40:main.c        **** 	*/
+  41:main.c        **** 	
+  42:main.c        **** 	uint8_t slaveAddr1 = 0x48; // 1 == on; 2 == on; 3 == 0n -> 0b01001000 
+  43:main.c        **** 	// slaveAddr2 udgået, da den ikke længere er relevant
+  44:main.c        **** 	//uint8_t slaveAddr2 = 0x4F; // 1 == off; 2 == off; 3 == 0ff -> 0b01001111 
+  45:main.c        **** 
+  46:main.c        **** 	
+  47:main.c        ****     for(;;)
+  48:main.c        ****     {
+  49:main.c        **** 		// Hent temperatur data fra parameter adresse til float variable
+  50:main.c        **** 		temp = fetchData(slaveAddr1); 
+  51:main.c        **** 		// Vi caster temp til uint8_t, for at fjerne kommatal og gemmer i uint8_t variablen Whole
+  52:main.c        **** 		uint8_t whole = (uint8_t)temp;
+  53:main.c        **** 		// Vi trækker vores heltal fra vores oprindelige float og gemmer resultatet i en decimal variabe
+  54:main.c        **** 		// Den decimal variable vil nu indeholde 0 eller 0.5
+  55:main.c        **** 		float decimal = temp - whole;
+  56:main.c        **** 		// Vi bitshifter whole variablem en plads og gemmer det i en ny variabel.
+  57:main.c        **** 		uint8_t treatedTemperature = whole << 1;
+  58:main.c        **** 		if (decimal)
+  59:main.c        **** 			treatedTemperature++; // Hvis decimal er forskellig fra nul lægger i en til whole
+  60:main.c        **** 		
+  61:main.c        **** 		// Vi overføre treatedTemperature variablen via UART til arduino temp
+  62:main.c        **** 		UART_TERMINAL_WriteTxData(treatedTemperature);
+  63:main.c        **** 		// Vi tilføjer et to sekunders delay mellem data hentning. 
+  64:main.c        **** 		// Dels for ikke at overvælde LM75, dels for ikke at overvælde Arduino, da den køre over inter
+  65:main.c        **** 		CyDelay(2000);
+  66:main.c        **** 		/*
+  67:main.c        **** 		// Udgået funktionalitet til læsning over 2 LM75 kredsløb. - Ikke relevant til vores brug. 
   68:main.c        **** 		
-  69:main.c        **** 		CyDelay(2000);
-  70:main.c        **** 		/*
-  71:main.c        **** 		// Klargøre buffer til udskrive med adresse på I2C enhed og float temperatur
-  72:main.c        **** 		snprintf(buffer, sizeof(buffer), "Enhed med adresse %u har temperatur: %.1f \r\n", slaveAddr1, de
-  73:main.c        **** 		UART_TERMINAL_PutString(buffer); 
-  74:main.c        **** 
-  75:main.c        **** 		// Hent temperatur data fra parameter adresse
-  76:main.c        **** 		dec = fetchData(slaveAddr2);
-  77:main.c        **** 		// Klargøre buffer til udskrive med adresse på I2C enhed og temperatur float
-  78:main.c        **** 		snprintf(buffer, sizeof(buffer), "Enhed med adresse %u har temperatur: %.1f \r\n", slaveAddr2, de
-  79:main.c        **** 		UART_TERMINAL_PutString(buffer);
-  80:main.c        **** 		
-  81:main.c        **** 		UART_TERMINAL_PutString("\r\n");
-  82:main.c        **** 		*/
-  83:main.c        **** 		// Forsinkelse mellem data hentning og udskrift
-  84:main.c        **** 		CyDelay(2000);
-ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccQb0PU9.s 			page 3
+  69:main.c        **** 		// Klargøre buffer til udskrive med adresse på I2C enhed og float temperatur
+  70:main.c        **** 		snprintf(buffer, sizeof(buffer), "Enhed med adresse %u har temperatur: %.1f \r\n", slaveAddr1, de
+  71:main.c        **** 		UART_TERMINAL_PutString(buffer); 
+  72:main.c        **** 
+  73:main.c        **** 		// Hent temperatur data fra parameter adresse
+  74:main.c        **** 		dec = fetchData(slaveAddr2);
+  75:main.c        **** 		// Klargøre buffer til udskrive med adresse på I2C enhed og temperatur float
+  76:main.c        **** 		snprintf(buffer, sizeof(buffer), "Enhed med adresse %u har temperatur: %.1f \r\n", slaveAddr2, de
+  77:main.c        **** 		UART_TERMINAL_PutString(buffer);
+  78:main.c        **** 		
+  79:main.c        **** 		UART_TERMINAL_PutString("\r\n");
+  80:main.c        **** 		*/
+  81:main.c        ****     }
+  82:main.c        **** }
+  83:main.c        **** 
+  84:main.c        **** // Henter temperatur data fra LM75.
+ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccCqYfyT.s 			page 3
 
 
-  85:main.c        ****     }
-  86:main.c        **** }
-  87:main.c        **** 
-  88:main.c        **** // Henter temperatur data fra LM75, omregner anden komplement til float værdi og behandler data og
-  89:main.c        **** float fetchData(uint8_t adress)
-  90:main.c        **** {
-  31              		.loc 1 90 0
+  85:main.c        **** // Omregner anden komplement til float værdi og behandler data og returnere float med beregnet dat
+  86:main.c        **** float fetchData(uint8_t adress)
+  87:main.c        **** {
+  31              		.loc 1 87 0
   32              		.cfi_startproc
   33              		@ args = 0, pretend = 0, frame = 0
   34              		@ frame_needed = 0, uses_anonymous_args = 0
@@ -139,80 +136,80 @@ ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccQb0PU9.s 			page 1
   40              		.cfi_offset 5, -8
   41              		.cfi_offset 14, -4
   42              	.LVL1:
-  91:main.c        **** 	uint8_t recievedValue1 = 0;
-  92:main.c        **** 	uint8_t recievedValue2 = 0;
-  93:main.c        **** 	// starter dataoverførsel og sikre at der ikke er fejl 
-  94:main.c        **** 	uint8_t status = I2C_LM75_MasterSendStart(adress, 1);
-  43              		.loc 1 94 0
+  88:main.c        **** 	uint8_t recievedValue1 = 0;
+  89:main.c        **** 	uint8_t recievedValue2 = 0;
+  90:main.c        **** 	// starter dataoverførsel og sikre at der ikke er fejl 
+  91:main.c        **** 	uint8_t status = I2C_LM75_MasterSendStart(adress, 1);
+  43              		.loc 1 91 0
   44 0002 0121     		movs	r1, #1
   45 0004 FFF7FEFF 		bl	I2C_LM75_MasterSendStart
   46              	.LVL2:
-  95:main.c        **** 	if (I2C_LM75_MSTR_NO_ERROR == status)
-  47              		.loc 1 95 0
+  92:main.c        **** 	if (I2C_LM75_MSTR_NO_ERROR == status)
+  47              		.loc 1 92 0
   48 0008 D0B9     		cbnz	r0, .L2
   49              	.LBB2:
-  96:main.c        **** 		{
-  97:main.c        **** 			// Første modtagede byte gemmes i recievedValue1 og anden i recievedValue2
-  98:main.c        **** 			// Rå data
-  99:main.c        **** 		    recievedValue1 = I2C_LM75_MasterReadByte(I2C_LM75_ACK_DATA); // Indeholder temperatur heltals
-  50              		.loc 1 99 0
+  93:main.c        **** 		{
+  94:main.c        **** 			// Første modtagede byte gemmes i recievedValue1 og anden i recievedValue2
+  95:main.c        **** 			// Rå data
+  96:main.c        **** 		    recievedValue1 = I2C_LM75_MasterReadByte(I2C_LM75_ACK_DATA); // Indeholder temperatur heltals
+  50              		.loc 1 96 0
   51 000a 0120     		movs	r0, #1
   52              	.LVL3:
   53 000c FFF7FEFF 		bl	I2C_LM75_MasterReadByte
   54              	.LVL4:
   55 0010 0446     		mov	r4, r0
   56              	.LVL5:
- 100:main.c        **** 			recievedValue2 = I2C_LM75_MasterReadByte(I2C_LM75_NAK_DATA); // Indeholder temperatur komma
-  57              		.loc 1 100 0
+  97:main.c        **** 			recievedValue2 = I2C_LM75_MasterReadByte(I2C_LM75_NAK_DATA); // Indeholder temperatur komma
+  57              		.loc 1 97 0
   58 0012 0020     		movs	r0, #0
   59 0014 FFF7FEFF 		bl	I2C_LM75_MasterReadByte
   60              	.LVL6:
   61 0018 0546     		mov	r5, r0
   62              	.LVL7:
- 101:main.c        **** 			I2C_LM75_MasterSendStop(); // Dataoverførsel slut
-  63              		.loc 1 101 0
+  98:main.c        **** 			I2C_LM75_MasterSendStop(); // Dataoverførsel slut
+  63              		.loc 1 98 0
   64 001a FFF7FEFF 		bl	I2C_LM75_MasterSendStop
   65              	.LVL8:
- 102:main.c        **** 			
- 103:main.c        **** 			// Vi indsætter vores først modtagede byte i dec variablen
- 104:main.c        **** 			float dec = recievedValue1; // Til behandling af data
-  66              		.loc 1 104 0
+  99:main.c        **** 			
+ 100:main.c        **** 			// Vi indsætter vores først modtagede byte i dec variablen
+ 101:main.c        **** 			float dec = recievedValue1; // Til behandling af data
+  66              		.loc 1 101 0
   67 001e 2046     		mov	r0, r4
-ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccQb0PU9.s 			page 4
-
-
   68 0020 FFF7FEFF 		bl	__aeabi_ui2f
   69              	.LVL9:
- 105:main.c        **** 			
- 106:main.c        **** 			// Vi undersøger om recievedValue1 (som er to's komplements binær) er et negativt tal
- 107:main.c        **** 			if (recievedValue1 >> 7)  
-  70              		.loc 1 107 0
+ 102:main.c        **** 			
+ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccCqYfyT.s 			page 4
+
+
+ 103:main.c        **** 			// Vi undersøger om recievedValue1 (som er to's komplements binær) er et negativt tal
+ 104:main.c        **** 			if (recievedValue1 >> 7)  
+  70              		.loc 1 104 0
   71 0024 14F0800F 		tst	r4, #128
   72 0028 02D0     		beq	.L3
- 108:main.c        **** 			{
- 109:main.c        **** 				// recievedValue1 omregnes fra to-komplement til decimal og gemmes i variablen dec
- 110:main.c        **** 			    dec = (~recievedValue1+1); // omregn 2-komp -> decimal
-  73              		.loc 1 110 0
+ 105:main.c        **** 			{
+ 106:main.c        **** 				// recievedValue1 omregnes fra to-komplement til decimal og gemmes i variablen dec
+ 107:main.c        **** 			    dec = (~recievedValue1+1); // omregn 2-komp -> decimal
+  73              		.loc 1 107 0
   74 002a 6042     		negs	r0, r4
   75              	.LVL10:
   76 002c FFF7FEFF 		bl	__aeabi_i2f
   77              	.LVL11:
   78              	.L3:
- 111:main.c        **** 				
- 112:main.c        **** 			}
+ 108:main.c        **** 				
+ 109:main.c        **** 			}
+ 110:main.c        **** 			
+ 111:main.c        **** 			// Herunder One-line databeregning - Potentilt mere effektiv (dekompiler for at teste effektivit
+ 112:main.c        **** 			//float combinedValue = ((((~recievedValue1+1) << 8) + (recievedValue2)) >> 7)/2; 
  113:main.c        **** 			
- 114:main.c        **** 			// Herunder One-line databeregning - Potentilt mere effektiv (dekompiler for at teste effektivit
- 115:main.c        **** 			//float combinedValue = ((((~recievedValue1+1) << 8) + (recievedValue2)) >> 7)/2; 
- 116:main.c        **** 			
- 117:main.c        **** 			// vi er intresseret i om MSB i recievedValue2 er forskellig fra 0
- 118:main.c        **** 			if ((recievedValue2>>7) != 0) 
-  79              		.loc 1 118 0
+ 114:main.c        **** 			// vi er intresseret i om MSB i recievedValue2 er forskellig fra 0
+ 115:main.c        **** 			if ((recievedValue2>>7) != 0) 
+  79              		.loc 1 115 0
   80 0030 15F0800F 		tst	r5, #128
   81 0034 07D0     		beq	.L4
- 119:main.c        **** 			{
- 120:main.c        **** 			    // Hvis MSB i recievedValue2 byte er forskellig fra 0 tilføjes en halv grad til float varia
- 121:main.c        **** 				dec += 0.5;
-  82              		.loc 1 121 0
+ 116:main.c        **** 			{
+ 117:main.c        **** 			    // Hvis MSB i recievedValue2 byte er forskellig fra 0 tilføjes en halv grad til float varia
+ 118:main.c        **** 				dec += 0.5;
+  82              		.loc 1 118 0
   83 0036 4FF07C51 		mov	r1, #1056964608
   84 003a FFF7FEFF 		bl	__aeabi_fadd
   85              	.LVL12:
@@ -220,30 +217,30 @@ ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccQb0PU9.s 			page 1
   87              	.LVL13:
   88              	.L2:
   89              	.LBE2:
- 122:main.c        **** 			}
- 123:main.c        **** 			//  Data beregning slut
- 124:main.c        **** 			return dec;
- 125:main.c        **** 			
- 126:main.c        **** 		}
- 127:main.c        **** 		else
- 128:main.c        **** 		{
- 129:main.c        **** 			I2C_LM75_MasterSendStop();
-  90              		.loc 1 129 0
+ 119:main.c        **** 			}
+ 120:main.c        **** 			//  Data beregning slut
+ 121:main.c        **** 			return dec;
+ 122:main.c        **** 			
+ 123:main.c        **** 		}
+ 124:main.c        **** 		else
+ 125:main.c        **** 		{
+ 126:main.c        **** 			I2C_LM75_MasterSendStop();
+  90              		.loc 1 126 0
   91 0040 FFF7FEFF 		bl	I2C_LM75_MasterSendStop
   92              	.LVL14:
- 130:main.c        **** 			return 0;
-  93              		.loc 1 130 0
+ 127:main.c        **** 			return 0;
+  93              		.loc 1 127 0
   94 0044 0020     		movs	r0, #0
   95              	.LVL15:
   96              	.L4:
- 131:main.c        **** 		}
- 132:main.c        **** }
-ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccQb0PU9.s 			page 5
-
-
-  97              		.loc 1 132 0
+ 128:main.c        **** 		}
+ 129:main.c        **** }
+  97              		.loc 1 129 0
   98 0046 38BD     		pop	{r3, r4, r5, pc}
   99              		.cfi_endproc
+ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccCqYfyT.s 			page 5
+
+
  100              	.LFE65:
  101              		.size	fetchData, .-fetchData
  102              		.global	__aeabi_f2uiz
@@ -280,30 +277,30 @@ ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccQb0PU9.s 			page 1
  130              		.syntax unified
  131 0004 FFF7FEFF 		bl	I2C_LM75_Start
  132              	.LVL16:
-  26:main.c        **** 	
- 133              		.loc 1 26 0
+  25:main.c        **** 	
+ 133              		.loc 1 25 0
  134 0008 FFF7FEFF 		bl	UART_TERMINAL_Start
  135              	.LVL17:
  136              	.L10:
  137              	.LBB3:
-  53:main.c        **** 		
- 138              		.loc 1 53 0
+  50:main.c        **** 		// Vi caster temp til uint8_t, for at fjerne kommatal og gemmer i uint8_t variablen Whole
+ 138              		.loc 1 50 0
  139 000c 4820     		movs	r0, #72
  140 000e FFF7FEFF 		bl	fetchData
  141              	.LVL18:
  142 0012 0546     		mov	r5, r0
  143              	.LVL19:
-  55:main.c        **** 		
- 144              		.loc 1 55 0
+  52:main.c        **** 		// Vi trækker vores heltal fra vores oprindelige float og gemmer resultatet i en decimal variabe
+ 144              		.loc 1 52 0
  145 0014 FFF7FEFF 		bl	__aeabi_f2uiz
  146              	.LVL20:
  147 0018 C4B2     		uxtb	r4, r0
-ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccQb0PU9.s 			page 6
-
-
  148              	.LVL21:
-  57:main.c        **** 		
- 149              		.loc 1 57 0
+  55:main.c        **** 		// Vi bitshifter whole variablem en plads og gemmer det i en ny variabel.
+ 149              		.loc 1 55 0
+ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccCqYfyT.s 			page 6
+
+
  150 001a 2046     		mov	r0, r4
  151 001c FFF7FEFF 		bl	__aeabi_i2f
  152              	.LVL22:
@@ -311,1060 +308,1004 @@ ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccQb0PU9.s 			page 1
  154 0022 2846     		mov	r0, r5
  155 0024 FFF7FEFF 		bl	__aeabi_fsub
  156              	.LVL23:
-  59:main.c        **** 		if (decimal)
- 157              		.loc 1 59 0
+  57:main.c        **** 		if (decimal)
+ 157              		.loc 1 57 0
  158 0028 6400     		lsls	r4, r4, #1
  159              	.LVL24:
  160 002a E4B2     		uxtb	r4, r4
  161              	.LVL25:
-  60:main.c        **** 			whole++;
- 162              		.loc 1 60 0
+  58:main.c        **** 			treatedTemperature++; // Hvis decimal er forskellig fra nul lægger i en til whole
+ 162              		.loc 1 58 0
  163 002c 0021     		movs	r1, #0
  164 002e FFF7FEFF 		bl	__aeabi_fcmpeq
  165              	.LVL26:
  166 0032 08B9     		cbnz	r0, .L8
-  61:main.c        **** 		
- 167              		.loc 1 61 0
+  59:main.c        **** 		
+ 167              		.loc 1 59 0
  168 0034 0134     		adds	r4, r4, #1
  169              	.LVL27:
  170 0036 E4B2     		uxtb	r4, r4
  171              	.LVL28:
  172              	.L8:
-  67:main.c        **** 		
- 173              		.loc 1 67 0
+  62:main.c        **** 		// Vi tilføjer et to sekunders delay mellem data hentning. 
+ 173              		.loc 1 62 0
  174 0038 2046     		mov	r0, r4
  175 003a FFF7FEFF 		bl	UART_TERMINAL_WriteTxData
  176              	.LVL29:
-  69:main.c        **** 		/*
- 177              		.loc 1 69 0
+  65:main.c        **** 		/*
+ 177              		.loc 1 65 0
  178 003e 4FF4FA60 		mov	r0, #2000
  179 0042 FFF7FEFF 		bl	CyDelay
  180              	.LVL30:
-  84:main.c        ****     }
- 181              		.loc 1 84 0
- 182 0046 4FF4FA60 		mov	r0, #2000
- 183 004a FFF7FEFF 		bl	CyDelay
- 184              	.LVL31:
- 185              	.LBE3:
-  85:main.c        **** }
- 186              		.loc 1 85 0
- 187 004e DDE7     		b	.L10
- 188              		.cfi_endproc
- 189              	.LFE64:
- 190              		.size	main, .-main
- 191              		.text
- 192              	.Letext0:
- 193              		.file 2 "c:\\program files (x86)\\cypress\\psoc creator\\4.4\\psoc creator\\import\\gnu\\arm\\5.4.
- 194              		.file 3 "c:\\program files (x86)\\cypress\\psoc creator\\4.4\\psoc creator\\import\\gnu\\arm\\5.4.
- 195              		.file 4 "Generated_Source\\PSoC5/I2C_LM75.h"
- 196              		.file 5 "Generated_Source\\PSoC5/UART_TERMINAL.h"
-ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccQb0PU9.s 			page 7
+ 181              	.LBE3:
+  81:main.c        **** }
+ 182              		.loc 1 81 0
+ 183 0046 E1E7     		b	.L10
+ 184              		.cfi_endproc
+ 185              	.LFE64:
+ 186              		.size	main, .-main
+ 187              		.text
+ 188              	.Letext0:
+ 189              		.file 2 "c:\\program files (x86)\\cypress\\psoc creator\\4.4\\psoc creator\\import\\gnu\\arm\\5.4.
+ 190              		.file 3 "c:\\program files (x86)\\cypress\\psoc creator\\4.4\\psoc creator\\import\\gnu\\arm\\5.4.
+ 191              		.file 4 "Generated_Source\\PSoC5/I2C_LM75.h"
+ 192              		.file 5 "Generated_Source\\PSoC5/UART_TERMINAL.h"
+ 193              		.file 6 "Generated_Source\\PSoC5/CyLib.h"
+ 194              		.file 7 "Generated_Source\\PSoC5/core_cm3.h"
+ 195              		.section	.debug_info,"",%progbits
+ 196              	.Ldebug_info0:
+ 197 0000 8E020000 		.4byte	0x28e
+ 198 0004 0400     		.2byte	0x4
+ 199 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 200 000a 04       		.byte	0x4
+ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccCqYfyT.s 			page 7
 
 
- 197              		.file 6 "Generated_Source\\PSoC5/CyLib.h"
- 198              		.file 7 "Generated_Source\\PSoC5/core_cm3.h"
- 199              		.section	.debug_info,"",%progbits
- 200              	.Ldebug_info0:
- 201 0000 BB020000 		.4byte	0x2bb
- 202 0004 0400     		.2byte	0x4
- 203 0006 00000000 		.4byte	.Ldebug_abbrev0
- 204 000a 04       		.byte	0x4
- 205 000b 01       		.uleb128 0x1
- 206 000c 7A000000 		.4byte	.LASF32
- 207 0010 0C       		.byte	0xc
- 208 0011 6B020000 		.4byte	.LASF33
- 209 0015 08010000 		.4byte	.LASF34
- 210 0019 00000000 		.4byte	.Ldebug_ranges0+0
- 211 001d 00000000 		.4byte	0
- 212 0021 00000000 		.4byte	.Ldebug_line0
- 213 0025 02       		.uleb128 0x2
- 214 0026 01       		.byte	0x1
- 215 0027 06       		.byte	0x6
- 216 0028 B6020000 		.4byte	.LASF0
- 217 002c 03       		.uleb128 0x3
- 218 002d 00000000 		.4byte	.LASF4
- 219 0031 02       		.byte	0x2
- 220 0032 1D       		.byte	0x1d
- 221 0033 37000000 		.4byte	0x37
- 222 0037 02       		.uleb128 0x2
- 223 0038 01       		.byte	0x1
- 224 0039 08       		.byte	0x8
- 225 003a 6C000000 		.4byte	.LASF1
- 226 003e 02       		.uleb128 0x2
- 227 003f 02       		.byte	0x2
- 228 0040 05       		.byte	0x5
- 229 0041 90020000 		.4byte	.LASF2
- 230 0045 02       		.uleb128 0x2
- 231 0046 02       		.byte	0x2
- 232 0047 07       		.byte	0x7
- 233 0048 A4010000 		.4byte	.LASF3
- 234 004c 03       		.uleb128 0x3
- 235 004d 1B000000 		.4byte	.LASF5
- 236 0051 02       		.byte	0x2
- 237 0052 3F       		.byte	0x3f
- 238 0053 57000000 		.4byte	0x57
- 239 0057 02       		.uleb128 0x2
- 240 0058 04       		.byte	0x4
- 241 0059 05       		.byte	0x5
- 242 005a A1020000 		.4byte	.LASF6
- 243 005e 02       		.uleb128 0x2
- 244 005f 04       		.byte	0x4
- 245 0060 07       		.byte	0x7
- 246 0061 8D010000 		.4byte	.LASF7
- 247 0065 02       		.uleb128 0x2
- 248 0066 08       		.byte	0x8
- 249 0067 05       		.byte	0x5
- 250 0068 5D020000 		.4byte	.LASF8
- 251 006c 02       		.uleb128 0x2
- 252 006d 08       		.byte	0x8
- 253 006e 07       		.byte	0x7
-ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccQb0PU9.s 			page 8
+ 201 000b 01       		.uleb128 0x1
+ 202 000c 7A000000 		.4byte	.LASF33
+ 203 0010 0C       		.byte	0xc
+ 204 0011 7E020000 		.4byte	.LASF34
+ 205 0015 08010000 		.4byte	.LASF35
+ 206 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 207 001d 00000000 		.4byte	0
+ 208 0021 00000000 		.4byte	.Ldebug_line0
+ 209 0025 02       		.uleb128 0x2
+ 210 0026 01       		.byte	0x1
+ 211 0027 06       		.byte	0x6
+ 212 0028 C2020000 		.4byte	.LASF0
+ 213 002c 03       		.uleb128 0x3
+ 214 002d 00000000 		.4byte	.LASF4
+ 215 0031 02       		.byte	0x2
+ 216 0032 1D       		.byte	0x1d
+ 217 0033 37000000 		.4byte	0x37
+ 218 0037 02       		.uleb128 0x2
+ 219 0038 01       		.byte	0x1
+ 220 0039 08       		.byte	0x8
+ 221 003a 6C000000 		.4byte	.LASF1
+ 222 003e 02       		.uleb128 0x2
+ 223 003f 02       		.byte	0x2
+ 224 0040 05       		.byte	0x5
+ 225 0041 A3020000 		.4byte	.LASF2
+ 226 0045 02       		.uleb128 0x2
+ 227 0046 02       		.byte	0x2
+ 228 0047 07       		.byte	0x7
+ 229 0048 A4010000 		.4byte	.LASF3
+ 230 004c 03       		.uleb128 0x3
+ 231 004d 1B000000 		.4byte	.LASF5
+ 232 0051 02       		.byte	0x2
+ 233 0052 3F       		.byte	0x3f
+ 234 0053 57000000 		.4byte	0x57
+ 235 0057 02       		.uleb128 0x2
+ 236 0058 04       		.byte	0x4
+ 237 0059 05       		.byte	0x5
+ 238 005a AD020000 		.4byte	.LASF6
+ 239 005e 02       		.uleb128 0x2
+ 240 005f 04       		.byte	0x4
+ 241 0060 07       		.byte	0x7
+ 242 0061 8D010000 		.4byte	.LASF7
+ 243 0065 02       		.uleb128 0x2
+ 244 0066 08       		.byte	0x8
+ 245 0067 05       		.byte	0x5
+ 246 0068 70020000 		.4byte	.LASF8
+ 247 006c 02       		.uleb128 0x2
+ 248 006d 08       		.byte	0x8
+ 249 006e 07       		.byte	0x7
+ 250 006f 2D020000 		.4byte	.LASF9
+ 251 0073 04       		.uleb128 0x4
+ 252 0074 04       		.byte	0x4
+ 253 0075 05       		.byte	0x5
+ 254 0076 696E7400 		.ascii	"int\000"
+ 255 007a 02       		.uleb128 0x2
+ 256 007b 04       		.byte	0x4
+ 257 007c 07       		.byte	0x7
+ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccCqYfyT.s 			page 8
 
 
- 254 006f 2D020000 		.4byte	.LASF9
- 255 0073 04       		.uleb128 0x4
- 256 0074 04       		.byte	0x4
- 257 0075 05       		.byte	0x5
- 258 0076 696E7400 		.ascii	"int\000"
- 259 007a 02       		.uleb128 0x2
- 260 007b 04       		.byte	0x4
- 261 007c 07       		.byte	0x7
- 262 007d 20020000 		.4byte	.LASF10
- 263 0081 03       		.uleb128 0x3
- 264 0082 44020000 		.4byte	.LASF11
- 265 0086 03       		.byte	0x3
- 266 0087 18       		.byte	0x18
- 267 0088 2C000000 		.4byte	0x2c
- 268 008c 03       		.uleb128 0x3
- 269 008d 4C020000 		.4byte	.LASF12
- 270 0091 03       		.byte	0x3
- 271 0092 2C       		.byte	0x2c
- 272 0093 4C000000 		.4byte	0x4c
- 273 0097 02       		.uleb128 0x2
- 274 0098 04       		.byte	0x4
- 275 0099 04       		.byte	0x4
- 276 009a 4E000000 		.4byte	.LASF13
- 277 009e 02       		.uleb128 0x2
- 278 009f 08       		.byte	0x8
- 279 00a0 04       		.byte	0x4
- 280 00a1 DC010000 		.4byte	.LASF14
- 281 00a5 02       		.uleb128 0x2
- 282 00a6 01       		.byte	0x1
- 283 00a7 08       		.byte	0x8
- 284 00a8 72020000 		.4byte	.LASF15
- 285 00ac 02       		.uleb128 0x2
- 286 00ad 08       		.byte	0x8
- 287 00ae 04       		.byte	0x4
- 288 00af AA020000 		.4byte	.LASF16
- 289 00b3 02       		.uleb128 0x2
- 290 00b4 04       		.byte	0x4
- 291 00b5 07       		.byte	0x7
- 292 00b6 54020000 		.4byte	.LASF17
- 293 00ba 05       		.uleb128 0x5
- 294 00bb 11000000 		.4byte	.LASF35
- 295 00bf 01       		.byte	0x1
- 296 00c0 59       		.byte	0x59
- 297 00c1 97000000 		.4byte	0x97
- 298 00c5 00000000 		.4byte	.LFB65
- 299 00c9 48000000 		.4byte	.LFE65-.LFB65
- 300 00cd 01       		.uleb128 0x1
- 301 00ce 9C       		.byte	0x9c
- 302 00cf 78010000 		.4byte	0x178
- 303 00d3 06       		.uleb128 0x6
- 304 00d4 0A000000 		.4byte	.LASF36
- 305 00d8 01       		.byte	0x1
- 306 00d9 59       		.byte	0x59
- 307 00da 81000000 		.4byte	0x81
- 308 00de 00000000 		.4byte	.LLST0
- 309 00e2 07       		.uleb128 0x7
- 310 00e3 E3010000 		.4byte	.LASF18
-ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccQb0PU9.s 			page 9
+ 258 007d 20020000 		.4byte	.LASF10
+ 259 0081 03       		.uleb128 0x3
+ 260 0082 44020000 		.4byte	.LASF11
+ 261 0086 03       		.byte	0x3
+ 262 0087 18       		.byte	0x18
+ 263 0088 2C000000 		.4byte	0x2c
+ 264 008c 03       		.uleb128 0x3
+ 265 008d 5F020000 		.4byte	.LASF12
+ 266 0091 03       		.byte	0x3
+ 267 0092 2C       		.byte	0x2c
+ 268 0093 4C000000 		.4byte	0x4c
+ 269 0097 02       		.uleb128 0x2
+ 270 0098 04       		.byte	0x4
+ 271 0099 04       		.byte	0x4
+ 272 009a 4E000000 		.4byte	.LASF13
+ 273 009e 02       		.uleb128 0x2
+ 274 009f 08       		.byte	0x8
+ 275 00a0 04       		.byte	0x4
+ 276 00a1 DC010000 		.4byte	.LASF14
+ 277 00a5 02       		.uleb128 0x2
+ 278 00a6 01       		.byte	0x1
+ 279 00a7 08       		.byte	0x8
+ 280 00a8 85020000 		.4byte	.LASF15
+ 281 00ac 02       		.uleb128 0x2
+ 282 00ad 08       		.byte	0x8
+ 283 00ae 04       		.byte	0x4
+ 284 00af B6020000 		.4byte	.LASF16
+ 285 00b3 02       		.uleb128 0x2
+ 286 00b4 04       		.byte	0x4
+ 287 00b5 07       		.byte	0x7
+ 288 00b6 67020000 		.4byte	.LASF17
+ 289 00ba 05       		.uleb128 0x5
+ 290 00bb 11000000 		.4byte	.LASF36
+ 291 00bf 01       		.byte	0x1
+ 292 00c0 56       		.byte	0x56
+ 293 00c1 97000000 		.4byte	0x97
+ 294 00c5 00000000 		.4byte	.LFB65
+ 295 00c9 48000000 		.4byte	.LFE65-.LFB65
+ 296 00cd 01       		.uleb128 0x1
+ 297 00ce 9C       		.byte	0x9c
+ 298 00cf 78010000 		.4byte	0x178
+ 299 00d3 06       		.uleb128 0x6
+ 300 00d4 0A000000 		.4byte	.LASF37
+ 301 00d8 01       		.byte	0x1
+ 302 00d9 56       		.byte	0x56
+ 303 00da 81000000 		.4byte	0x81
+ 304 00de 00000000 		.4byte	.LLST0
+ 305 00e2 07       		.uleb128 0x7
+ 306 00e3 E3010000 		.4byte	.LASF18
+ 307 00e7 01       		.byte	0x1
+ 308 00e8 58       		.byte	0x58
+ 309 00e9 81000000 		.4byte	0x81
+ 310 00ed 21000000 		.4byte	.LLST1
+ 311 00f1 07       		.uleb128 0x7
+ 312 00f2 F2010000 		.4byte	.LASF19
+ 313 00f6 01       		.byte	0x1
+ 314 00f7 59       		.byte	0x59
+ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccCqYfyT.s 			page 9
 
 
- 311 00e7 01       		.byte	0x1
- 312 00e8 5B       		.byte	0x5b
- 313 00e9 81000000 		.4byte	0x81
- 314 00ed 21000000 		.4byte	.LLST1
- 315 00f1 07       		.uleb128 0x7
- 316 00f2 F2010000 		.4byte	.LASF19
- 317 00f6 01       		.byte	0x1
- 318 00f7 5C       		.byte	0x5c
- 319 00f8 81000000 		.4byte	0x81
- 320 00fc 4C000000 		.4byte	.LLST2
- 321 0100 07       		.uleb128 0x7
- 322 0101 33000000 		.4byte	.LASF20
- 323 0105 01       		.byte	0x1
- 324 0106 5E       		.byte	0x5e
- 325 0107 81000000 		.4byte	0x81
- 326 010b 77000000 		.4byte	.LLST3
- 327 010f 08       		.uleb128 0x8
- 328 0110 0A000000 		.4byte	.LBB2
- 329 0114 36000000 		.4byte	.LBE2-.LBB2
- 330 0118 5B010000 		.4byte	0x15b
- 331 011c 09       		.uleb128 0x9
- 332 011d 64656300 		.ascii	"dec\000"
- 333 0121 01       		.byte	0x1
- 334 0122 68       		.byte	0x68
- 335 0123 97000000 		.4byte	0x97
- 336 0127 95000000 		.4byte	.LLST4
- 337 012b 0A       		.uleb128 0xa
- 338 012c 10000000 		.4byte	.LVL4
- 339 0130 71020000 		.4byte	0x271
- 340 0134 3E010000 		.4byte	0x13e
- 341 0138 0B       		.uleb128 0xb
- 342 0139 01       		.uleb128 0x1
- 343 013a 50       		.byte	0x50
- 344 013b 01       		.uleb128 0x1
- 345 013c 31       		.byte	0x31
- 346 013d 00       		.byte	0
- 347 013e 0A       		.uleb128 0xa
- 348 013f 18000000 		.4byte	.LVL6
- 349 0143 71020000 		.4byte	0x271
- 350 0147 51010000 		.4byte	0x151
- 351 014b 0B       		.uleb128 0xb
- 352 014c 01       		.uleb128 0x1
- 353 014d 50       		.byte	0x50
- 354 014e 01       		.uleb128 0x1
- 355 014f 30       		.byte	0x30
- 356 0150 00       		.byte	0
- 357 0151 0C       		.uleb128 0xc
- 358 0152 1E000000 		.4byte	.LVL8
- 359 0156 7C020000 		.4byte	0x27c
- 360 015a 00       		.byte	0
- 361 015b 0A       		.uleb128 0xa
- 362 015c 08000000 		.4byte	.LVL2
- 363 0160 87020000 		.4byte	0x287
- 364 0164 6E010000 		.4byte	0x16e
- 365 0168 0B       		.uleb128 0xb
- 366 0169 01       		.uleb128 0x1
- 367 016a 51       		.byte	0x51
-ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccQb0PU9.s 			page 10
+ 315 00f8 81000000 		.4byte	0x81
+ 316 00fc 4C000000 		.4byte	.LLST2
+ 317 0100 07       		.uleb128 0x7
+ 318 0101 33000000 		.4byte	.LASF20
+ 319 0105 01       		.byte	0x1
+ 320 0106 5B       		.byte	0x5b
+ 321 0107 81000000 		.4byte	0x81
+ 322 010b 77000000 		.4byte	.LLST3
+ 323 010f 08       		.uleb128 0x8
+ 324 0110 0A000000 		.4byte	.LBB2
+ 325 0114 36000000 		.4byte	.LBE2-.LBB2
+ 326 0118 5B010000 		.4byte	0x15b
+ 327 011c 09       		.uleb128 0x9
+ 328 011d 64656300 		.ascii	"dec\000"
+ 329 0121 01       		.byte	0x1
+ 330 0122 65       		.byte	0x65
+ 331 0123 97000000 		.4byte	0x97
+ 332 0127 95000000 		.4byte	.LLST4
+ 333 012b 0A       		.uleb128 0xa
+ 334 012c 10000000 		.4byte	.LVL4
+ 335 0130 44020000 		.4byte	0x244
+ 336 0134 3E010000 		.4byte	0x13e
+ 337 0138 0B       		.uleb128 0xb
+ 338 0139 01       		.uleb128 0x1
+ 339 013a 50       		.byte	0x50
+ 340 013b 01       		.uleb128 0x1
+ 341 013c 31       		.byte	0x31
+ 342 013d 00       		.byte	0
+ 343 013e 0A       		.uleb128 0xa
+ 344 013f 18000000 		.4byte	.LVL6
+ 345 0143 44020000 		.4byte	0x244
+ 346 0147 51010000 		.4byte	0x151
+ 347 014b 0B       		.uleb128 0xb
+ 348 014c 01       		.uleb128 0x1
+ 349 014d 50       		.byte	0x50
+ 350 014e 01       		.uleb128 0x1
+ 351 014f 30       		.byte	0x30
+ 352 0150 00       		.byte	0
+ 353 0151 0C       		.uleb128 0xc
+ 354 0152 1E000000 		.4byte	.LVL8
+ 355 0156 4F020000 		.4byte	0x24f
+ 356 015a 00       		.byte	0
+ 357 015b 0A       		.uleb128 0xa
+ 358 015c 08000000 		.4byte	.LVL2
+ 359 0160 5A020000 		.4byte	0x25a
+ 360 0164 6E010000 		.4byte	0x16e
+ 361 0168 0B       		.uleb128 0xb
+ 362 0169 01       		.uleb128 0x1
+ 363 016a 51       		.byte	0x51
+ 364 016b 01       		.uleb128 0x1
+ 365 016c 31       		.byte	0x31
+ 366 016d 00       		.byte	0
+ 367 016e 0C       		.uleb128 0xc
+ 368 016f 44000000 		.4byte	.LVL14
+ 369 0173 4F020000 		.4byte	0x24f
+ 370 0177 00       		.byte	0
+ 371 0178 0D       		.uleb128 0xd
+ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccCqYfyT.s 			page 10
 
 
- 368 016b 01       		.uleb128 0x1
- 369 016c 31       		.byte	0x31
- 370 016d 00       		.byte	0
- 371 016e 0C       		.uleb128 0xc
- 372 016f 44000000 		.4byte	.LVL14
- 373 0173 7C020000 		.4byte	0x27c
- 374 0177 00       		.byte	0
- 375 0178 0D       		.uleb128 0xd
- 376 0179 01020000 		.4byte	.LASF37
- 377 017d 01       		.byte	0x1
- 378 017e 11       		.byte	0x11
- 379 017f 73000000 		.4byte	0x73
- 380 0183 00000000 		.4byte	.LFB64
- 381 0187 50000000 		.4byte	.LFE64-.LFB64
- 382 018b 01       		.uleb128 0x1
- 383 018c 9C       		.byte	0x9c
- 384 018d 50020000 		.4byte	0x250
- 385 0191 07       		.uleb128 0x7
- 386 0192 9F010000 		.4byte	.LASF21
- 387 0196 01       		.byte	0x1
- 388 0197 1C       		.byte	0x1c
- 389 0198 97000000 		.4byte	0x97
- 390 019c BE000000 		.4byte	.LLST5
- 391 01a0 0E       		.uleb128 0xe
- 392 01a1 9A020000 		.4byte	.LASF38
- 393 01a5 01       		.byte	0x1
- 394 01a6 1F       		.byte	0x1f
- 395 01a7 50020000 		.4byte	0x250
- 396 01ab 0F       		.uleb128 0xf
- 397 01ac 33000000 		.4byte	.LASF20
- 398 01b0 01       		.byte	0x1
- 399 01b1 20       		.byte	0x20
- 400 01b2 81000000 		.4byte	0x81
- 401 01b6 00       		.byte	0
- 402 01b7 0F       		.uleb128 0xf
- 403 01b8 15020000 		.4byte	.LASF22
- 404 01bc 01       		.byte	0x1
- 405 01bd 2E       		.byte	0x2e
- 406 01be 81000000 		.4byte	0x81
- 407 01c2 48       		.byte	0x48
- 408 01c3 08       		.uleb128 0x8
- 409 01c4 0C000000 		.4byte	.LBB3
- 410 01c8 42000000 		.4byte	.LBE3-.LBB3
- 411 01cc 3D020000 		.4byte	0x23d
- 412 01d0 07       		.uleb128 0x7
- 413 01d1 25000000 		.4byte	.LASF23
- 414 01d5 01       		.byte	0x1
- 415 01d6 37       		.byte	0x37
- 416 01d7 81000000 		.4byte	0x81
- 417 01db DC000000 		.4byte	.LLST6
- 418 01df 07       		.uleb128 0x7
- 419 01e0 2B000000 		.4byte	.LASF24
- 420 01e4 01       		.byte	0x1
- 421 01e5 39       		.byte	0x39
- 422 01e6 97000000 		.4byte	0x97
- 423 01ea 12010000 		.4byte	.LLST7
- 424 01ee 0A       		.uleb128 0xa
-ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccQb0PU9.s 			page 11
+ 372 0179 01020000 		.4byte	.LASF38
+ 373 017d 01       		.byte	0x1
+ 374 017e 11       		.byte	0x11
+ 375 017f 73000000 		.4byte	0x73
+ 376 0183 00000000 		.4byte	.LFB64
+ 377 0187 48000000 		.4byte	.LFE64-.LFB64
+ 378 018b 01       		.uleb128 0x1
+ 379 018c 9C       		.byte	0x9c
+ 380 018d 33020000 		.4byte	0x233
+ 381 0191 07       		.uleb128 0x7
+ 382 0192 9F010000 		.4byte	.LASF21
+ 383 0196 01       		.byte	0x1
+ 384 0197 1B       		.byte	0x1b
+ 385 0198 97000000 		.4byte	0x97
+ 386 019c BE000000 		.4byte	.LLST5
+ 387 01a0 0E       		.uleb128 0xe
+ 388 01a1 15020000 		.4byte	.LASF22
+ 389 01a5 01       		.byte	0x1
+ 390 01a6 2A       		.byte	0x2a
+ 391 01a7 81000000 		.4byte	0x81
+ 392 01ab 48       		.byte	0x48
+ 393 01ac 08       		.uleb128 0x8
+ 394 01ad 0C000000 		.4byte	.LBB3
+ 395 01b1 3A000000 		.4byte	.LBE3-.LBB3
+ 396 01b5 20020000 		.4byte	0x220
+ 397 01b9 07       		.uleb128 0x7
+ 398 01ba 25000000 		.4byte	.LASF23
+ 399 01be 01       		.byte	0x1
+ 400 01bf 34       		.byte	0x34
+ 401 01c0 81000000 		.4byte	0x81
+ 402 01c4 DC000000 		.4byte	.LLST6
+ 403 01c8 07       		.uleb128 0x7
+ 404 01c9 2B000000 		.4byte	.LASF24
+ 405 01cd 01       		.byte	0x1
+ 406 01ce 37       		.byte	0x37
+ 407 01cf 97000000 		.4byte	0x97
+ 408 01d3 EF000000 		.4byte	.LLST7
+ 409 01d7 07       		.uleb128 0x7
+ 410 01d8 4C020000 		.4byte	.LASF25
+ 411 01dc 01       		.byte	0x1
+ 412 01dd 39       		.byte	0x39
+ 413 01de 81000000 		.4byte	0x81
+ 414 01e2 02010000 		.4byte	.LLST8
+ 415 01e6 0A       		.uleb128 0xa
+ 416 01e7 12000000 		.4byte	.LVL18
+ 417 01eb BA000000 		.4byte	0xba
+ 418 01ef FA010000 		.4byte	0x1fa
+ 419 01f3 0B       		.uleb128 0xb
+ 420 01f4 01       		.uleb128 0x1
+ 421 01f5 50       		.byte	0x50
+ 422 01f6 02       		.uleb128 0x2
+ 423 01f7 08       		.byte	0x8
+ 424 01f8 48       		.byte	0x48
+ 425 01f9 00       		.byte	0
+ 426 01fa 0A       		.uleb128 0xa
+ 427 01fb 3E000000 		.4byte	.LVL29
+ 428 01ff 65020000 		.4byte	0x265
+ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccCqYfyT.s 			page 11
 
 
- 425 01ef 12000000 		.4byte	.LVL18
- 426 01f3 BA000000 		.4byte	0xba
- 427 01f7 02020000 		.4byte	0x202
- 428 01fb 0B       		.uleb128 0xb
- 429 01fc 01       		.uleb128 0x1
- 430 01fd 50       		.byte	0x50
- 431 01fe 02       		.uleb128 0x2
- 432 01ff 08       		.byte	0x8
- 433 0200 48       		.byte	0x48
- 434 0201 00       		.byte	0
- 435 0202 0A       		.uleb128 0xa
- 436 0203 3E000000 		.4byte	.LVL29
- 437 0207 92020000 		.4byte	0x292
- 438 020b 16020000 		.4byte	0x216
- 439 020f 0B       		.uleb128 0xb
- 440 0210 01       		.uleb128 0x1
- 441 0211 50       		.byte	0x50
- 442 0212 02       		.uleb128 0x2
- 443 0213 74       		.byte	0x74
- 444 0214 00       		.sleb128 0
- 445 0215 00       		.byte	0
- 446 0216 0A       		.uleb128 0xa
- 447 0217 46000000 		.4byte	.LVL30
- 448 021b 9D020000 		.4byte	0x29d
- 449 021f 2B020000 		.4byte	0x22b
- 450 0223 0B       		.uleb128 0xb
- 451 0224 01       		.uleb128 0x1
- 452 0225 50       		.byte	0x50
- 453 0226 03       		.uleb128 0x3
- 454 0227 0A       		.byte	0xa
- 455 0228 D007     		.2byte	0x7d0
- 456 022a 00       		.byte	0
- 457 022b 10       		.uleb128 0x10
- 458 022c 4E000000 		.4byte	.LVL31
- 459 0230 9D020000 		.4byte	0x29d
- 460 0234 0B       		.uleb128 0xb
- 461 0235 01       		.uleb128 0x1
- 462 0236 50       		.byte	0x50
- 463 0237 03       		.uleb128 0x3
- 464 0238 0A       		.byte	0xa
- 465 0239 D007     		.2byte	0x7d0
- 466 023b 00       		.byte	0
- 467 023c 00       		.byte	0
- 468 023d 0C       		.uleb128 0xc
- 469 023e 08000000 		.4byte	.LVL16
- 470 0242 A8020000 		.4byte	0x2a8
- 471 0246 0C       		.uleb128 0xc
- 472 0247 0C000000 		.4byte	.LVL17
- 473 024b B3020000 		.4byte	0x2b3
- 474 024f 00       		.byte	0
- 475 0250 11       		.uleb128 0x11
- 476 0251 A5000000 		.4byte	0xa5
- 477 0255 60020000 		.4byte	0x260
- 478 0259 12       		.uleb128 0x12
- 479 025a B3000000 		.4byte	0xb3
- 480 025e FF       		.byte	0xff
- 481 025f 00       		.byte	0
-ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccQb0PU9.s 			page 12
+ 429 0203 0E020000 		.4byte	0x20e
+ 430 0207 0B       		.uleb128 0xb
+ 431 0208 01       		.uleb128 0x1
+ 432 0209 50       		.byte	0x50
+ 433 020a 02       		.uleb128 0x2
+ 434 020b 74       		.byte	0x74
+ 435 020c 00       		.sleb128 0
+ 436 020d 00       		.byte	0
+ 437 020e 0F       		.uleb128 0xf
+ 438 020f 46000000 		.4byte	.LVL30
+ 439 0213 70020000 		.4byte	0x270
+ 440 0217 0B       		.uleb128 0xb
+ 441 0218 01       		.uleb128 0x1
+ 442 0219 50       		.byte	0x50
+ 443 021a 03       		.uleb128 0x3
+ 444 021b 0A       		.byte	0xa
+ 445 021c D007     		.2byte	0x7d0
+ 446 021e 00       		.byte	0
+ 447 021f 00       		.byte	0
+ 448 0220 0C       		.uleb128 0xc
+ 449 0221 08000000 		.4byte	.LVL16
+ 450 0225 7B020000 		.4byte	0x27b
+ 451 0229 0C       		.uleb128 0xc
+ 452 022a 0C000000 		.4byte	.LVL17
+ 453 022e 86020000 		.4byte	0x286
+ 454 0232 00       		.byte	0
+ 455 0233 10       		.uleb128 0x10
+ 456 0234 B7010000 		.4byte	.LASF39
+ 457 0238 07       		.byte	0x7
+ 458 0239 1207     		.2byte	0x712
+ 459 023b 3F020000 		.4byte	0x23f
+ 460 023f 11       		.uleb128 0x11
+ 461 0240 8C000000 		.4byte	0x8c
+ 462 0244 12       		.uleb128 0x12
+ 463 0245 54000000 		.4byte	.LASF26
+ 464 0249 54000000 		.4byte	.LASF26
+ 465 024d 04       		.byte	0x4
+ 466 024e B7       		.byte	0xb7
+ 467 024f 12       		.uleb128 0x12
+ 468 0250 C4010000 		.4byte	.LASF27
+ 469 0254 C4010000 		.4byte	.LASF27
+ 470 0258 04       		.byte	0x4
+ 471 0259 B5       		.byte	0xb5
+ 472 025a 12       		.uleb128 0x12
+ 473 025b 8A020000 		.4byte	.LASF28
+ 474 025f 8A020000 		.4byte	.LASF28
+ 475 0263 04       		.byte	0x4
+ 476 0264 B1       		.byte	0xb1
+ 477 0265 12       		.uleb128 0x12
+ 478 0266 73010000 		.4byte	.LASF29
+ 479 026a 73010000 		.4byte	.LASF29
+ 480 026e 05       		.byte	0x5
+ 481 026f 88       		.byte	0x88
+ 482 0270 12       		.uleb128 0x12
+ 483 0271 CE020000 		.4byte	.LASF30
+ 484 0275 CE020000 		.4byte	.LASF30
+ 485 0279 06       		.byte	0x6
+ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccCqYfyT.s 			page 12
 
 
- 482 0260 13       		.uleb128 0x13
- 483 0261 B7010000 		.4byte	.LASF39
- 484 0265 07       		.byte	0x7
- 485 0266 1207     		.2byte	0x712
- 486 0268 6C020000 		.4byte	0x26c
- 487 026c 14       		.uleb128 0x14
- 488 026d 8C000000 		.4byte	0x8c
- 489 0271 15       		.uleb128 0x15
- 490 0272 54000000 		.4byte	.LASF25
- 491 0276 54000000 		.4byte	.LASF25
- 492 027a 04       		.byte	0x4
- 493 027b B7       		.byte	0xb7
- 494 027c 15       		.uleb128 0x15
- 495 027d C4010000 		.4byte	.LASF26
- 496 0281 C4010000 		.4byte	.LASF26
- 497 0285 04       		.byte	0x4
- 498 0286 B5       		.byte	0xb5
- 499 0287 15       		.uleb128 0x15
- 500 0288 77020000 		.4byte	.LASF27
- 501 028c 77020000 		.4byte	.LASF27
- 502 0290 04       		.byte	0x4
- 503 0291 B1       		.byte	0xb1
- 504 0292 15       		.uleb128 0x15
- 505 0293 73010000 		.4byte	.LASF28
- 506 0297 73010000 		.4byte	.LASF28
- 507 029b 05       		.byte	0x5
- 508 029c 88       		.byte	0x88
- 509 029d 15       		.uleb128 0x15
- 510 029e C2020000 		.4byte	.LASF29
- 511 02a2 C2020000 		.4byte	.LASF29
- 512 02a6 06       		.byte	0x6
- 513 02a7 76       		.byte	0x76
- 514 02a8 15       		.uleb128 0x15
- 515 02a9 06020000 		.4byte	.LASF30
- 516 02ad 06020000 		.4byte	.LASF30
- 517 02b1 04       		.byte	0x4
- 518 02b2 93       		.byte	0x93
- 519 02b3 15       		.uleb128 0x15
- 520 02b4 3A000000 		.4byte	.LASF31
- 521 02b8 3A000000 		.4byte	.LASF31
- 522 02bc 05       		.byte	0x5
- 523 02bd 54       		.byte	0x54
- 524 02be 00       		.byte	0
- 525              		.section	.debug_abbrev,"",%progbits
- 526              	.Ldebug_abbrev0:
- 527 0000 01       		.uleb128 0x1
- 528 0001 11       		.uleb128 0x11
- 529 0002 01       		.byte	0x1
- 530 0003 25       		.uleb128 0x25
- 531 0004 0E       		.uleb128 0xe
- 532 0005 13       		.uleb128 0x13
- 533 0006 0B       		.uleb128 0xb
- 534 0007 03       		.uleb128 0x3
- 535 0008 0E       		.uleb128 0xe
- 536 0009 1B       		.uleb128 0x1b
- 537 000a 0E       		.uleb128 0xe
- 538 000b 55       		.uleb128 0x55
-ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccQb0PU9.s 			page 13
+ 486 027a 76       		.byte	0x76
+ 487 027b 12       		.uleb128 0x12
+ 488 027c 06020000 		.4byte	.LASF31
+ 489 0280 06020000 		.4byte	.LASF31
+ 490 0284 04       		.byte	0x4
+ 491 0285 93       		.byte	0x93
+ 492 0286 12       		.uleb128 0x12
+ 493 0287 3A000000 		.4byte	.LASF32
+ 494 028b 3A000000 		.4byte	.LASF32
+ 495 028f 05       		.byte	0x5
+ 496 0290 54       		.byte	0x54
+ 497 0291 00       		.byte	0
+ 498              		.section	.debug_abbrev,"",%progbits
+ 499              	.Ldebug_abbrev0:
+ 500 0000 01       		.uleb128 0x1
+ 501 0001 11       		.uleb128 0x11
+ 502 0002 01       		.byte	0x1
+ 503 0003 25       		.uleb128 0x25
+ 504 0004 0E       		.uleb128 0xe
+ 505 0005 13       		.uleb128 0x13
+ 506 0006 0B       		.uleb128 0xb
+ 507 0007 03       		.uleb128 0x3
+ 508 0008 0E       		.uleb128 0xe
+ 509 0009 1B       		.uleb128 0x1b
+ 510 000a 0E       		.uleb128 0xe
+ 511 000b 55       		.uleb128 0x55
+ 512 000c 17       		.uleb128 0x17
+ 513 000d 11       		.uleb128 0x11
+ 514 000e 01       		.uleb128 0x1
+ 515 000f 10       		.uleb128 0x10
+ 516 0010 17       		.uleb128 0x17
+ 517 0011 00       		.byte	0
+ 518 0012 00       		.byte	0
+ 519 0013 02       		.uleb128 0x2
+ 520 0014 24       		.uleb128 0x24
+ 521 0015 00       		.byte	0
+ 522 0016 0B       		.uleb128 0xb
+ 523 0017 0B       		.uleb128 0xb
+ 524 0018 3E       		.uleb128 0x3e
+ 525 0019 0B       		.uleb128 0xb
+ 526 001a 03       		.uleb128 0x3
+ 527 001b 0E       		.uleb128 0xe
+ 528 001c 00       		.byte	0
+ 529 001d 00       		.byte	0
+ 530 001e 03       		.uleb128 0x3
+ 531 001f 16       		.uleb128 0x16
+ 532 0020 00       		.byte	0
+ 533 0021 03       		.uleb128 0x3
+ 534 0022 0E       		.uleb128 0xe
+ 535 0023 3A       		.uleb128 0x3a
+ 536 0024 0B       		.uleb128 0xb
+ 537 0025 3B       		.uleb128 0x3b
+ 538 0026 0B       		.uleb128 0xb
+ 539 0027 49       		.uleb128 0x49
+ 540 0028 13       		.uleb128 0x13
+ 541 0029 00       		.byte	0
+ 542 002a 00       		.byte	0
+ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccCqYfyT.s 			page 13
 
 
- 539 000c 17       		.uleb128 0x17
- 540 000d 11       		.uleb128 0x11
- 541 000e 01       		.uleb128 0x1
- 542 000f 10       		.uleb128 0x10
- 543 0010 17       		.uleb128 0x17
- 544 0011 00       		.byte	0
- 545 0012 00       		.byte	0
- 546 0013 02       		.uleb128 0x2
- 547 0014 24       		.uleb128 0x24
- 548 0015 00       		.byte	0
- 549 0016 0B       		.uleb128 0xb
- 550 0017 0B       		.uleb128 0xb
- 551 0018 3E       		.uleb128 0x3e
- 552 0019 0B       		.uleb128 0xb
- 553 001a 03       		.uleb128 0x3
- 554 001b 0E       		.uleb128 0xe
- 555 001c 00       		.byte	0
- 556 001d 00       		.byte	0
- 557 001e 03       		.uleb128 0x3
- 558 001f 16       		.uleb128 0x16
- 559 0020 00       		.byte	0
- 560 0021 03       		.uleb128 0x3
- 561 0022 0E       		.uleb128 0xe
- 562 0023 3A       		.uleb128 0x3a
- 563 0024 0B       		.uleb128 0xb
- 564 0025 3B       		.uleb128 0x3b
- 565 0026 0B       		.uleb128 0xb
- 566 0027 49       		.uleb128 0x49
- 567 0028 13       		.uleb128 0x13
- 568 0029 00       		.byte	0
- 569 002a 00       		.byte	0
- 570 002b 04       		.uleb128 0x4
- 571 002c 24       		.uleb128 0x24
- 572 002d 00       		.byte	0
- 573 002e 0B       		.uleb128 0xb
- 574 002f 0B       		.uleb128 0xb
- 575 0030 3E       		.uleb128 0x3e
- 576 0031 0B       		.uleb128 0xb
- 577 0032 03       		.uleb128 0x3
- 578 0033 08       		.uleb128 0x8
- 579 0034 00       		.byte	0
- 580 0035 00       		.byte	0
- 581 0036 05       		.uleb128 0x5
- 582 0037 2E       		.uleb128 0x2e
- 583 0038 01       		.byte	0x1
- 584 0039 3F       		.uleb128 0x3f
- 585 003a 19       		.uleb128 0x19
- 586 003b 03       		.uleb128 0x3
- 587 003c 0E       		.uleb128 0xe
- 588 003d 3A       		.uleb128 0x3a
- 589 003e 0B       		.uleb128 0xb
- 590 003f 3B       		.uleb128 0x3b
- 591 0040 0B       		.uleb128 0xb
- 592 0041 27       		.uleb128 0x27
- 593 0042 19       		.uleb128 0x19
- 594 0043 49       		.uleb128 0x49
- 595 0044 13       		.uleb128 0x13
-ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccQb0PU9.s 			page 14
+ 543 002b 04       		.uleb128 0x4
+ 544 002c 24       		.uleb128 0x24
+ 545 002d 00       		.byte	0
+ 546 002e 0B       		.uleb128 0xb
+ 547 002f 0B       		.uleb128 0xb
+ 548 0030 3E       		.uleb128 0x3e
+ 549 0031 0B       		.uleb128 0xb
+ 550 0032 03       		.uleb128 0x3
+ 551 0033 08       		.uleb128 0x8
+ 552 0034 00       		.byte	0
+ 553 0035 00       		.byte	0
+ 554 0036 05       		.uleb128 0x5
+ 555 0037 2E       		.uleb128 0x2e
+ 556 0038 01       		.byte	0x1
+ 557 0039 3F       		.uleb128 0x3f
+ 558 003a 19       		.uleb128 0x19
+ 559 003b 03       		.uleb128 0x3
+ 560 003c 0E       		.uleb128 0xe
+ 561 003d 3A       		.uleb128 0x3a
+ 562 003e 0B       		.uleb128 0xb
+ 563 003f 3B       		.uleb128 0x3b
+ 564 0040 0B       		.uleb128 0xb
+ 565 0041 27       		.uleb128 0x27
+ 566 0042 19       		.uleb128 0x19
+ 567 0043 49       		.uleb128 0x49
+ 568 0044 13       		.uleb128 0x13
+ 569 0045 11       		.uleb128 0x11
+ 570 0046 01       		.uleb128 0x1
+ 571 0047 12       		.uleb128 0x12
+ 572 0048 06       		.uleb128 0x6
+ 573 0049 40       		.uleb128 0x40
+ 574 004a 18       		.uleb128 0x18
+ 575 004b 9642     		.uleb128 0x2116
+ 576 004d 19       		.uleb128 0x19
+ 577 004e 01       		.uleb128 0x1
+ 578 004f 13       		.uleb128 0x13
+ 579 0050 00       		.byte	0
+ 580 0051 00       		.byte	0
+ 581 0052 06       		.uleb128 0x6
+ 582 0053 05       		.uleb128 0x5
+ 583 0054 00       		.byte	0
+ 584 0055 03       		.uleb128 0x3
+ 585 0056 0E       		.uleb128 0xe
+ 586 0057 3A       		.uleb128 0x3a
+ 587 0058 0B       		.uleb128 0xb
+ 588 0059 3B       		.uleb128 0x3b
+ 589 005a 0B       		.uleb128 0xb
+ 590 005b 49       		.uleb128 0x49
+ 591 005c 13       		.uleb128 0x13
+ 592 005d 02       		.uleb128 0x2
+ 593 005e 17       		.uleb128 0x17
+ 594 005f 00       		.byte	0
+ 595 0060 00       		.byte	0
+ 596 0061 07       		.uleb128 0x7
+ 597 0062 34       		.uleb128 0x34
+ 598 0063 00       		.byte	0
+ 599 0064 03       		.uleb128 0x3
+ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccCqYfyT.s 			page 14
 
 
- 596 0045 11       		.uleb128 0x11
- 597 0046 01       		.uleb128 0x1
- 598 0047 12       		.uleb128 0x12
- 599 0048 06       		.uleb128 0x6
- 600 0049 40       		.uleb128 0x40
- 601 004a 18       		.uleb128 0x18
- 602 004b 9642     		.uleb128 0x2116
- 603 004d 19       		.uleb128 0x19
- 604 004e 01       		.uleb128 0x1
- 605 004f 13       		.uleb128 0x13
- 606 0050 00       		.byte	0
- 607 0051 00       		.byte	0
- 608 0052 06       		.uleb128 0x6
- 609 0053 05       		.uleb128 0x5
- 610 0054 00       		.byte	0
- 611 0055 03       		.uleb128 0x3
- 612 0056 0E       		.uleb128 0xe
- 613 0057 3A       		.uleb128 0x3a
- 614 0058 0B       		.uleb128 0xb
- 615 0059 3B       		.uleb128 0x3b
- 616 005a 0B       		.uleb128 0xb
- 617 005b 49       		.uleb128 0x49
- 618 005c 13       		.uleb128 0x13
- 619 005d 02       		.uleb128 0x2
- 620 005e 17       		.uleb128 0x17
- 621 005f 00       		.byte	0
- 622 0060 00       		.byte	0
- 623 0061 07       		.uleb128 0x7
- 624 0062 34       		.uleb128 0x34
- 625 0063 00       		.byte	0
- 626 0064 03       		.uleb128 0x3
- 627 0065 0E       		.uleb128 0xe
- 628 0066 3A       		.uleb128 0x3a
- 629 0067 0B       		.uleb128 0xb
- 630 0068 3B       		.uleb128 0x3b
- 631 0069 0B       		.uleb128 0xb
- 632 006a 49       		.uleb128 0x49
- 633 006b 13       		.uleb128 0x13
- 634 006c 02       		.uleb128 0x2
- 635 006d 17       		.uleb128 0x17
- 636 006e 00       		.byte	0
- 637 006f 00       		.byte	0
- 638 0070 08       		.uleb128 0x8
- 639 0071 0B       		.uleb128 0xb
- 640 0072 01       		.byte	0x1
- 641 0073 11       		.uleb128 0x11
- 642 0074 01       		.uleb128 0x1
- 643 0075 12       		.uleb128 0x12
- 644 0076 06       		.uleb128 0x6
- 645 0077 01       		.uleb128 0x1
- 646 0078 13       		.uleb128 0x13
- 647 0079 00       		.byte	0
- 648 007a 00       		.byte	0
- 649 007b 09       		.uleb128 0x9
- 650 007c 34       		.uleb128 0x34
- 651 007d 00       		.byte	0
- 652 007e 03       		.uleb128 0x3
-ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccQb0PU9.s 			page 15
+ 600 0065 0E       		.uleb128 0xe
+ 601 0066 3A       		.uleb128 0x3a
+ 602 0067 0B       		.uleb128 0xb
+ 603 0068 3B       		.uleb128 0x3b
+ 604 0069 0B       		.uleb128 0xb
+ 605 006a 49       		.uleb128 0x49
+ 606 006b 13       		.uleb128 0x13
+ 607 006c 02       		.uleb128 0x2
+ 608 006d 17       		.uleb128 0x17
+ 609 006e 00       		.byte	0
+ 610 006f 00       		.byte	0
+ 611 0070 08       		.uleb128 0x8
+ 612 0071 0B       		.uleb128 0xb
+ 613 0072 01       		.byte	0x1
+ 614 0073 11       		.uleb128 0x11
+ 615 0074 01       		.uleb128 0x1
+ 616 0075 12       		.uleb128 0x12
+ 617 0076 06       		.uleb128 0x6
+ 618 0077 01       		.uleb128 0x1
+ 619 0078 13       		.uleb128 0x13
+ 620 0079 00       		.byte	0
+ 621 007a 00       		.byte	0
+ 622 007b 09       		.uleb128 0x9
+ 623 007c 34       		.uleb128 0x34
+ 624 007d 00       		.byte	0
+ 625 007e 03       		.uleb128 0x3
+ 626 007f 08       		.uleb128 0x8
+ 627 0080 3A       		.uleb128 0x3a
+ 628 0081 0B       		.uleb128 0xb
+ 629 0082 3B       		.uleb128 0x3b
+ 630 0083 0B       		.uleb128 0xb
+ 631 0084 49       		.uleb128 0x49
+ 632 0085 13       		.uleb128 0x13
+ 633 0086 02       		.uleb128 0x2
+ 634 0087 17       		.uleb128 0x17
+ 635 0088 00       		.byte	0
+ 636 0089 00       		.byte	0
+ 637 008a 0A       		.uleb128 0xa
+ 638 008b 898201   		.uleb128 0x4109
+ 639 008e 01       		.byte	0x1
+ 640 008f 11       		.uleb128 0x11
+ 641 0090 01       		.uleb128 0x1
+ 642 0091 31       		.uleb128 0x31
+ 643 0092 13       		.uleb128 0x13
+ 644 0093 01       		.uleb128 0x1
+ 645 0094 13       		.uleb128 0x13
+ 646 0095 00       		.byte	0
+ 647 0096 00       		.byte	0
+ 648 0097 0B       		.uleb128 0xb
+ 649 0098 8A8201   		.uleb128 0x410a
+ 650 009b 00       		.byte	0
+ 651 009c 02       		.uleb128 0x2
+ 652 009d 18       		.uleb128 0x18
+ 653 009e 9142     		.uleb128 0x2111
+ 654 00a0 18       		.uleb128 0x18
+ 655 00a1 00       		.byte	0
+ 656 00a2 00       		.byte	0
+ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccCqYfyT.s 			page 15
 
 
- 653 007f 08       		.uleb128 0x8
- 654 0080 3A       		.uleb128 0x3a
- 655 0081 0B       		.uleb128 0xb
- 656 0082 3B       		.uleb128 0x3b
- 657 0083 0B       		.uleb128 0xb
- 658 0084 49       		.uleb128 0x49
- 659 0085 13       		.uleb128 0x13
- 660 0086 02       		.uleb128 0x2
- 661 0087 17       		.uleb128 0x17
- 662 0088 00       		.byte	0
- 663 0089 00       		.byte	0
- 664 008a 0A       		.uleb128 0xa
- 665 008b 898201   		.uleb128 0x4109
- 666 008e 01       		.byte	0x1
- 667 008f 11       		.uleb128 0x11
- 668 0090 01       		.uleb128 0x1
- 669 0091 31       		.uleb128 0x31
- 670 0092 13       		.uleb128 0x13
- 671 0093 01       		.uleb128 0x1
- 672 0094 13       		.uleb128 0x13
- 673 0095 00       		.byte	0
- 674 0096 00       		.byte	0
- 675 0097 0B       		.uleb128 0xb
- 676 0098 8A8201   		.uleb128 0x410a
- 677 009b 00       		.byte	0
- 678 009c 02       		.uleb128 0x2
- 679 009d 18       		.uleb128 0x18
- 680 009e 9142     		.uleb128 0x2111
- 681 00a0 18       		.uleb128 0x18
- 682 00a1 00       		.byte	0
- 683 00a2 00       		.byte	0
- 684 00a3 0C       		.uleb128 0xc
- 685 00a4 898201   		.uleb128 0x4109
- 686 00a7 00       		.byte	0
- 687 00a8 11       		.uleb128 0x11
- 688 00a9 01       		.uleb128 0x1
- 689 00aa 31       		.uleb128 0x31
- 690 00ab 13       		.uleb128 0x13
- 691 00ac 00       		.byte	0
- 692 00ad 00       		.byte	0
- 693 00ae 0D       		.uleb128 0xd
- 694 00af 2E       		.uleb128 0x2e
- 695 00b0 01       		.byte	0x1
- 696 00b1 3F       		.uleb128 0x3f
- 697 00b2 19       		.uleb128 0x19
- 698 00b3 03       		.uleb128 0x3
- 699 00b4 0E       		.uleb128 0xe
- 700 00b5 3A       		.uleb128 0x3a
- 701 00b6 0B       		.uleb128 0xb
- 702 00b7 3B       		.uleb128 0x3b
- 703 00b8 0B       		.uleb128 0xb
- 704 00b9 27       		.uleb128 0x27
- 705 00ba 19       		.uleb128 0x19
- 706 00bb 49       		.uleb128 0x49
- 707 00bc 13       		.uleb128 0x13
- 708 00bd 8701     		.uleb128 0x87
- 709 00bf 19       		.uleb128 0x19
-ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccQb0PU9.s 			page 16
+ 657 00a3 0C       		.uleb128 0xc
+ 658 00a4 898201   		.uleb128 0x4109
+ 659 00a7 00       		.byte	0
+ 660 00a8 11       		.uleb128 0x11
+ 661 00a9 01       		.uleb128 0x1
+ 662 00aa 31       		.uleb128 0x31
+ 663 00ab 13       		.uleb128 0x13
+ 664 00ac 00       		.byte	0
+ 665 00ad 00       		.byte	0
+ 666 00ae 0D       		.uleb128 0xd
+ 667 00af 2E       		.uleb128 0x2e
+ 668 00b0 01       		.byte	0x1
+ 669 00b1 3F       		.uleb128 0x3f
+ 670 00b2 19       		.uleb128 0x19
+ 671 00b3 03       		.uleb128 0x3
+ 672 00b4 0E       		.uleb128 0xe
+ 673 00b5 3A       		.uleb128 0x3a
+ 674 00b6 0B       		.uleb128 0xb
+ 675 00b7 3B       		.uleb128 0x3b
+ 676 00b8 0B       		.uleb128 0xb
+ 677 00b9 27       		.uleb128 0x27
+ 678 00ba 19       		.uleb128 0x19
+ 679 00bb 49       		.uleb128 0x49
+ 680 00bc 13       		.uleb128 0x13
+ 681 00bd 8701     		.uleb128 0x87
+ 682 00bf 19       		.uleb128 0x19
+ 683 00c0 11       		.uleb128 0x11
+ 684 00c1 01       		.uleb128 0x1
+ 685 00c2 12       		.uleb128 0x12
+ 686 00c3 06       		.uleb128 0x6
+ 687 00c4 40       		.uleb128 0x40
+ 688 00c5 18       		.uleb128 0x18
+ 689 00c6 9642     		.uleb128 0x2116
+ 690 00c8 19       		.uleb128 0x19
+ 691 00c9 01       		.uleb128 0x1
+ 692 00ca 13       		.uleb128 0x13
+ 693 00cb 00       		.byte	0
+ 694 00cc 00       		.byte	0
+ 695 00cd 0E       		.uleb128 0xe
+ 696 00ce 34       		.uleb128 0x34
+ 697 00cf 00       		.byte	0
+ 698 00d0 03       		.uleb128 0x3
+ 699 00d1 0E       		.uleb128 0xe
+ 700 00d2 3A       		.uleb128 0x3a
+ 701 00d3 0B       		.uleb128 0xb
+ 702 00d4 3B       		.uleb128 0x3b
+ 703 00d5 0B       		.uleb128 0xb
+ 704 00d6 49       		.uleb128 0x49
+ 705 00d7 13       		.uleb128 0x13
+ 706 00d8 1C       		.uleb128 0x1c
+ 707 00d9 0B       		.uleb128 0xb
+ 708 00da 00       		.byte	0
+ 709 00db 00       		.byte	0
+ 710 00dc 0F       		.uleb128 0xf
+ 711 00dd 898201   		.uleb128 0x4109
+ 712 00e0 01       		.byte	0x1
+ 713 00e1 11       		.uleb128 0x11
+ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccCqYfyT.s 			page 16
 
 
- 710 00c0 11       		.uleb128 0x11
- 711 00c1 01       		.uleb128 0x1
- 712 00c2 12       		.uleb128 0x12
- 713 00c3 06       		.uleb128 0x6
- 714 00c4 40       		.uleb128 0x40
- 715 00c5 18       		.uleb128 0x18
- 716 00c6 9642     		.uleb128 0x2116
- 717 00c8 19       		.uleb128 0x19
- 718 00c9 01       		.uleb128 0x1
- 719 00ca 13       		.uleb128 0x13
- 720 00cb 00       		.byte	0
- 721 00cc 00       		.byte	0
- 722 00cd 0E       		.uleb128 0xe
- 723 00ce 34       		.uleb128 0x34
- 724 00cf 00       		.byte	0
- 725 00d0 03       		.uleb128 0x3
- 726 00d1 0E       		.uleb128 0xe
- 727 00d2 3A       		.uleb128 0x3a
- 728 00d3 0B       		.uleb128 0xb
- 729 00d4 3B       		.uleb128 0x3b
- 730 00d5 0B       		.uleb128 0xb
- 731 00d6 49       		.uleb128 0x49
- 732 00d7 13       		.uleb128 0x13
- 733 00d8 00       		.byte	0
- 734 00d9 00       		.byte	0
- 735 00da 0F       		.uleb128 0xf
- 736 00db 34       		.uleb128 0x34
- 737 00dc 00       		.byte	0
- 738 00dd 03       		.uleb128 0x3
- 739 00de 0E       		.uleb128 0xe
- 740 00df 3A       		.uleb128 0x3a
- 741 00e0 0B       		.uleb128 0xb
- 742 00e1 3B       		.uleb128 0x3b
- 743 00e2 0B       		.uleb128 0xb
- 744 00e3 49       		.uleb128 0x49
- 745 00e4 13       		.uleb128 0x13
- 746 00e5 1C       		.uleb128 0x1c
- 747 00e6 0B       		.uleb128 0xb
- 748 00e7 00       		.byte	0
- 749 00e8 00       		.byte	0
- 750 00e9 10       		.uleb128 0x10
- 751 00ea 898201   		.uleb128 0x4109
- 752 00ed 01       		.byte	0x1
- 753 00ee 11       		.uleb128 0x11
- 754 00ef 01       		.uleb128 0x1
- 755 00f0 31       		.uleb128 0x31
- 756 00f1 13       		.uleb128 0x13
- 757 00f2 00       		.byte	0
- 758 00f3 00       		.byte	0
- 759 00f4 11       		.uleb128 0x11
- 760 00f5 01       		.uleb128 0x1
- 761 00f6 01       		.byte	0x1
- 762 00f7 49       		.uleb128 0x49
- 763 00f8 13       		.uleb128 0x13
- 764 00f9 01       		.uleb128 0x1
- 765 00fa 13       		.uleb128 0x13
- 766 00fb 00       		.byte	0
-ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccQb0PU9.s 			page 17
+ 714 00e2 01       		.uleb128 0x1
+ 715 00e3 31       		.uleb128 0x31
+ 716 00e4 13       		.uleb128 0x13
+ 717 00e5 00       		.byte	0
+ 718 00e6 00       		.byte	0
+ 719 00e7 10       		.uleb128 0x10
+ 720 00e8 34       		.uleb128 0x34
+ 721 00e9 00       		.byte	0
+ 722 00ea 03       		.uleb128 0x3
+ 723 00eb 0E       		.uleb128 0xe
+ 724 00ec 3A       		.uleb128 0x3a
+ 725 00ed 0B       		.uleb128 0xb
+ 726 00ee 3B       		.uleb128 0x3b
+ 727 00ef 05       		.uleb128 0x5
+ 728 00f0 49       		.uleb128 0x49
+ 729 00f1 13       		.uleb128 0x13
+ 730 00f2 3F       		.uleb128 0x3f
+ 731 00f3 19       		.uleb128 0x19
+ 732 00f4 3C       		.uleb128 0x3c
+ 733 00f5 19       		.uleb128 0x19
+ 734 00f6 00       		.byte	0
+ 735 00f7 00       		.byte	0
+ 736 00f8 11       		.uleb128 0x11
+ 737 00f9 35       		.uleb128 0x35
+ 738 00fa 00       		.byte	0
+ 739 00fb 49       		.uleb128 0x49
+ 740 00fc 13       		.uleb128 0x13
+ 741 00fd 00       		.byte	0
+ 742 00fe 00       		.byte	0
+ 743 00ff 12       		.uleb128 0x12
+ 744 0100 2E       		.uleb128 0x2e
+ 745 0101 00       		.byte	0
+ 746 0102 3F       		.uleb128 0x3f
+ 747 0103 19       		.uleb128 0x19
+ 748 0104 3C       		.uleb128 0x3c
+ 749 0105 19       		.uleb128 0x19
+ 750 0106 6E       		.uleb128 0x6e
+ 751 0107 0E       		.uleb128 0xe
+ 752 0108 03       		.uleb128 0x3
+ 753 0109 0E       		.uleb128 0xe
+ 754 010a 3A       		.uleb128 0x3a
+ 755 010b 0B       		.uleb128 0xb
+ 756 010c 3B       		.uleb128 0x3b
+ 757 010d 0B       		.uleb128 0xb
+ 758 010e 00       		.byte	0
+ 759 010f 00       		.byte	0
+ 760 0110 00       		.byte	0
+ 761              		.section	.debug_loc,"",%progbits
+ 762              	.Ldebug_loc0:
+ 763              	.LLST0:
+ 764 0000 00000000 		.4byte	.LVL0
+ 765 0004 07000000 		.4byte	.LVL2-1
+ 766 0008 0100     		.2byte	0x1
+ 767 000a 50       		.byte	0x50
+ 768 000b 07000000 		.4byte	.LVL2-1
+ 769 000f 48000000 		.4byte	.LFE65
+ 770 0013 0400     		.2byte	0x4
+ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccCqYfyT.s 			page 17
 
 
- 767 00fc 00       		.byte	0
- 768 00fd 12       		.uleb128 0x12
- 769 00fe 21       		.uleb128 0x21
- 770 00ff 00       		.byte	0
- 771 0100 49       		.uleb128 0x49
- 772 0101 13       		.uleb128 0x13
- 773 0102 2F       		.uleb128 0x2f
- 774 0103 0B       		.uleb128 0xb
- 775 0104 00       		.byte	0
- 776 0105 00       		.byte	0
- 777 0106 13       		.uleb128 0x13
- 778 0107 34       		.uleb128 0x34
- 779 0108 00       		.byte	0
- 780 0109 03       		.uleb128 0x3
- 781 010a 0E       		.uleb128 0xe
- 782 010b 3A       		.uleb128 0x3a
- 783 010c 0B       		.uleb128 0xb
- 784 010d 3B       		.uleb128 0x3b
- 785 010e 05       		.uleb128 0x5
- 786 010f 49       		.uleb128 0x49
- 787 0110 13       		.uleb128 0x13
- 788 0111 3F       		.uleb128 0x3f
- 789 0112 19       		.uleb128 0x19
- 790 0113 3C       		.uleb128 0x3c
- 791 0114 19       		.uleb128 0x19
- 792 0115 00       		.byte	0
- 793 0116 00       		.byte	0
- 794 0117 14       		.uleb128 0x14
- 795 0118 35       		.uleb128 0x35
- 796 0119 00       		.byte	0
- 797 011a 49       		.uleb128 0x49
- 798 011b 13       		.uleb128 0x13
- 799 011c 00       		.byte	0
- 800 011d 00       		.byte	0
- 801 011e 15       		.uleb128 0x15
- 802 011f 2E       		.uleb128 0x2e
- 803 0120 00       		.byte	0
- 804 0121 3F       		.uleb128 0x3f
- 805 0122 19       		.uleb128 0x19
- 806 0123 3C       		.uleb128 0x3c
- 807 0124 19       		.uleb128 0x19
- 808 0125 6E       		.uleb128 0x6e
- 809 0126 0E       		.uleb128 0xe
- 810 0127 03       		.uleb128 0x3
- 811 0128 0E       		.uleb128 0xe
- 812 0129 3A       		.uleb128 0x3a
- 813 012a 0B       		.uleb128 0xb
- 814 012b 3B       		.uleb128 0x3b
- 815 012c 0B       		.uleb128 0xb
- 816 012d 00       		.byte	0
- 817 012e 00       		.byte	0
- 818 012f 00       		.byte	0
- 819              		.section	.debug_loc,"",%progbits
- 820              	.Ldebug_loc0:
- 821              	.LLST0:
- 822 0000 00000000 		.4byte	.LVL0
- 823 0004 07000000 		.4byte	.LVL2-1
-ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccQb0PU9.s 			page 18
+ 771 0015 F3       		.byte	0xf3
+ 772 0016 01       		.uleb128 0x1
+ 773 0017 50       		.byte	0x50
+ 774 0018 9F       		.byte	0x9f
+ 775 0019 00000000 		.4byte	0
+ 776 001d 00000000 		.4byte	0
+ 777              	.LLST1:
+ 778 0021 02000000 		.4byte	.LVL1
+ 779 0025 12000000 		.4byte	.LVL5
+ 780 0029 0200     		.2byte	0x2
+ 781 002b 30       		.byte	0x30
+ 782 002c 9F       		.byte	0x9f
+ 783 002d 12000000 		.4byte	.LVL5
+ 784 0031 40000000 		.4byte	.LVL13
+ 785 0035 0100     		.2byte	0x1
+ 786 0037 54       		.byte	0x54
+ 787 0038 40000000 		.4byte	.LVL13
+ 788 003c 46000000 		.4byte	.LVL15
+ 789 0040 0200     		.2byte	0x2
+ 790 0042 30       		.byte	0x30
+ 791 0043 9F       		.byte	0x9f
+ 792 0044 00000000 		.4byte	0
+ 793 0048 00000000 		.4byte	0
+ 794              	.LLST2:
+ 795 004c 02000000 		.4byte	.LVL1
+ 796 0050 1A000000 		.4byte	.LVL7
+ 797 0054 0200     		.2byte	0x2
+ 798 0056 30       		.byte	0x30
+ 799 0057 9F       		.byte	0x9f
+ 800 0058 1A000000 		.4byte	.LVL7
+ 801 005c 40000000 		.4byte	.LVL13
+ 802 0060 0100     		.2byte	0x1
+ 803 0062 55       		.byte	0x55
+ 804 0063 40000000 		.4byte	.LVL13
+ 805 0067 46000000 		.4byte	.LVL15
+ 806 006b 0200     		.2byte	0x2
+ 807 006d 30       		.byte	0x30
+ 808 006e 9F       		.byte	0x9f
+ 809 006f 00000000 		.4byte	0
+ 810 0073 00000000 		.4byte	0
+ 811              	.LLST3:
+ 812 0077 08000000 		.4byte	.LVL2
+ 813 007b 0C000000 		.4byte	.LVL3
+ 814 007f 0100     		.2byte	0x1
+ 815 0081 50       		.byte	0x50
+ 816 0082 40000000 		.4byte	.LVL13
+ 817 0086 43000000 		.4byte	.LVL14-1
+ 818 008a 0100     		.2byte	0x1
+ 819 008c 50       		.byte	0x50
+ 820 008d 00000000 		.4byte	0
+ 821 0091 00000000 		.4byte	0
+ 822              	.LLST4:
+ 823 0095 24000000 		.4byte	.LVL9
+ 824 0099 2C000000 		.4byte	.LVL10
+ 825 009d 0100     		.2byte	0x1
+ 826 009f 50       		.byte	0x50
+ 827 00a0 30000000 		.4byte	.LVL11
+ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccCqYfyT.s 			page 18
 
 
- 824 0008 0100     		.2byte	0x1
- 825 000a 50       		.byte	0x50
- 826 000b 07000000 		.4byte	.LVL2-1
- 827 000f 48000000 		.4byte	.LFE65
- 828 0013 0400     		.2byte	0x4
- 829 0015 F3       		.byte	0xf3
- 830 0016 01       		.uleb128 0x1
- 831 0017 50       		.byte	0x50
- 832 0018 9F       		.byte	0x9f
- 833 0019 00000000 		.4byte	0
- 834 001d 00000000 		.4byte	0
- 835              	.LLST1:
- 836 0021 02000000 		.4byte	.LVL1
- 837 0025 12000000 		.4byte	.LVL5
- 838 0029 0200     		.2byte	0x2
- 839 002b 30       		.byte	0x30
- 840 002c 9F       		.byte	0x9f
- 841 002d 12000000 		.4byte	.LVL5
- 842 0031 40000000 		.4byte	.LVL13
- 843 0035 0100     		.2byte	0x1
- 844 0037 54       		.byte	0x54
- 845 0038 40000000 		.4byte	.LVL13
- 846 003c 46000000 		.4byte	.LVL15
- 847 0040 0200     		.2byte	0x2
- 848 0042 30       		.byte	0x30
- 849 0043 9F       		.byte	0x9f
- 850 0044 00000000 		.4byte	0
- 851 0048 00000000 		.4byte	0
- 852              	.LLST2:
- 853 004c 02000000 		.4byte	.LVL1
- 854 0050 1A000000 		.4byte	.LVL7
- 855 0054 0200     		.2byte	0x2
- 856 0056 30       		.byte	0x30
- 857 0057 9F       		.byte	0x9f
- 858 0058 1A000000 		.4byte	.LVL7
- 859 005c 40000000 		.4byte	.LVL13
- 860 0060 0100     		.2byte	0x1
- 861 0062 55       		.byte	0x55
- 862 0063 40000000 		.4byte	.LVL13
- 863 0067 46000000 		.4byte	.LVL15
- 864 006b 0200     		.2byte	0x2
- 865 006d 30       		.byte	0x30
- 866 006e 9F       		.byte	0x9f
- 867 006f 00000000 		.4byte	0
- 868 0073 00000000 		.4byte	0
- 869              	.LLST3:
- 870 0077 08000000 		.4byte	.LVL2
- 871 007b 0C000000 		.4byte	.LVL3
- 872 007f 0100     		.2byte	0x1
- 873 0081 50       		.byte	0x50
- 874 0082 40000000 		.4byte	.LVL13
- 875 0086 43000000 		.4byte	.LVL14-1
- 876 008a 0100     		.2byte	0x1
- 877 008c 50       		.byte	0x50
- 878 008d 00000000 		.4byte	0
- 879 0091 00000000 		.4byte	0
- 880              	.LLST4:
-ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccQb0PU9.s 			page 19
+ 828 00a4 3D000000 		.4byte	.LVL12-1
+ 829 00a8 0100     		.2byte	0x1
+ 830 00aa 50       		.byte	0x50
+ 831 00ab 3E000000 		.4byte	.LVL12
+ 832 00af 40000000 		.4byte	.LVL13
+ 833 00b3 0100     		.2byte	0x1
+ 834 00b5 50       		.byte	0x50
+ 835 00b6 00000000 		.4byte	0
+ 836 00ba 00000000 		.4byte	0
+ 837              	.LLST5:
+ 838 00be 14000000 		.4byte	.LVL19
+ 839 00c2 17000000 		.4byte	.LVL20-1
+ 840 00c6 0100     		.2byte	0x1
+ 841 00c8 50       		.byte	0x50
+ 842 00c9 17000000 		.4byte	.LVL20-1
+ 843 00cd 48000000 		.4byte	.LFE64
+ 844 00d1 0100     		.2byte	0x1
+ 845 00d3 55       		.byte	0x55
+ 846 00d4 00000000 		.4byte	0
+ 847 00d8 00000000 		.4byte	0
+ 848              	.LLST6:
+ 849 00dc 1A000000 		.4byte	.LVL21
+ 850 00e0 2A000000 		.4byte	.LVL24
+ 851 00e4 0100     		.2byte	0x1
+ 852 00e6 54       		.byte	0x54
+ 853 00e7 00000000 		.4byte	0
+ 854 00eb 00000000 		.4byte	0
+ 855              	.LLST7:
+ 856 00ef 28000000 		.4byte	.LVL23
+ 857 00f3 31000000 		.4byte	.LVL26-1
+ 858 00f7 0100     		.2byte	0x1
+ 859 00f9 50       		.byte	0x50
+ 860 00fa 00000000 		.4byte	0
+ 861 00fe 00000000 		.4byte	0
+ 862              	.LLST8:
+ 863 0102 2C000000 		.4byte	.LVL25
+ 864 0106 36000000 		.4byte	.LVL27
+ 865 010a 0100     		.2byte	0x1
+ 866 010c 54       		.byte	0x54
+ 867 010d 36000000 		.4byte	.LVL27
+ 868 0111 38000000 		.4byte	.LVL28
+ 869 0115 0300     		.2byte	0x3
+ 870 0117 74       		.byte	0x74
+ 871 0118 7F       		.sleb128 -1
+ 872 0119 9F       		.byte	0x9f
+ 873 011a 38000000 		.4byte	.LVL28
+ 874 011e 48000000 		.4byte	.LFE64
+ 875 0122 0100     		.2byte	0x1
+ 876 0124 54       		.byte	0x54
+ 877 0125 00000000 		.4byte	0
+ 878 0129 00000000 		.4byte	0
+ 879              		.section	.debug_aranges,"",%progbits
+ 880 0000 24000000 		.4byte	0x24
+ 881 0004 0200     		.2byte	0x2
+ 882 0006 00000000 		.4byte	.Ldebug_info0
+ 883 000a 04       		.byte	0x4
+ 884 000b 00       		.byte	0
+ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccCqYfyT.s 			page 19
 
 
- 881 0095 24000000 		.4byte	.LVL9
- 882 0099 2C000000 		.4byte	.LVL10
- 883 009d 0100     		.2byte	0x1
- 884 009f 50       		.byte	0x50
- 885 00a0 30000000 		.4byte	.LVL11
- 886 00a4 3D000000 		.4byte	.LVL12-1
- 887 00a8 0100     		.2byte	0x1
- 888 00aa 50       		.byte	0x50
- 889 00ab 3E000000 		.4byte	.LVL12
- 890 00af 40000000 		.4byte	.LVL13
- 891 00b3 0100     		.2byte	0x1
- 892 00b5 50       		.byte	0x50
- 893 00b6 00000000 		.4byte	0
- 894 00ba 00000000 		.4byte	0
- 895              	.LLST5:
- 896 00be 14000000 		.4byte	.LVL19
- 897 00c2 17000000 		.4byte	.LVL20-1
- 898 00c6 0100     		.2byte	0x1
- 899 00c8 50       		.byte	0x50
- 900 00c9 17000000 		.4byte	.LVL20-1
- 901 00cd 50000000 		.4byte	.LFE64
- 902 00d1 0100     		.2byte	0x1
- 903 00d3 55       		.byte	0x55
- 904 00d4 00000000 		.4byte	0
- 905 00d8 00000000 		.4byte	0
- 906              	.LLST6:
- 907 00dc 1A000000 		.4byte	.LVL21
- 908 00e0 2A000000 		.4byte	.LVL24
- 909 00e4 0100     		.2byte	0x1
- 910 00e6 54       		.byte	0x54
- 911 00e7 2C000000 		.4byte	.LVL25
- 912 00eb 36000000 		.4byte	.LVL27
- 913 00ef 0100     		.2byte	0x1
- 914 00f1 54       		.byte	0x54
- 915 00f2 36000000 		.4byte	.LVL27
- 916 00f6 38000000 		.4byte	.LVL28
- 917 00fa 0300     		.2byte	0x3
- 918 00fc 74       		.byte	0x74
- 919 00fd 7F       		.sleb128 -1
- 920 00fe 9F       		.byte	0x9f
- 921 00ff 38000000 		.4byte	.LVL28
- 922 0103 50000000 		.4byte	.LFE64
- 923 0107 0100     		.2byte	0x1
- 924 0109 54       		.byte	0x54
- 925 010a 00000000 		.4byte	0
- 926 010e 00000000 		.4byte	0
- 927              	.LLST7:
- 928 0112 28000000 		.4byte	.LVL23
- 929 0116 31000000 		.4byte	.LVL26-1
- 930 011a 0100     		.2byte	0x1
- 931 011c 50       		.byte	0x50
- 932 011d 00000000 		.4byte	0
- 933 0121 00000000 		.4byte	0
- 934              		.section	.debug_aranges,"",%progbits
- 935 0000 24000000 		.4byte	0x24
- 936 0004 0200     		.2byte	0x2
- 937 0006 00000000 		.4byte	.Ldebug_info0
-ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccQb0PU9.s 			page 20
+ 885 000c 0000     		.2byte	0
+ 886 000e 0000     		.2byte	0
+ 887 0010 00000000 		.4byte	.LFB65
+ 888 0014 48000000 		.4byte	.LFE65-.LFB65
+ 889 0018 00000000 		.4byte	.LFB64
+ 890 001c 48000000 		.4byte	.LFE64-.LFB64
+ 891 0020 00000000 		.4byte	0
+ 892 0024 00000000 		.4byte	0
+ 893              		.section	.debug_ranges,"",%progbits
+ 894              	.Ldebug_ranges0:
+ 895 0000 00000000 		.4byte	.LFB65
+ 896 0004 48000000 		.4byte	.LFE65
+ 897 0008 00000000 		.4byte	.LFB64
+ 898 000c 48000000 		.4byte	.LFE64
+ 899 0010 00000000 		.4byte	0
+ 900 0014 00000000 		.4byte	0
+ 901              		.section	.debug_line,"",%progbits
+ 902              	.Ldebug_line0:
+ 903 0000 AD010000 		.section	.debug_str,"MS",%progbits,1
+ 903      02006B01 
+ 903      00000201 
+ 903      FB0E0D00 
+ 903      01010101 
+ 904              	.LASF4:
+ 905 0000 5F5F7569 		.ascii	"__uint8_t\000"
+ 905      6E74385F 
+ 905      7400
+ 906              	.LASF37:
+ 907 000a 61647265 		.ascii	"adress\000"
+ 907      737300
+ 908              	.LASF36:
+ 909 0011 66657463 		.ascii	"fetchData\000"
+ 909      68446174 
+ 909      6100
+ 910              	.LASF5:
+ 911 001b 5F5F696E 		.ascii	"__int32_t\000"
+ 911      7433325F 
+ 911      7400
+ 912              	.LASF23:
+ 913 0025 77686F6C 		.ascii	"whole\000"
+ 913      6500
+ 914              	.LASF24:
+ 915 002b 64656369 		.ascii	"decimal\000"
+ 915      6D616C00 
+ 916              	.LASF20:
+ 917 0033 73746174 		.ascii	"status\000"
+ 917      757300
+ 918              	.LASF32:
+ 919 003a 55415254 		.ascii	"UART_TERMINAL_Start\000"
+ 919      5F544552 
+ 919      4D494E41 
+ 919      4C5F5374 
+ 919      61727400 
+ 920              	.LASF13:
+ 921 004e 666C6F61 		.ascii	"float\000"
+ 921      7400
+ 922              	.LASF26:
+ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccCqYfyT.s 			page 20
 
 
- 938 000a 04       		.byte	0x4
- 939 000b 00       		.byte	0
- 940 000c 0000     		.2byte	0
- 941 000e 0000     		.2byte	0
- 942 0010 00000000 		.4byte	.LFB65
- 943 0014 48000000 		.4byte	.LFE65-.LFB65
- 944 0018 00000000 		.4byte	.LFB64
- 945 001c 50000000 		.4byte	.LFE64-.LFB64
- 946 0020 00000000 		.4byte	0
- 947 0024 00000000 		.4byte	0
- 948              		.section	.debug_ranges,"",%progbits
- 949              	.Ldebug_ranges0:
- 950 0000 00000000 		.4byte	.LFB65
- 951 0004 48000000 		.4byte	.LFE65
- 952 0008 00000000 		.4byte	.LFB64
- 953 000c 50000000 		.4byte	.LFE64
- 954 0010 00000000 		.4byte	0
- 955 0014 00000000 		.4byte	0
- 956              		.section	.debug_line,"",%progbits
- 957              	.Ldebug_line0:
- 958 0000 AE010000 		.section	.debug_str,"MS",%progbits,1
- 958      02006B01 
- 958      00000201 
- 958      FB0E0D00 
- 958      01010101 
- 959              	.LASF4:
- 960 0000 5F5F7569 		.ascii	"__uint8_t\000"
- 960      6E74385F 
- 960      7400
- 961              	.LASF36:
- 962 000a 61647265 		.ascii	"adress\000"
- 962      737300
- 963              	.LASF35:
- 964 0011 66657463 		.ascii	"fetchData\000"
- 964      68446174 
- 964      6100
- 965              	.LASF5:
- 966 001b 5F5F696E 		.ascii	"__int32_t\000"
- 966      7433325F 
- 966      7400
- 967              	.LASF23:
- 968 0025 77686F6C 		.ascii	"whole\000"
- 968      6500
- 969              	.LASF24:
- 970 002b 64656369 		.ascii	"decimal\000"
- 970      6D616C00 
- 971              	.LASF20:
- 972 0033 73746174 		.ascii	"status\000"
- 972      757300
- 973              	.LASF31:
- 974 003a 55415254 		.ascii	"UART_TERMINAL_Start\000"
- 974      5F544552 
- 974      4D494E41 
- 974      4C5F5374 
- 974      61727400 
- 975              	.LASF13:
- 976 004e 666C6F61 		.ascii	"float\000"
-ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccQb0PU9.s 			page 21
+ 923 0054 4932435F 		.ascii	"I2C_LM75_MasterReadByte\000"
+ 923      4C4D3735 
+ 923      5F4D6173 
+ 923      74657252 
+ 923      65616442 
+ 924              	.LASF1:
+ 925 006c 756E7369 		.ascii	"unsigned char\000"
+ 925      676E6564 
+ 925      20636861 
+ 925      7200
+ 926              	.LASF33:
+ 927 007a 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
+ 927      43313120 
+ 927      352E342E 
+ 927      31203230 
+ 927      31363036 
+ 928 00ad 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m3 -mthumb -g -O"
+ 928      20726576 
+ 928      6973696F 
+ 928      6E203233 
+ 928      37373135 
+ 929 00e0 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
+ 929      66756E63 
+ 929      74696F6E 
+ 929      2D736563 
+ 929      74696F6E 
+ 930              	.LASF35:
+ 931 0108 433A5C55 		.ascii	"C:\\Users\\hresk\\OneDrive\\Dokumenter\\GitHub\\Sem"
+ 931      73657273 
+ 931      5C687265 
+ 931      736B5C4F 
+ 931      6E654472 
+ 932 0135 65737465 		.ascii	"esterProjekt2\\Arduino\\Arduino Temp\\Communication"
+ 932      7250726F 
+ 932      6A656B74 
+ 932      325C4172 
+ 932      6475696E 
+ 933 0165 20427573 		.ascii	" Busses.cydsn\000"
+ 933      7365732E 
+ 933      63796473 
+ 933      6E00
+ 934              	.LASF29:
+ 935 0173 55415254 		.ascii	"UART_TERMINAL_WriteTxData\000"
+ 935      5F544552 
+ 935      4D494E41 
+ 935      4C5F5772 
+ 935      69746554 
+ 936              	.LASF7:
+ 937 018d 6C6F6E67 		.ascii	"long unsigned int\000"
+ 937      20756E73 
+ 937      69676E65 
+ 937      6420696E 
+ 937      7400
+ 938              	.LASF21:
+ 939 019f 74656D70 		.ascii	"temp\000"
+ 939      00
+ 940              	.LASF3:
+ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccCqYfyT.s 			page 21
 
 
- 976      7400
- 977              	.LASF25:
- 978 0054 4932435F 		.ascii	"I2C_LM75_MasterReadByte\000"
- 978      4C4D3735 
- 978      5F4D6173 
- 978      74657252 
- 978      65616442 
- 979              	.LASF1:
- 980 006c 756E7369 		.ascii	"unsigned char\000"
- 980      676E6564 
- 980      20636861 
- 980      7200
- 981              	.LASF32:
- 982 007a 474E5520 		.ascii	"GNU C11 5.4.1 20160609 (release) [ARM/embedded-5-br"
- 982      43313120 
- 982      352E342E 
- 982      31203230 
- 982      31363036 
- 983 00ad 616E6368 		.ascii	"anch revision 237715] -mcpu=cortex-m3 -mthumb -g -O"
- 983      20726576 
- 983      6973696F 
- 983      6E203233 
- 983      37373135 
- 984 00e0 67202D66 		.ascii	"g -ffunction-sections -ffat-lto-objects\000"
- 984      66756E63 
- 984      74696F6E 
- 984      2D736563 
- 984      74696F6E 
- 985              	.LASF34:
- 986 0108 433A5C55 		.ascii	"C:\\Users\\hresk\\OneDrive\\Dokumenter\\GitHub\\Sem"
- 986      73657273 
- 986      5C687265 
- 986      736B5C4F 
- 986      6E654472 
- 987 0135 65737465 		.ascii	"esterProjekt2\\Arduino\\Arduino Temp\\Communication"
- 987      7250726F 
- 987      6A656B74 
- 987      325C4172 
- 987      6475696E 
- 988 0165 20427573 		.ascii	" Busses.cydsn\000"
- 988      7365732E 
- 988      63796473 
- 988      6E00
- 989              	.LASF28:
- 990 0173 55415254 		.ascii	"UART_TERMINAL_WriteTxData\000"
- 990      5F544552 
- 990      4D494E41 
- 990      4C5F5772 
- 990      69746554 
- 991              	.LASF7:
- 992 018d 6C6F6E67 		.ascii	"long unsigned int\000"
- 992      20756E73 
- 992      69676E65 
- 992      6420696E 
- 992      7400
- 993              	.LASF21:
- 994 019f 74656D70 		.ascii	"temp\000"
-ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccQb0PU9.s 			page 22
+ 941 01a4 73686F72 		.ascii	"short unsigned int\000"
+ 941      7420756E 
+ 941      7369676E 
+ 941      65642069 
+ 941      6E7400
+ 942              	.LASF39:
+ 943 01b7 49544D5F 		.ascii	"ITM_RxBuffer\000"
+ 943      52784275 
+ 943      66666572 
+ 943      00
+ 944              	.LASF27:
+ 945 01c4 4932435F 		.ascii	"I2C_LM75_MasterSendStop\000"
+ 945      4C4D3735 
+ 945      5F4D6173 
+ 945      74657253 
+ 945      656E6453 
+ 946              	.LASF14:
+ 947 01dc 646F7562 		.ascii	"double\000"
+ 947      6C6500
+ 948              	.LASF18:
+ 949 01e3 72656369 		.ascii	"recievedValue1\000"
+ 949      65766564 
+ 949      56616C75 
+ 949      653100
+ 950              	.LASF19:
+ 951 01f2 72656369 		.ascii	"recievedValue2\000"
+ 951      65766564 
+ 951      56616C75 
+ 951      653200
+ 952              	.LASF38:
+ 953 0201 6D61696E 		.ascii	"main\000"
+ 953      00
+ 954              	.LASF31:
+ 955 0206 4932435F 		.ascii	"I2C_LM75_Start\000"
+ 955      4C4D3735 
+ 955      5F537461 
+ 955      727400
+ 956              	.LASF22:
+ 957 0215 736C6176 		.ascii	"slaveAddr1\000"
+ 957      65416464 
+ 957      723100
+ 958              	.LASF10:
+ 959 0220 756E7369 		.ascii	"unsigned int\000"
+ 959      676E6564 
+ 959      20696E74 
+ 959      00
+ 960              	.LASF9:
+ 961 022d 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 961      206C6F6E 
+ 961      6720756E 
+ 961      7369676E 
+ 961      65642069 
+ 962              	.LASF11:
+ 963 0244 75696E74 		.ascii	"uint8_t\000"
+ 963      385F7400 
+ 964              	.LASF25:
+ 965 024c 74726561 		.ascii	"treatedTemperature\000"
+ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccCqYfyT.s 			page 22
 
 
- 994      00
- 995              	.LASF3:
- 996 01a4 73686F72 		.ascii	"short unsigned int\000"
- 996      7420756E 
- 996      7369676E 
- 996      65642069 
- 996      6E7400
- 997              	.LASF39:
- 998 01b7 49544D5F 		.ascii	"ITM_RxBuffer\000"
- 998      52784275 
- 998      66666572 
- 998      00
- 999              	.LASF26:
- 1000 01c4 4932435F 		.ascii	"I2C_LM75_MasterSendStop\000"
- 1000      4C4D3735 
- 1000      5F4D6173 
- 1000      74657253 
- 1000      656E6453 
- 1001              	.LASF14:
- 1002 01dc 646F7562 		.ascii	"double\000"
- 1002      6C6500
- 1003              	.LASF18:
- 1004 01e3 72656369 		.ascii	"recievedValue1\000"
- 1004      65766564 
- 1004      56616C75 
- 1004      653100
- 1005              	.LASF19:
- 1006 01f2 72656369 		.ascii	"recievedValue2\000"
- 1006      65766564 
- 1006      56616C75 
- 1006      653200
- 1007              	.LASF37:
- 1008 0201 6D61696E 		.ascii	"main\000"
- 1008      00
- 1009              	.LASF30:
- 1010 0206 4932435F 		.ascii	"I2C_LM75_Start\000"
- 1010      4C4D3735 
- 1010      5F537461 
- 1010      727400
- 1011              	.LASF22:
- 1012 0215 736C6176 		.ascii	"slaveAddr1\000"
- 1012      65416464 
- 1012      723100
- 1013              	.LASF10:
- 1014 0220 756E7369 		.ascii	"unsigned int\000"
- 1014      676E6564 
- 1014      20696E74 
- 1014      00
- 1015              	.LASF9:
- 1016 022d 6C6F6E67 		.ascii	"long long unsigned int\000"
- 1016      206C6F6E 
- 1016      6720756E 
- 1016      7369676E 
- 1016      65642069 
- 1017              	.LASF11:
- 1018 0244 75696E74 		.ascii	"uint8_t\000"
- 1018      385F7400 
-ARM GAS  C:\Users\hresk\AppData\Local\Temp\ccQb0PU9.s 			page 23
-
-
- 1019              	.LASF12:
- 1020 024c 696E7433 		.ascii	"int32_t\000"
- 1020      325F7400 
- 1021              	.LASF17:
- 1022 0254 73697A65 		.ascii	"sizetype\000"
- 1022      74797065 
- 1022      00
- 1023              	.LASF8:
- 1024 025d 6C6F6E67 		.ascii	"long long int\000"
- 1024      206C6F6E 
- 1024      6720696E 
- 1024      7400
- 1025              	.LASF33:
- 1026 026b 6D61696E 		.ascii	"main.c\000"
- 1026      2E6300
- 1027              	.LASF15:
- 1028 0272 63686172 		.ascii	"char\000"
- 1028      00
- 1029              	.LASF27:
- 1030 0277 4932435F 		.ascii	"I2C_LM75_MasterSendStart\000"
- 1030      4C4D3735 
- 1030      5F4D6173 
- 1030      74657253 
- 1030      656E6453 
- 1031              	.LASF2:
- 1032 0290 73686F72 		.ascii	"short int\000"
- 1032      7420696E 
- 1032      7400
- 1033              	.LASF38:
- 1034 029a 62756666 		.ascii	"buffer\000"
- 1034      657200
- 1035              	.LASF6:
- 1036 02a1 6C6F6E67 		.ascii	"long int\000"
- 1036      20696E74 
- 1036      00
- 1037              	.LASF16:
- 1038 02aa 6C6F6E67 		.ascii	"long double\000"
- 1038      20646F75 
- 1038      626C6500 
- 1039              	.LASF0:
- 1040 02b6 7369676E 		.ascii	"signed char\000"
- 1040      65642063 
- 1040      68617200 
- 1041              	.LASF29:
- 1042 02c2 43794465 		.ascii	"CyDelay\000"
- 1042      6C617900 
- 1043              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran
+ 965      74656454 
+ 965      656D7065 
+ 965      72617475 
+ 965      726500
+ 966              	.LASF12:
+ 967 025f 696E7433 		.ascii	"int32_t\000"
+ 967      325F7400 
+ 968              	.LASF17:
+ 969 0267 73697A65 		.ascii	"sizetype\000"
+ 969      74797065 
+ 969      00
+ 970              	.LASF8:
+ 971 0270 6C6F6E67 		.ascii	"long long int\000"
+ 971      206C6F6E 
+ 971      6720696E 
+ 971      7400
+ 972              	.LASF34:
+ 973 027e 6D61696E 		.ascii	"main.c\000"
+ 973      2E6300
+ 974              	.LASF15:
+ 975 0285 63686172 		.ascii	"char\000"
+ 975      00
+ 976              	.LASF28:
+ 977 028a 4932435F 		.ascii	"I2C_LM75_MasterSendStart\000"
+ 977      4C4D3735 
+ 977      5F4D6173 
+ 977      74657253 
+ 977      656E6453 
+ 978              	.LASF2:
+ 979 02a3 73686F72 		.ascii	"short int\000"
+ 979      7420696E 
+ 979      7400
+ 980              	.LASF6:
+ 981 02ad 6C6F6E67 		.ascii	"long int\000"
+ 981      20696E74 
+ 981      00
+ 982              	.LASF16:
+ 983 02b6 6C6F6E67 		.ascii	"long double\000"
+ 983      20646F75 
+ 983      626C6500 
+ 984              	.LASF0:
+ 985 02c2 7369676E 		.ascii	"signed char\000"
+ 985      65642063 
+ 985      68617200 
+ 986              	.LASF30:
+ 987 02ce 43794465 		.ascii	"CyDelay\000"
+ 987      6C617900 
+ 988              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 5.4.1 20160609 (release) [ARM/embedded-5-bran

@@ -136,39 +136,6 @@
 <VisibleNodeIds>
 <v>Communication Busses-000</v>
 <v>Communication Busses-000\Communication Busses</v>
-<v>Communication Busses-000\Communication Busses\CortexM3</v>
-<v>Communication Busses-000\Communication Busses\CortexM3\ARM_GCC_541</v>
-<v>Communication Busses-000\Communication Busses\CortexM3\ARM_GCC_541\Debug</v>
-<v>Communication Busses-000\Communication Busses\CortexM3\ARM_GCC_541\Debug\Listing Files</v>
-<v>Communication Busses-000\Communication Busses\CortexM3\ARM_GCC_541\Debug\Listing Files\Cm3Start.lst</v>
-<v>Communication Busses-000\Communication Busses\CortexM3\ARM_GCC_541\Debug\Listing Files\cy_em_eeprom.lst</v>
-<v>Communication Busses-000\Communication Busses\CortexM3\ARM_GCC_541\Debug\Listing Files\CyBootAsmGnu.lst</v>
-<v>Communication Busses-000\Communication Busses\CortexM3\ARM_GCC_541\Debug\Listing Files\CyDmac.lst</v>
-<v>Communication Busses-000\Communication Busses\CortexM3\ARM_GCC_541\Debug\Listing Files\cyfitter_cfg.lst</v>
-<v>Communication Busses-000\Communication Busses\CortexM3\ARM_GCC_541\Debug\Listing Files\CyFlash.lst</v>
-<v>Communication Busses-000\Communication Busses\CortexM3\ARM_GCC_541\Debug\Listing Files\CyLib.lst</v>
-<v>Communication Busses-000\Communication Busses\CortexM3\ARM_GCC_541\Debug\Listing Files\cymetadata.lst</v>
-<v>Communication Busses-000\Communication Busses\CortexM3\ARM_GCC_541\Debug\Listing Files\cyPm.lst</v>
-<v>Communication Busses-000\Communication Busses\CortexM3\ARM_GCC_541\Debug\Listing Files\CySpc.lst</v>
-<v>Communication Busses-000\Communication Busses\CortexM3\ARM_GCC_541\Debug\Listing Files\cyutils.lst</v>
-<v>Communication Busses-000\Communication Busses\CortexM3\ARM_GCC_541\Debug\Listing Files\I2C_LM75.lst</v>
-<v>Communication Busses-000\Communication Busses\CortexM3\ARM_GCC_541\Debug\Listing Files\I2C_LM75_BOOT.lst</v>
-<v>Communication Busses-000\Communication Busses\CortexM3\ARM_GCC_541\Debug\Listing Files\I2C_LM75_INT.lst</v>
-<v>Communication Busses-000\Communication Busses\CortexM3\ARM_GCC_541\Debug\Listing Files\I2C_LM75_MASTER.lst</v>
-<v>Communication Busses-000\Communication Busses\CortexM3\ARM_GCC_541\Debug\Listing Files\I2C_LM75_PM.lst</v>
-<v>Communication Busses-000\Communication Busses\CortexM3\ARM_GCC_541\Debug\Listing Files\I2C_LM75_SLAVE.lst</v>
-<v>Communication Busses-000\Communication Busses\CortexM3\ARM_GCC_541\Debug\Listing Files\main.lst</v>
-<v>Communication Busses-000\Communication Busses\CortexM3\ARM_GCC_541\Debug\Listing Files\Pin_SDA.lst</v>
-<v>Communication Busses-000\Communication Busses\CortexM3\ARM_GCC_541\Debug\Listing Files\Pin_SDL.lst</v>
-<v>Communication Busses-000\Communication Busses\CortexM3\ARM_GCC_541\Debug\Listing Files\Pin_VDD.lst</v>
-<v>Communication Busses-000\Communication Busses\CortexM3\ARM_GCC_541\Debug\Listing Files\UART_TERMINAL.lst</v>
-<v>Communication Busses-000\Communication Busses\CortexM3\ARM_GCC_541\Debug\Listing Files\UART_TERMINAL_BOOT.lst</v>
-<v>Communication Busses-000\Communication Busses\CortexM3\ARM_GCC_541\Debug\Listing Files\UART_TERMINAL_INT.lst</v>
-<v>Communication Busses-000\Communication Busses\CortexM3\ARM_GCC_541\Debug\Listing Files\UART_TERMINAL_IntClock.lst</v>
-<v>Communication Busses-000\Communication Busses\CortexM3\ARM_GCC_541\Debug\Listing Files\UART_TERMINAL_PM.lst</v>
-<v>Communication Busses-000\Communication Busses\CortexM3\ARM_GCC_541\Debug\Communication Busses.elf</v>
-<v>Communication Busses-000\Communication Busses\CortexM3\ARM_GCC_541\Debug\Communication Busses.hex</v>
-<v>Communication Busses-000\Communication Busses\CortexM3\ARM_GCC_541\Debug\Communication Busses.map</v>
 </VisibleNodeIds>
 </CyGuid_2a325b3b-c96a-4e9f-b7a0-2c44ecb5f237>
 </TreeStates>
