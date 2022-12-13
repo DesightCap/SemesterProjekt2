@@ -59,11 +59,13 @@ int main(void)
 			break;
 			
 
-			case 'p': // change code
+			case 'p': ; // change code 
+			// OBS ';' indsat for at undgå "a label can only be part of a statement and a declaration is not a statement" fejl
+
 			char pwdRecieved = ReadChar();
 			address = 0b0000000000000101;
-			// Mask pwdRecieved ind i com
 			com = 0b0000000010000000; // sidste 4 = XXXX?
+			com |= (uint16_t)pwdRecieved;
 			sendx10(&address, &com, &combined, &encoded, &datapakke, &counter);
 			
 			break;
@@ -75,9 +77,9 @@ int main(void)
 			com = 0b0000000011111111;
 
 			sendx10(&address, &com, &combined, &encoded, &datapakke, &counter);
-		
+			
 			while(count < dataSIZE +2){}
-				
+			
 			if(count == dataSIZE +2)
 			{
 				recievex10(&addressRecieved, &commandRecieved, &combined, &encoded, &datapakkeRecieved, &count);
