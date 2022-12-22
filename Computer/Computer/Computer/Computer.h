@@ -11,8 +11,7 @@ using namespace std;
 class Computer
 {
 public:
-	//Computer(testUI, testUART, &testLog, &testtemperatureerature)
-	Computer(UART* testUART, Log* testLog, Temperature* testtemperature);
+	Computer(UART* UARTObj, Log* LogObj, Temperature* TemperatureObj);
 
 	void readToggle();
 	void openMenu();
@@ -24,8 +23,8 @@ public:
 	void clearInputBuffer();
 	void seeCurrentTemperature(char[]); 
 private:
-	UART* testUART_;
-	Log* testLog_;
+	UART* UARTObject_;
+	Log* LogObject_;
 	Temperature* temperatureObject_;
 	int temperature_;
 	bool writeTemperature_;

@@ -2,26 +2,16 @@
 #include "Computer.h"
 #include <time.h>
 #include <iomanip> // til at sætte præcion 
-
-
 #include <string> // string til double via stod()
-
-//[HKEY_LOCAL_MACHINE\HARDWARE\]
-//Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Ports
 
 void testFunction_writeToLog(Log);
 void testFunction_writeToArduino(UART);
 void testFunction_ArdunoConnected(UART);
 
-
 using namespace std;
 
 //char inputData[INPUT_DATA_BYTES]; // INPUT_DATA_BYTES er defineret i UART.h
 //double inputValue = 0.0;
-
-
-
-
 
 // Vi antager at Ardrino tilsluttes port mellem COM1 og COM9, da vi ellers skal formatere porten som \\\\.\\COM3 som Win32 vil have den // Kan evt. udvides efterfølgende
 char comport[] = "COM7";
@@ -34,68 +24,36 @@ int main()
 	cout << "Indtast COM port nummer som kommunikationsenhed er tilsluttet: ";
 	cin >> userPort;
 	comport[3] = (char)userPort + 48;
-	
-	Log testLog;
-	UART testUART(port); // Med UART der opretter forbindelse i constructoren, kunne Complex(d).print(); som vist i OOP være en ide til at hente data ud?
-	Temperature testtemperature;
-	Computer testComputer(&testUART, &testLog, &testtemperature);
-	testComputer.openMenu();
-/*for (int i = 0; ; i++)
-	{
 
-		//Sleep(ARDUINO_WAIT_TIME);
-		
-	// kan nu sende besked korrekt til arudino, dog med små forstyrrelser på output pins, når pinnen er low.
-		char x = 'd';
-		char y = 'u';
-		char tempRequest = 'a';
-		char changeCode = 'b';
-		char temperatur = 'c';
-	testUART.send(&x, 1);
-		//Sleep(200);
-		cout << testUART.send(&x, 1) << endl;
-		//testUART.send(&z, 1);
-		char recieve[] = "00.0";
-		*/
-	//	testUART.getTemperature(recieve, (sizeof(recieve) / sizeof(recieve[0])) - 1);
-	//	double temp = testComputer.temperatureCharArrayToDouble(recieve);
-
-	//	testLog.addToLog(temp);
-		Sleep(500);
-	//testUART.send(&y, 1);
-	//	Sleep(200);	
-	//cout << testUART.send(&y, 1) << endl;
-	Sleep(500);
-	//testUART.send(&z, 1);
-	//cout << testUART.send(&z, 1) << endl;
-
-		//testFunction_writeToArduino(testUART);
-
-
-	}
-	//	testLog.print();
-
-
-void testFunction_writeToLog(Log testLog)
-{
-	// addToLog metode test
-	srand(time(0)); testLog.addToLog(rand() % 20);
+	Log LogObj;
+	UART UARTObj(port); // Med UART der opretter forbindelse i constructoren, kunne Complex(d).print(); som vist i OOP være en ide til at hente data ud?
+	Temperature TemperatureObj;
+	Computer ComputerObj(&UARTObj, &LogObj, &TemperatureObj);
+	ComputerObj.openMenu();
 }
 
-void testFunction_ArdunoConnected(UART testUART)
+
+
+void testFunction_writeToLog(Log LogObj)
 {
-	cout << "Arduino forbundet: " << boolalpha << testUART.isConnected() << endl;
-	if (testUART.isConnected())
+	// addToLog metode test
+	srand(time(0)); LogObj.addToLog(rand() % 20);
+}
+
+void testFunction_ArdunoConnected(UART UARTObj)
+{
+	cout << "Arduino forbundet: " << boolalpha << UARTObj.isConnected() << endl;
+	if (UARTObj.isConnected())
 		cout << endl << "Forbundet til port " << port << endl;
 }
 
-void testFunction_writeToArduino(UART testUART)
+void testFunction_writeToArduino(UART UARTObj)
 {
 	// Test skrivning til Arduino
 	char testOutput = 1;
 	while (true)
 	{
-		if (testUART.send(&testOutput, 1))
+		if (UARTObj.send(&testOutput, 1))
 		{
 			cout << "SUCCESS" << endl;
 

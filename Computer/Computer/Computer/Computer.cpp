@@ -10,8 +10,8 @@
 Computer::Computer(UART* testUART, Log* testLog, Temperature* testTemperature)
 {
 	temperature_ = 0;
-	testUART_ = testUART;
-	testLog_ = testLog;
+	UARTObject_ = testUART;
+	LogObject_ = testLog;
 	temperatureObject_ = testTemperature;
 	writeTemperature_ = true;
 }
@@ -25,7 +25,7 @@ void Computer::readToggle()
 void Computer::openMenu()
 {
 	//char x = 'd';
-	//testUART_->send(&x, 1);
+	//UARTObject_->send(&x, 1);
 	// Jeg har været nødt til at sætte en sleep ind ved UIinput kald, det ødelægger lidt ideen med at omgå at blokere for kørslen.
 	// Vi er evt. nødt til at mixe med multithreading? 
 	// Problem burde være løst - prøv at fjerne diverse Sleep() funktioner og se om UI stadig virker
@@ -43,7 +43,7 @@ void Computer::openMenu()
 		case 1:
 			// Hvordan håndtere vi her? 
 			system("CLS");
-			testLog_->print();
+			LogObject_->print();
 			this->menuPrint(false); // udskriver menu uden rydning af consol
 			break;
 		case 2:
@@ -109,7 +109,7 @@ void Computer::openMenu()
 
 				}
 			}
-			testUART_->changePassword((char)pwdInt);
+			UARTObject_->changePassword((char)pwdInt);
 			cout << endl << endl;
 			break;
 		}
@@ -120,12 +120,12 @@ void Computer::openMenu()
 
 			while (writeTemperature_)
 			{
-				testUART_->getTemperature(recieve, (sizeof(recieve) / sizeof(recieve[0])) - 1);
+				UARTObject_->getTemperature(recieve, (sizeof(recieve) / sizeof(recieve[0])) - 1);
 				if (recieve[2] == '.' && recieve[1] != '0' && recieve[0] != '0')
 				{
 					double recievedDouble = this->temperatureCharArrayToDouble(recieve);
 
-					testLog_->addToLog(recievedDouble);
+					LogObject_->addToLog(recievedDouble);
 					seeCurrentTemperature(recieve);
 					//recieve[0]++; // tester der hører sammen med ovenstående char recieve[] = "00.0";
 
@@ -135,20 +135,20 @@ void Computer::openMenu()
 					{
 					case -1:
 						if (writeTemperature_)
-							testUART_->sendUp();
+							UARTObject_->sendUp();
 						//		cout << "Haev Temperatur" << endl; // tester
 						break;
 					case 0:
 						if (writeTemperature_)
 						{
 							char x = 'x';
-							testUART_->send(&x, 1);
+							UARTObject_->send(&x, 1);
 						}
 						//			cout << "Temperatur indenfor interval" << endl; // tester
 						break;
 					case 1:
 						if (writeTemperature_)
-							testUART_->sendDown();
+							UARTObject_->sendDown();
 						//		cout << "Saenk temperatur " << endl; // tester
 						break;
 					default:
@@ -160,7 +160,7 @@ void Computer::openMenu()
 				{
 
 					char x = 'x';
-					testUART_->send(&x, 1);
+					UARTObject_->send(&x, 1);
 				}
 				break;
 			}
@@ -204,13 +204,13 @@ int Computer::UIinput()
 string Computer::dataHandler()
 {
 	Sleep(ARDUINO_WAIT_TIME);
-	if (testUART_->isConnected())
+	if (UARTObject_->isConnected())
 	{
 		for (int i = 0; i < INPUT_DATA_BYTES; i++)
 		{
 			inputData_[i] = 0;
 		}
-		testUART_->getTemperature(inputData_, INPUT_DATA_BYTES);
+		UARTObject_->getTemperature(inputData_, INPUT_DATA_BYTES);
 	}
 
 	string inputValStr(inputData_);
