@@ -34,10 +34,12 @@ UART::UART(char* portName)
 	if (errMsg == notConnected)
 	{
 		cout << "Tilslut kommunikations enhed. " << endl;
+		Sleep(ARDUINO_WAIT_TIME);
 	}
 	else if (errMsg == deviceInUse)
 	{
 		cout << "Kommunikations enheden er allerde i brug. " << endl;
+		Sleep(ARDUINO_WAIT_TIME);
 	}
 	else if (errMsg == noError)
 	{
@@ -47,6 +49,7 @@ UART::UART(char* portName)
 		if (!GetCommState(handleToCOM, &dcbSerialParameters))
 		{
 			cout << "Det lykkedes ikke at få de nuværende seriel parametre. " << endl;
+			Sleep(ARDUINO_WAIT_TIME);
 		}
 		else
 		{
@@ -55,7 +58,7 @@ UART::UART(char* portName)
 			dcbSerialParameters.StopBits = ONESTOPBIT;
 			dcbSerialParameters.Parity = NOPARITY;
 			dcbSerialParameters.fDtrControl = DTR_CONTROL_ENABLE;
-
+			
 			if (!SetCommState(handleToCOM, &dcbSerialParameters))
 			{
 				cout << "Advarsel: Seriel port parametres kunne ikke sættes. " << endl;

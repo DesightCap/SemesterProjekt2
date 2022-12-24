@@ -17,20 +17,16 @@ void Log::print() // Idskriver hele log
 	}
 
 	MyFile.close();
-
 }
 
 void Log::addToLog(double temperature) // Tilføjer læsning til log
 {
-
 	time_t currentTime = time(NULL);
 	struct tm localTime;
 
 	time(&currentTime);
-	//localTime = localtime(&currentTime); 
 	errno_t errTme = localtime_s(&localTime, &currentTime);
-
-	//cout << localTime->tm_mon; // Test time functions by printing to terminal
+	// Hvis errTme == 0 er det lykkedes at finde tiden. Ellers er der sket en fejl.
 	if (errTme == 0)
 	{
 		ofstream MyFile;
@@ -41,8 +37,8 @@ void Log::addToLog(double temperature) // Tilføjer læsning til log
 			<< setw(2) << localTime.tm_min << ':'	// Skriver minut som to tal til fil
 			<< setw(2) << localTime.tm_sec 			// Skriver time som to tal til fil
 			<< " Dato: "
-			<< localTime.tm_mday << "/" << localTime.tm_mon + 1 << "/" << localTime.tm_year + 1900
-			<< " temperatureeratur: " << temperature
+			<< localTime.tm_mday << "/" << localTime.tm_mon + 1 << "/" << localTime.tm_year + 1900 // "dd/mm/åå" // måned [0..11] && år er år siden 1900
+			<< " temperatur: " << temperature
 			<< endl;
 		MyFile.close();
 	}
