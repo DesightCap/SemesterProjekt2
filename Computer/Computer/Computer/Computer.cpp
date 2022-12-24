@@ -24,14 +24,6 @@ void Computer::readToggle()
 
 void Computer::openMenu()
 {
-	//char x = 'd';
-	//UARTObject_->send(&x, 1);
-	// Jeg har været nødt til at sætte en sleep ind ved UIinput kald, det ødelægger lidt ideen med at omgå at blokere for kørslen.
-	// Vi er evt. nødt til at mixe med multithreading? 
-	// Problem burde være løst - prøv at fjerne diverse Sleep() funktioner og se om UI stadig virker
-
-	// char recieve[] = "00.0"; // tester der hører sammen med recieve[0]++ i loopet
-
 	bool runningTemperatureReg = true;
 	this->menuPrint();
 	while (runningTemperatureReg)
@@ -41,7 +33,6 @@ void Computer::openMenu()
 		switch (UIinput())
 		{
 		case 1:
-			// Hvordan håndtere vi her? 
 			system("CLS");
 			LogObject_->print();
 			this->menuPrint(false); // udskriver menu uden rydning af consol
@@ -80,7 +71,6 @@ void Computer::openMenu()
 				cin >> c;
 				while (cin.fail())
 				{
-
 					cout << endl << "Fejl!" << endl << "Godtager 0 eller tal derover. ";
 					cin.clear();
 					cin.ignore(256, '\n');
@@ -115,19 +105,17 @@ void Computer::openMenu()
 		}
 		default:
 
-			char recieve[] = "00.0"; // Sat høj for test
-			char toSend;
+			char recieve[] = "00.0";
 
 			while (writeTemperature_)
 			{
 				UARTObject_->getTemperature(recieve, (sizeof(recieve) / sizeof(recieve[0])) - 1);
-				if (recieve[2] == '.' && recieve[1] != '0' && recieve[0] != '0')
+				if (recieve[2] == '.' && (recieve[1] != '0' || recieve[0] != '0'))
 				{
 					double recievedDouble = this->temperatureCharArrayToDouble(recieve);
 
 					LogObject_->addToLog(recievedDouble);
 					seeCurrentTemperature(recieve);
-					//recieve[0]++; // tester der hører sammen med ovenstående char recieve[] = "00.0";
 
 				//	cout << "Skrevet til log: " << recieve[0] << recieve[1] << recieve[2] << recieve[3] << endl; // tester
 
@@ -142,7 +130,8 @@ void Computer::openMenu()
 						if (writeTemperature_)
 						{
 							char x = 'x';
-							UARTObject_->send(&x, 1);
+							UARTObject_->send(&x, 1); // tror ikke det her giver mening, for vores CTRL arudino har slet ikke en 'x' case
+													  // enten skal hele casen slettes, eller have den med, men det inde i casen skal slettes.
 						}
 						//			cout << "Temperatur indenfor interval" << endl; // tester
 						break;
@@ -167,6 +156,7 @@ void Computer::openMenu()
 		}
 	}
 }
+
 
 void Computer::menuPrint(bool clear)
 {
