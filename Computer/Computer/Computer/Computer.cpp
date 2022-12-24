@@ -127,12 +127,6 @@ void Computer::openMenu()
 						//		cout << "Haev Temperatur" << endl; // tester
 						break;
 					case 0:
-						if (writeTemperature_)
-						{
-							char x = 'x';
-							UARTObject_->send(&x, 1); // tror ikke det her giver mening, for vores CTRL arudino har slet ikke en 'x' case
-													  // enten skal hele casen slettes, eller have den med, men det inde i casen skal slettes.
-						}
 						//			cout << "Temperatur indenfor interval" << endl; // tester
 						break;
 					case 1:
@@ -142,16 +136,9 @@ void Computer::openMenu()
 						break;
 					default:
 						break;
-
 					}
 				}
-				else
-				{
-
-					char x = 'x';
-					UARTObject_->send(&x, 1);
-				}
-				break;
+		break;
 			}
 		}
 	}

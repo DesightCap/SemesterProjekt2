@@ -18,4 +18,3 @@ private:
 	int TemperatureMin_;
 	int TemperatureMax_;
 };
-

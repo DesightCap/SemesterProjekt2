@@ -54,8 +54,6 @@ void temperatureRequest();
 
 int main()
 {
-	// Initialize LED port
-	//initLEDport();
 	// Initialize UART: Baud = 9600, 8 data bits, No Parity
 	InitUART(9600,8);
 	//initSwitchPort();
@@ -64,77 +62,35 @@ int main()
 	
 	while (1)
 	{
-			//_delay_ms(2000);
-
-		// Placer kode/funktionskald til modtagelse af x10 her
+		recieved = ReadChar();
 		
-		
-	/*	uint16_t x10recievedTemp = (com << 9);
-		x10recievedTemp = (x10recievedTemp >> 9);
-		
-
-		SendChar((char)x10recievedTemp);
-		
-		float temp = (x10recievedTemp >> 1);
-		if (x10recievedTemp << 15)
+		if (recieved == 'u' || recieved == 'U')
 		{
-			temp += 0.5;
-		}
-		if (PORTC != 0)
-		{
-			// Det kan være det går galt her når vi bruger stostrf
-			char charArray[sizeof(temp)];
-			dtostrf(temp, 5, 1, charArray);
-			SendString(charArray);
-		}
-		else
-		{*/
-			
-				// kan nu sende besked korrekt til arudino, dog med små forstyrrelser på output pins, når pinnen er low.
-			recieved = ReadChar();
-			
-		/*	if (recieved != '0')
-			{
-				//toggleLED(0b11111111);
-				PORTB = 0b11111111;
-			}
-		*/
-		
-			if (recieved == 'u' || recieved == 'U')
-			{
 			//	temperatureChange('u');
 			PORTB = 0b11111111;
-				if ( PORTL == 0b00000001 || PORTL == 0b00000100)
-				{
-					PORTL = 0b00000000;
-				}
+			if ( PORTL == 0b00000001 || PORTL == 0b00000100)
+			{
+				PORTL = 0b00000000;
+			}
 			PORTL |= 1; // blow eksempel
 			//com = 0b1111111100000000;
 
-			}
+		}
 
-			if (recieved == 'd'||recieved == 'D')
-			{
-				PORTB = 0b00000001;
+		if (recieved == 'd'||recieved == 'D')
+		{
+			PORTB = 0b00000001;
 			
 			if ( PORTL == 0b00000001 || PORTL == 0b00000100)
 			{
 				PORTL = 0b00000000;
-				} 
-					PORTL |=1<<2; // heat eksempel
+			}
+			PORTL |=1<<2; // heat eksempel
 			//	com = 0b0000000011111111;
 
-				//temperatureChange('d');
-			}
-
-	
-		//	sendx10(&address, &com, &combined, &encoded, &datapakke, &counter);
-		
-		
-		//recieved = '0';
+			//temperatureChange('d');
+		}
 	}
-	
-
 }
 
 void temperatureChange(char t)
@@ -150,7 +106,7 @@ void temperatureChange(char t)
 	{
 		
 		toggleLED(0b00110011);
-		//com = 0b0000000011110000;		
+		//com = 0b0000000011110000;
 		//sendInProcess = sendx10(&address, &com, &combined, &encoded, &datapakke, &counter);
 		
 	}
@@ -197,36 +153,4 @@ ISR(INT0_vect) //Interrupt på int0. Tjek pin nummer
 		counter++;
 
 	}
-	/*else if (!sendInProcess)
-	{
-		_delay_ms(20);
-		uint8_t inputPin = (PINC & 0x1);
-		uint32_t longInputPin = 0x0000;
-		longInputPin|= inputPin;
-		
-		if(startRecieved != 0b00001110)
-		{
-			startRecieved |= inputPin;
-			startRecieved = startRecieved << 1;
-		}
-		else
-		{
-			if(count <= dataSIZE)
-			{
-				datapakkeRecieved |= longInputPin;
-				datapakkeRecieved = (datapakkeRecieved << 1);
-				count++;
-			}
-			else if (count == (dataSIZE+1))
-			{
-				datapakkeRecieved = datapakkeRecieved << 2;
-				startRecieved = 0;
-				//PORTB = (datapakkeRecieved);
-				count++;
-			}
-
-			
-		}
-	}
-	*/
 }
