@@ -1,7 +1,4 @@
 ﻿  Computer.cpp
-C:\Users\hresk\OneDrive\Dokumenter\GitHub\SemesterProjekt2\Computer\Computer\Computer\Computer.cpp(134,57): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
-C:\Users\hresk\OneDrive\Dokumenter\GitHub\SemesterProjekt2\Computer\Computer\Computer\Computer.cpp(119,9): warning C4101: 'toSend': unreferenced local variable
-  UART.cpp
-  Generating Code...
-C:\Users\hresk\OneDrive\Dokumenter\GitHub\SemesterProjekt2\Computer\Computer\Computer\Computer.cpp(312): warning C4715: 'Computer::setTemperatureInt': not all control paths return a value
+C:\Users\hresk\OneDrive\Dokumenter\GitHub\SemesterProjekt2\Computer\Computer\Computer\Computer.cpp(125,57): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\hresk\OneDrive\Dokumenter\GitHub\SemesterProjekt2\Computer\Computer\Computer\Computer.cpp(292): warning C4715: 'Computer::setTemperatureInt': not all control paths return a value
   Computer.vcxproj -> C:\Users\hresk\OneDrive\Dokumenter\GitHub\SemesterProjekt2\Computer\Computer\x64\Debug\Computer.exe

@@ -141,7 +141,7 @@ void Computer::openMenu()
 						break;
 					}
 				}
-		break;
+				break;
 			}
 		}
 	}

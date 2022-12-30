@@ -307,3 +307,20 @@ void halfEncoded(uint16_t* encoded, uint32_t* datapakke)
 		else *encoded &= ~(1 << (14-i));
 	}
 }
+
+void sendBurst()
+{
+	_delay_ms(0.1);
+
+	//timer 0 ctc mode no prescale
+	TCCR1A = 0b01000000;
+	TCCR1B = 0b00001001;
+
+	//frekvens = 120000hz
+	OCR1A = 66;
+
+	_delay_ms(1);
+	TCCR1B = 0b00000000;
+	TCCR1A = 0b00000000;
+
+}

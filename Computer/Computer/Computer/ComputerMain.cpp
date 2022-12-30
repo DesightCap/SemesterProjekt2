@@ -15,16 +15,17 @@ using namespace std;
 
 // Vi antager at Ardrino tilsluttes port mellem COM1 og COM9, da vi ellers skal formatere porten som \\\\.\\COM3 som Win32 vil have den // Kan evt. udvides efterfølgende
 char comport[] = "COM7";
-//char comport[] = "\\\\.\\COM5";
+//char comport[] = "\\\\.\\COM13";
 char* port = comport;
 
 int main()
 {
+	//*
 	int userPort;
 	cout << "Indtast COM port nummer som kommunikationsenhed er tilsluttet: ";
 	cin >> userPort;
 	comport[3] = (char)userPort + 48;
-
+	//*/
 	Log LogObj;
 	UART UARTObj(port); // Med UART der opretter forbindelse i constructoren, kunne Complex(d).print(); som vist i OOP være en ide til at hente data ud?
 	Temperature TemperatureObj;

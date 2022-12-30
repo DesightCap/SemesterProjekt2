@@ -24,7 +24,7 @@ void hammingDecoding(uint16_t* str, uint16_t* encoded);
 void doubleEncoded(uint16_t* encoded, uint32_t* datapakke);
 void halfEncoded(uint16_t* encoded, uint32_t* datapakke);
 void recievex10(uint16_t* adr, uint16_t* com, uint16_t* combined, uint16_t* encoded, uint32_t* datapakke, volatile int* counterPtr);
-
+void sendBurst();
 
 
 

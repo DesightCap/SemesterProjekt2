@@ -34,43 +34,36 @@ int main(void)
 	InitUART(9600,8);
 	while (1)
 	{
-		
+		// Modtag UART karakter fra computer
 		charRecieved = ReadChar();
-		
 		
 		switch(charRecieved)
 		{
-			
-			case 'd': // blow on
-			address = 0b0000000000000110;
-			com = 0b0000000010110000;
+			case 'd': // Modtaget sænk temperatur
+			address = 0b0000000000000110; // Regulerings Arduino's adresse
+			com = 0b0000000010110000;// blow on kommando
 			sendx10(&address, &com, &combined, &encoded, &datapakke, &counter);
 			break;
 			
-			case 'u': // heat on
-			
-			address = 0b0000000000000110;
-			com = 0b0000000011000000;
+			case 'u': // Modtaget hæv temperatur
+			address = 0b0000000000000110; // Regulerings Arduino's adresse
+			com = 0b0000000011000000;// heat on kommando
 			sendx10(&address, &com, &combined, &encoded, &datapakke, &counter);
 			break;
 			
-			case 'p': ; // change code 
+			case 'p': ; // Modtaget change code 
 			// OBS ';' indsat for at undgå "a label can only be part of a statement and a declaration is not a statement" fejl
-
-			char pwdRecieved = ReadChar();
-			address = 0b0000000000000101;
+			char pwdRecieved = ReadChar(); // Modtaget ny kode
+			address = 0b0000000000000101; // Lock Arduino's adresse
 			com = 0b0000000010000000; // sidste 4 = XXXX?
-			com |= (uint16_t)pwdRecieved;
+			com |= (uint16_t)pwdRecieved; // XXXX = pwdRecieved
 			sendx10(&address, &com, &combined, &encoded, &datapakke, &counter);
-			
 			break;
 			
-			default:
+			default: // Hvis ingen anden kommando modtaget
+			address = 0b0000000000000100; // Temp Arduino's adresse
+			com = 0b0000000011111111; // Send ny temperatur
 			
-			// kontinuerlig tempRequest
-			address = 0b0000000000000100;
-			com = 0b0000000011111111;
-
 			sendx10(&address, &com, &combined, &encoded, &datapakke, &counter);
 			
 			while(count < dataSIZE +2){}
@@ -79,26 +72,26 @@ int main(void)
 			{
 				recievex10(&addressRecieved, &commandRecieved, &combined, &encoded, &datapakkeRecieved, &count);
 			}
-
+			// Hvis modtaget x10 adresse matcher min adresse 
 			if (addressRecieved == myAdress)
 			{
+				// Udpak temperatur data til float værdi
 				float temp = (commandRecieved >> 1);
-				
 				if (commandRecieved << 15)
 				{
 					temp += 0.5;
 				}
+				// Omdan float til char array
 				char charArray[sizeof(temp)];
 				dtostrf(temp, 3, 1, charArray);
+				// send char array med temperatur til computer via UART
 				SendString(charArray);
 			}
-
 			break;
 		}
-		
+		// Nulstil variable og loop delay
 		charRecieved = '0';
 		_delay_ms(2000);
-		
 	}
 }
 
@@ -112,8 +105,8 @@ ISR(INT0_vect)
 	if (counter <=4)
 	{
 		if (start & (0b00001000 >> (counter - 1)))
-		//sendBurst();
-		PORTA = 0b00000001;
+		sendBurst();
+		//PORTA = 0b00000001;
 		
 		else PORTA = 0;
 	}
@@ -122,8 +115,8 @@ ISR(INT0_vect)
 	if (counter > 4 && counter <= dataSIZE+4)
 	{
 		if (datapakke & (0b10000000000000000000000000000000 >> (counter - 5))) // set PIN high
-		//sendBurst();
-		PORTA = 0b00000001;
+		sendBurst();
+		//PORTA = 0b00000001;
 		
 		else PORTA = 0; //set PIN low
 	}
