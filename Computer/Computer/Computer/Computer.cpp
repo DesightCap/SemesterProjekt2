@@ -107,6 +107,9 @@ void Computer::openMenu()
 
 			char recieve[] = "00.0";
 
+			char req = 'r';
+			UARTObject_->send(&req, 1);
+
 			while (writeTemperature_)
 			{
 				UARTObject_->getTemperature(recieve, (sizeof(recieve) / sizeof(recieve[0])) - 1);
