@@ -10,14 +10,8 @@
 using namespace std;
 
 
-// Man burde kunne cleare Rx bufferen via CancelIo(handleToCOM)
-
-
-
 UART::UART(char* portName)
 {
-
-
 	errors = 0;
 	status = { 0 };
 	connected = false;

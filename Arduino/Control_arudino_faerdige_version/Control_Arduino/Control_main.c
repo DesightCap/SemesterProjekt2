@@ -42,12 +42,9 @@ int main(void)
 		{
 			
 			case 'd': // blow on
-			
 			address = 0b0000000000000110;
 			com = 0b0000000010110000;
 			sendx10(&address, &com, &combined, &encoded, &datapakke, &counter);
-			
-			
 			break;
 			
 			case 'u': // heat on
@@ -55,10 +52,8 @@ int main(void)
 			address = 0b0000000000000110;
 			com = 0b0000000011000000;
 			sendx10(&address, &com, &combined, &encoded, &datapakke, &counter);
-			
 			break;
 			
-
 			case 'p': ; // change code 
 			// OBS ';' indsat for at undgå "a label can only be part of a statement and a declaration is not a statement" fejl
 
