@@ -98,29 +98,32 @@ int main(void)
 
 ISR(INT0_vect)
 {
-	//////////////////////SENDER ISR!///////////////
-	/*Saetter PIN til high / low på ZC interrupt.Counter saettes til 1 når sendx10() kaldes og
-	datastroemmen slutter når det sidste bit i datapakke er sat på PORTA*/
 	
+	//////////////////////SENDER ISR!///////////////
+	/*Sender på ZC interrupt.Counter saettes til 1 når sendx10() kaldes og
+	datastroemmen slutter når det sidste bit i datapakke er sendt*/
+	
+	//send start-bits
 	if (counter <=4)
 	{
 		if (start & (0b00001000 >> (counter - 1)))
-		sendBurst();
-		//PORTA = 0b00000001;
+		//sendBurst();
+		PORTA = 0b00000001;
 		
 		else PORTA = 0;
 	}
 	
-	
+	//send data-bits
 	if (counter > 4 && counter <= dataSIZE+4)
 	{
 		if (datapakke & (0b10000000000000000000000000000000 >> (counter - 5))) // set PIN high
-		sendBurst();
-		//PORTA = 0b00000001;
+		//sendBurst();
+		PORTA = 0b00000001;
 		
 		else PORTA = 0; //set PIN low
 	}
 	
+	//Sidste data-bit er sendt
 	if (counter > dataSIZE+4)
 	{
 		PORTA = 0;
@@ -128,23 +131,23 @@ ISR(INT0_vect)
 	
 	counter++;
 	
-	
 	/////////////////////MODTAGER ISR!///////////////
-	
-
 	//_delay_ms(20);
 	uint8_t inputPin = (PINC & 0x1);
 	uint32_t longInputPin = 0x0000;
 	longInputPin|= inputPin;
 	
+	//venter på start-bits
 	if(startRecieved != 0b00001110)
 	{
 		startRecieved |= inputPin;
 		startRecieved = startRecieved << 1;
 	}
+	
+	//start-bit er valideret
 	else if (startRecieved == 0b00001110)
-
 	{
+		//modtager data-bits
 		if(count <= dataSIZE)
 		{
 			datapakkeRecieved |= longInputPin;
@@ -152,6 +155,7 @@ ISR(INT0_vect)
 			count++;
 		}
 		
+		//sidste bit er modtaget og bitstrengen left-shiftes så datapakken står i most-significant 30 bits
 		else if (count == (dataSIZE+1))
 		{
 			datapakkeRecieved = datapakkeRecieved << 2;
@@ -161,4 +165,3 @@ ISR(INT0_vect)
 		}
 	}
 }
-
